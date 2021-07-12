@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.Collection;
 
 @Controller
@@ -33,7 +34,8 @@ public class MainController {
     }
 
     @GetMapping("/register")
-    public String signUpPage() {
+    public String signUpPage(Principal principal) {
+        if(principal != null) return "redirect:/afterLogin";
         return "register";
     }
 

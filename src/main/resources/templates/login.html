@@ -3,11 +3,10 @@
 <!--begin::Head-->
 <head>
     <meta charset="utf-8"/>
-    <title>Sign In - LMS</title>
+    <title>Đăng nhập - LMS</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700"/>
-    <link th:href="@{/font/plugins.bundle.css}" rel="stylesheet" type="text/css"/>
-    <link th:href="@{/css/style.bundle.css}" rel="stylesheet" type="text/css"/>
+    <div th:replace="~{/layout/include:: head/link}"></div>
 </head>
 <body id="kt_body"
       class="bg-white header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed toolbar-tablet-and-mobile-fixed aside-enabled aside-fixed"
@@ -24,15 +23,15 @@
                 <!--begin::Content-->
                 <div class="d-flex flex-row-fluid flex-column text-center p-10 pt-lg-20">
                     <!--begin::Logo-->
-                    <a href="#" class="py-9">
-                        <img alt="Logo" th:src="@{/img/logo-3.svg}" class="h-70px"/>
+                    <a href="#" class="py-7">
+                        <img alt="Logo" th:src="@{/img/logo.png}" class=""style="height: 110px;"/>
                     </a>
                     <!--end::Logo-->
                     <!--begin::Title-->
                     <h1 class="fw-bolder fs-2qx pb-5 pb-md-10" style="color: #986923;">Wellcome to LMS</h1>
                     <!--end::Title-->
                     <!--begin::Description-->
-                    <p class="fw-bold fs-2" style="color: #986923;">Learning Management System<br/>WFH_SP21</p>
+                    <p class="fw-bold fs-2" style="color: #986923;">Hệ thống học trực tuyến</p>
                     <!--end::Description-->
                     <span class="text-active-danger" th:text="${Noti}"></span>
                 </div>
@@ -83,7 +82,7 @@
                                 <label class="form-label fw-bolder text-dark fs-6 mb-0">Mật khẩu</label>
                                 <!--end::Label-->
                                 <!--begin::Link-->
-                                <a href="#" class="link-primary fs-6 fw-bolder">Quên mật khẩu ?</a>
+<!--                                <a href="#" class="link-primary fs-6 fw-bolder">Quên mật khẩu ?</a>-->
                                 <!--end::Link-->
                             </div>
                             <!--end::Wrapper-->
@@ -103,12 +102,12 @@
                             </button>
                             <!--end::Submit button-->
                             <!--begin::Separator-->
-                            <div class="text-center text-muted text-uppercase fw-bolder mb-5">hoặc</div>
+<!--                            <div class="text-center text-muted text-uppercase fw-bolder mb-5">hoặc</div>-->
                             <!--end::Separator-->
                             <!--begin::Google link-->
-                            <a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">
-                                <img alt="Logo" th:src="@{/img/google-icon.svg}" class="h-20px me-3"/>Đăng nhập bằng
-                                Google</a>
+<!--                            <a href="#" class="btn btn-flex flex-center btn-light btn-lg w-100 mb-5">-->
+<!--                                <img alt="Logo" th:src="@{/img/google-icon.svg}" class="h-20px me-3"/>Đăng nhập bằng-->
+<!--                                Google</a>-->
                             <!--end::Google link-->
 
                         </div>
@@ -136,8 +135,7 @@
 </div>
 <!--end::Main-->
 <!--begin::Javascript-->
-<script th:src="@{/js/plugins.bundle.js}"></script>
-<script th:src="@{/js/scripts.bundle.js}"></script>
+<div th:replace="~{/layout/include::script}"></div>
 <!--begin::Page Custom Javascript(used by this page)-->
 <script th:src="@{/js/login.js}"></script>
 <!--end::Page Custom Javascript-->

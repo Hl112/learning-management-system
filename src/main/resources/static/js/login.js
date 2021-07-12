@@ -60,7 +60,7 @@ var KTSigninGeneral = function () {
                                                 var url = new URL(this.responseURL);
                                                 t.removeAttribute('data-kt-indicator');
                                                 t.disabled = !1;
-                                                if(url.href.indexOf('login') != -1){
+                                                if(url.href.indexOf('ogin') != -1){
                                                     Swal.fire({
                                                         text: 'Xin lỗi, tên tài khoản hoặc mật khẩu không đúng, vui lòng thử lại.',
                                                         icon: 'error',

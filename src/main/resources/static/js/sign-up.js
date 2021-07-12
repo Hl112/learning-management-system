@@ -141,32 +141,6 @@ var KTSignupGeneral = function () {
                 }
               })
           }
-
-
-
-          // 'Valid' == a ? (t.setAttribute('data-kt-indicator', 'on'), t.disabled = !0, setTimeout((function () {
-          //   t.removeAttribute('data-kt-indicator'),
-          //   t.disabled = !1,
-          //   Swal.fire({
-          //     text: 'Bạn đã đăng ký thành công!',
-          //     icon: 'success',
-          //     buttonsStyling: !1,
-          //     confirmButtonText: 'Ok, got it!',
-          //     customClass: {
-          //       confirmButton: 'btn btn-primary'
-          //     }
-          //   }).then((function (t) {
-          //     t.isConfirmed && (e.reset(), s.reset())
-          //   }))
-          // }), 1500)) : Swal.fire({
-          //   text: 'Xin lỗi, hình như có lỗi, vui lòng thử lại.',
-          //   icon: 'error',
-          //   buttonsStyling: !1,
-          //   confirmButtonText: 'Ok, got it!',
-          //   customClass: {
-          //     confirmButton: 'btn btn-primary'
-          //   }
-          // })
         }))
       })),
       e.querySelector('input[name="password"]').addEventListener('input', (function () {

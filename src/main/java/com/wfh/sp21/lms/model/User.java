@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,17 +21,23 @@ import java.util.Set;
 @Builder
 public class User {
     @Id
+    @NotNull
     private String username;
+    @NotNull
     private String password;
     private String email;
+    @NotNull
     private String firstName;
+    @NotNull
     private String lastName;
     private String phone;
+    private String address;
     private String description;
     private byte[] image;
     @Column(columnDefinition = "boolean default true")
     @NotNull
     private boolean status = true;
+    private Date joinedDate = new Date();
 
     @ManyToOne
     @JoinColumn(name = "role_id")

@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "lms.admin.defaultPassword",
+      "type": "java.lang.String",
+      "description": "Description for lms.admin.defaultPassword."
+  }
+] }
