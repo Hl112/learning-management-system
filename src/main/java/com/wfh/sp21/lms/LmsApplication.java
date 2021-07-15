@@ -1,7 +1,9 @@
 package com.wfh.sp21.lms;
 
+import com.wfh.sp21.lms.model.CourseCategory;
 import com.wfh.sp21.lms.model.Role;
 import com.wfh.sp21.lms.model.User;
+import com.wfh.sp21.lms.repository.CourseCategoryRepository;
 import com.wfh.sp21.lms.repository.RoleRepository;
 import com.wfh.sp21.lms.repository.UserRepository;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +21,7 @@ public class LmsApplication {
 
         ApplicationContext context = SpringApplication.run(LmsApplication.class, args);
         initUser(context);
-
+        initCourse(context);
     }
 
 
@@ -41,13 +43,20 @@ public class LmsApplication {
         adminUser = userRepository.save(adminUser);
         teacherUser = userRepository.save(teacherUser);
         studentUser = userRepository.save(studentUser);
-        System.out.println(adminUser);
-        System.out.println(teacherUser);
-        System.out.println(studentUser);
+        System.out.println("------------  Init User");
 
-        System.out.println("------------------------");
-        System.out.println(userRepository.findByUsername("admin"));
-        System.out.println("------------------------");
+
     }
 
+    public static void initCourse(ApplicationContext context) {
+        CourseCategoryRepository courseCategoryRepository = context.getBean(CourseCategoryRepository.class);
+        CourseCategory courseCategory = CourseCategory.builder().categoryName("Công nghệ thông tin").categoryDescription("Software Engineer").build();
+        CourseCategory courseCategory1 = CourseCategory.builder().categoryName("Ngôn ngữ anh").categoryDescription("Ngành ngôn ngữ").build();
+        CourseCategory courseCategory2 = CourseCategory.builder().categoryName("Quản trị kinh doanh").categoryDescription("Ngành quản trị").build();
+        courseCategoryRepository.save(courseCategory);
+        courseCategoryRepository.save(courseCategory1);
+        courseCategoryRepository.save(courseCategory2);
+
+        System.out.println("---------- Init Course");
+    }
 }
