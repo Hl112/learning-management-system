@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/teacher")
 public class TeacherController {
 
+
+
     @GetMapping(value = {"","/"})
     public String teacherPage(){
         return "teacher/teacher";

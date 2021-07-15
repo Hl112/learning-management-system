@@ -15,7 +15,7 @@
     <!--begin::Brand-->
     <div class="aside-logo flex-column-auto" id="kt_aside_logo">
         <!--begin::Logo-->
-        <a href="index.html">
+        <a href="/afterLogin">
             <img alt="Logo" th:src="@{/img/logo-default.svg}" class="h-15px logo"/>
         </a>
         <!--end::Logo-->
@@ -69,7 +69,7 @@
                 <div class="menu-item">
                     <a class="menu-link" th:href="@{/admin/userList}" th:classappend="${module == 'userList' ? 'active' : ''}">
 										<span class="menu-icon">
-											<i class="bi bi-person fs-2"></i>
+											<i class="bi bi-people fs-3"></i>
 										</span>
                         <span class="menu-title">Danh sách thành viên</span>
                     </a>
@@ -77,7 +77,7 @@
                 <div class="menu-item">
                     <a class="menu-link" th:href="@{/admin/addUser}" th:classappend="${module == 'addUser' ? 'active' : ''}">
 										<span class="menu-icon">
-											<i class="bi bi-person fs-2"></i>
+											<i class="bi bi-person-plus fs-2"></i>
 										</span>
                         <span class="menu-title">Thêm thành viên mới</span>
                     </a>
@@ -85,47 +85,23 @@
                 <div class="menu-item">
                     <a class="menu-link" th:href="@{/admin/userList}" th:classappend="${module == 'userDetails' ? 'active' : ''}">
 										<span class="menu-icon">
-											<i class="bi bi-person fs-2"></i>
+											<i class="bi bi-person-circle fs-2"></i>
 										</span>
                         <span class="menu-title">Chi tiết thành viên</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a class="menu-link" href="landing.html">
-										<span class="menu-icon">
-											<i class="bi bi-person fs-2"></i>
-										</span>
-                        <span class="menu-title">Delete user account</span>
                     </a>
                 </div>
                 <!-- Role -->
                 <div class="menu-item">
                     <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Role and Permision</span>
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Quản lý phân quyền</span>
                     </div>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link" href="landing.html">
+                    <a class="menu-link" th:href="@{/admin/permission}" th:classappend="${module == 'permission' ? 'active' : ''}">
 										<span class="menu-icon">
-											<i class="bi bi-person fs-2"></i>
+											<i class="bi bi-shield-check fs-2"></i>
 										</span>
-                        <span class="menu-title">Browse list of role</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a class="menu-link" href="landing.html">
-										<span class="menu-icon">
-											<i class="bi bi-person fs-2"></i>
-										</span>
-                        <span class="menu-title">Assign Role</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a class="menu-link" href="landing.html">
-										<span class="menu-icon">
-											<i class="bi bi-person fs-2"></i>
-										</span>
-                        <span class="menu-title">Permision</span>
+                        <span class="menu-title">Phân Quyền</span>
                     </a>
                 </div>
                 <!-- Course Category-->

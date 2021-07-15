@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -100,6 +101,42 @@ public class AdminController {
             return new ResponseEntity<String>("Tên tài khoản đã tồn tại", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping("/deleteUser")
+    @ResponseBody
+    public ResponseEntity<String> addUser(@RequestBody List<String> user) throws SQLException {
+        boolean result = false;
+        result = userServices.deleteUserByUsername(user);
+        if(result){
+            return new ResponseEntity<String>("Xóa thành viên thành công", HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<String>("Xóa thành viên thất bại", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @GetMapping("/permission")
+    public String permission(Model model){
+        List<Role> roleList = roleServices.getAllRoleList();
+        List<User> userList = userServices.getAllUsers();
+        model.addAttribute("module","permission");
+        model.addAttribute("LIST_USER",userList);
+        model.addAttribute("LIST_ROLE", roleList);
+        return "admin/permission";
+    }
+
+    @PutMapping("/permission")
+    @ResponseBody
+    public ResponseEntity<Object> assignRole(@RequestBody User user){
+        if(userServices.changeRole(user)){
+            return new ResponseEntity<Object>("Cập nhật vai trò thành công", HttpStatus.OK);
+        }else{
+            return new ResponseEntity<Object>("Cập nhật vai trò thất bại", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 
 
 }

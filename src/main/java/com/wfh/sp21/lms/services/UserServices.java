@@ -10,7 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -53,11 +55,44 @@ public class UserServices implements UserDetailsService {
         }
     }
 
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
+    public List<User> getAllUsers() {
+        return userRepository.findAllByStatusTrue();
     }
-    public User getUserByUsername(String username){
+
+    public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public boolean deleteUserByUsername(List<String> usernames) {
+        for (String username: usernames) {
+            User user = userRepository.findByUsername(username);
+            if (user == null) return false;
+            userRepository.delete(user);
+        }
+        return true;
+    }
+
+    public boolean deactivateListUsers(List<String> usernames) throws SQLException {
+        boolean result = false;
+
+           for (String username : usernames) {
+               User user = userRepository.findByUsername(username);
+               if (user == null)
+                 result = false;
+               user.setStatus(false);
+               userRepository.save(user);
+               result = true;
+           }
+        return result;
+    }
+
+    public boolean changeRole(User user){
+        Role role = roleRepository.findByRoleName(user.getRole().getRoleName());
+        User userDB = userRepository.findByUsername(user.getUsername());
+        userDB.setRole(role);
+        userRepository.save(userDB);
+        return true;
+    }
+
 
 }

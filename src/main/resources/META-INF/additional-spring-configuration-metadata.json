@@ -4,5 +4,10 @@
       "name": "lms.admin.defaultPassword",
       "type": "java.lang.String",
       "description": "Description for lms.admin.defaultPassword."
-  }
-] }
+    },
+    {
+      "name": "spring.datasource.hikari.idleTimeot",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.hikari.idleTimeot."
+    }
+  ] }

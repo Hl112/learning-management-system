@@ -940,6 +940,7 @@
                             <div class="menu-item px-3">
                                 <div class="menu-content d-flex align-items-center px-3">
                                     <!--begin::Avatar-->
+                                    <input type="hidden" name="userLogined" id="logined" th:value="${userLogin.username}">
                                     <div class="symbol symbol-50px me-5">
                                         <th:block th:if="${userLogin.image == null}">
                                             <img alt="No Img" th:src="@{/img/blank.png}">

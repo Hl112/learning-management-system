@@ -6,7 +6,7 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <div th:replace="~{/layout/include:: head/link}"></div>
-  <title>User Details</title>
+  <title>Hồ sơ chi tiết</title>
 </head>
 <!--begin::Body-->
 <body id="kt_body"
@@ -96,7 +96,7 @@
                       <div class="card-body d-flex flex-center flex-column pt-12 p-9 px-0">
                         <!--begin::Avatar-->
                         <div class="symbol symbol-100px symbol-circle mb-7">
-                          <img src="assets/media/avatars/150-1.jpg" alt="image">
+                          <img src="/img/blank.png" alt="image">
                         </div>
                         <!--end::Avatar-->
                         <!--begin::Name-->
@@ -223,7 +223,7 @@
                         <!--begin::Details item-->
                         <!--begin::Details item-->
                         <div class="fw-bolder mt-5">Date Joined</div>
-                        <div class="text-gray-600" th:text="${#dates.format(user.joinedDate,'dd-MM-yyyy , hh:ss')}"></div>
+                        <div class="text-gray-600" th:text="${#dates.format(user.joinedDate,'dd-MM-yyyy , hh:mm')}"></div>
                         <!--begin::Details item-->
                       </div>
                     </div>
