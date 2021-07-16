@@ -40,7 +40,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasAuthority("Admin")
                 .antMatchers("/teacher/**").hasAuthority("Teacher")
                 .antMatchers("/student/**").hasAuthority("Student")
-
                 .and()
                 .exceptionHandling().accessDeniedPage("/403")
                 .and()

@@ -2,7 +2,7 @@ package com.wfh.sp21.lms.controller;
 
 import com.wfh.sp21.lms.model.CourseCategory;
 import com.wfh.sp21.lms.model.User;
-import com.wfh.sp21.lms.services.CourseCategoryImpl;
+import com.wfh.sp21.lms.services.CourseCategoryServicesImpl;
 import com.wfh.sp21.lms.services.UserServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,12 +32,12 @@ public class TeacherController {
     }
 
     @Autowired
-    private CourseCategoryImpl courseCategoryImpl;
+    private CourseCategoryServicesImpl courseCategoryServicesImpl;
     //Course Category
     @GetMapping("/courseCategory")
     public String courseCategoryPage(Model model){
         model.addAttribute("module","courseCategory");
-        List<CourseCategory> courseCategoryList = courseCategoryImpl.getAllCourseCategories();
+        List<CourseCategory> courseCategoryList = courseCategoryServicesImpl.getAllCourseCategories();
         model.addAttribute("LIST_COURSE_CATEGORY", courseCategoryList);
         return "teacher/courseCategory";
     }
@@ -51,7 +51,7 @@ public class TeacherController {
     @PostMapping("/courseCategory")
     @ResponseBody
     public ResponseEntity<Object> addCourseCategory(@RequestBody CourseCategory courseCategory){
-        if(courseCategoryImpl.addCourseCategory(courseCategory)){
+        if(courseCategoryServicesImpl.addCourseCategory(courseCategory)){
             return new ResponseEntity<Object>("Thêm danh mục khóa học thành công", HttpStatus.OK);
         }else{
             return new ResponseEntity<Object>("Thêm danh mục khóa học thất bại", HttpStatus.BAD_REQUEST);
@@ -62,7 +62,7 @@ public class TeacherController {
     @PutMapping("/courseCategory")
     @ResponseBody
     public ResponseEntity<Object> updateCourseCategory(@RequestBody CourseCategory courseCategory){
-        if(courseCategoryImpl.updateCourseCategory(courseCategory)){
+        if(courseCategoryServicesImpl.updateCourseCategory(courseCategory)){
             return new ResponseEntity<Object>("Cập nhật danh mục khóa học thành công", HttpStatus.OK);
         }else{
             return new ResponseEntity<Object>("Cập nhật danh mục khóa học thất bại", HttpStatus.BAD_REQUEST);
@@ -72,7 +72,7 @@ public class TeacherController {
     @DeleteMapping("/courseCategory")
     @ResponseBody
     public ResponseEntity<Object> deleteCourseCategory(@RequestBody CourseCategory courseCategory){
-        if(courseCategoryImpl.deleteCourseCategory(courseCategory)){
+        if(courseCategoryServicesImpl.deleteCourseCategory(courseCategory)){
             return new ResponseEntity<Object>("Bạn đã xóa danh mục khóa học thành công", HttpStatus.OK);
         }else{
             return new ResponseEntity<Object>("Bạn đã xóa danh mục khóa học thất bại", HttpStatus.BAD_REQUEST);

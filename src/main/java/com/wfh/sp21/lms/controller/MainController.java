@@ -22,7 +22,6 @@ public class MainController {
     @Autowired
     private UserServicesImpl userServicesImpl;
 
-
     //Layout
     @GetMapping("/header")
     public String header(Model model, Principal principal){

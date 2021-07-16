@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class CourseCategoryImpl implements CourseCategoryServices{
+public class CourseCategoryServicesImpl implements CourseCategoryServices{
     @Autowired
     private CourseCategoryRepository courseCategoryRepository;
 
