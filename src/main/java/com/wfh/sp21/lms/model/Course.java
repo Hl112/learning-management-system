@@ -13,6 +13,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +35,12 @@ public class Course {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private CourseCategory courseCategory;
+
+    @ManyToOne
+    @JoinColumn(name = "username")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private User user;
 
     @OneToMany(mappedBy = "course")
     private Set<UserEnrolments> userEnrolments;

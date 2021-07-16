@@ -1,7 +1,9 @@
 package com.wfh.sp21.lms.controller;
 
+import com.wfh.sp21.lms.model.CourseCategory;
 import com.wfh.sp21.lms.model.Role;
 import com.wfh.sp21.lms.model.User;
+import com.wfh.sp21.lms.services.CourseCategoryServicesImpl;
 import com.wfh.sp21.lms.services.RoleServicesImpl;
 import com.wfh.sp21.lms.services.UserServicesImpl;
 import lombok.Data;
@@ -45,7 +47,7 @@ public class AdminController {
         model.addAttribute("userLogin",user);
         return "admin/admin";
     }
-    //Manage Account
+    //Begin Manage Account
     @GetMapping("/userList")
     public String userListPage(Model model){
         List<User> userList = userServicesImpl.getAllUsers();
@@ -106,7 +108,8 @@ public class AdminController {
             return new ResponseEntity<String>("Xóa thành viên thất bại", HttpStatus.BAD_REQUEST);
         }
     }
-    //Permision
+    //End Manager Account
+    //Begin Permission
     @GetMapping("/permission")
     public String permission(Model model){
         List<Role> roleList = roleServicesImpl.getAllRoleList();
@@ -126,7 +129,49 @@ public class AdminController {
             return new ResponseEntity<Object>("Cập nhật vai trò thất bại", HttpStatus.BAD_REQUEST);
         }
     }
+    //End Permission
+    //Begin Course Category
+    @Autowired
+    private CourseCategoryServicesImpl courseCategoryServicesImpl;
 
+    @GetMapping("/courseCategory")
+    public String courseCategoryPage(Model model){
+        model.addAttribute("module","courseCategory");
+        List<CourseCategory> courseCategoryList = courseCategoryServicesImpl.getAllCourseCategories();
+        model.addAttribute("LIST_COURSE_CATEGORY", courseCategoryList);
+        return "admin/courseCategory";
+    }
 
+    @PostMapping("/courseCategory")
+    @ResponseBody
+    public ResponseEntity<Object> addCourseCategory(@RequestBody CourseCategory courseCategory){
+        if(courseCategoryServicesImpl.addCourseCategory(courseCategory)){
+            return new ResponseEntity<Object>("Thêm danh mục khóa học thành công", HttpStatus.OK);
+        }else{
+            return new ResponseEntity<Object>("Thêm danh mục khóa học thất bại", HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @PutMapping("/courseCategory")
+    @ResponseBody
+    public ResponseEntity<Object> updateCourseCategory(@RequestBody CourseCategory courseCategory){
+        if(courseCategoryServicesImpl.updateCourseCategory(courseCategory)){
+            return new ResponseEntity<Object>("Cập nhật danh mục khóa học thành công", HttpStatus.OK);
+        }else{
+            return new ResponseEntity<Object>("Cập nhật danh mục khóa học thất bại", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/courseCategory")
+    @ResponseBody
+    public ResponseEntity<Object> deleteCourseCategory(@RequestBody CourseCategory courseCategory){
+        if(courseCategoryServicesImpl.deleteCourseCategory(courseCategory)){
+            return new ResponseEntity<Object>("Bạn đã xóa danh mục khóa học thành công", HttpStatus.OK);
+        }else{
+            return new ResponseEntity<Object>("Bạn đã xóa danh mục khóa học thất bại", HttpStatus.BAD_REQUEST);
+        }
+    }
+    //End CourseCategory
 
 }

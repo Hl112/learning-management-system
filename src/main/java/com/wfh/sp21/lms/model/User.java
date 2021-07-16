@@ -54,6 +54,11 @@ public class User {
     @ToString.Exclude
     private Set<Question> listQuestions;
 
+    @OneToMany(mappedBy = "user")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Set<Course> listCourses;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

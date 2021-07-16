@@ -51,7 +51,7 @@ var KTUsersPermissionsList = function () {
                                    }
                                 }
                             });
-                            xhr.open("DELETE", "/teacher/courseCategory");
+                            xhr.open("DELETE", "/admin/courseCategory");
                             xhr.setRequestHeader("Content-Type", "application/json");
                             xhr.send(data);
                         }else{

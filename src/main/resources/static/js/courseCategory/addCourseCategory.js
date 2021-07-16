@@ -93,7 +93,7 @@ var KTUsersAddPermission = function () {
                                         }
                                     }
                                 });
-                                xhr.open("POST", "/teacher/courseCategory");
+                                xhr.open("POST", "/admin/courseCategory");
                                 xhr.setRequestHeader("Content-Type", "application/json");
                                 xhr.send(data);
                             }, 700);
