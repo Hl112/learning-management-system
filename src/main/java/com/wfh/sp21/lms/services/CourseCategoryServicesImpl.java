@@ -22,6 +22,11 @@ public class CourseCategoryServicesImpl implements CourseCategoryServices{
     }
 
     @Override
+    public CourseCategory getCourseCategoryById(Long courseCategoryId) {
+        return courseCategoryRepository.findByCategoryId(courseCategoryId);
+    }
+
+    @Override
     public boolean addCourseCategory(CourseCategory courseCategory) {
         courseCategoryRepository.save(courseCategory);
         return true;

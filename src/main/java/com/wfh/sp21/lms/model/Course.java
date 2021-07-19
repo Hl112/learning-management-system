@@ -24,7 +24,8 @@ public class Course {
     private Date endDate;
     private String password;
     private String description;
-    private byte[] image;
+    @Lob
+    private String image;
     @ColumnDefault("1")
     private boolean active;
     @ColumnDefault("0")

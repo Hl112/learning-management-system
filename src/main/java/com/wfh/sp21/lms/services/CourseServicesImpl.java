@@ -5,9 +5,10 @@ import com.wfh.sp21.lms.model.CourseCategory;
 import com.wfh.sp21.lms.repository.CourseCategoryRepository;
 import com.wfh.sp21.lms.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class CourseServicesImpl implements CourseServices{
 
     @Autowired
@@ -18,6 +19,21 @@ public class CourseServicesImpl implements CourseServices{
     @Override
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
+    }
+
+    @Override
+    public List<Course> getAllCourseByUsername(String username) {
+        return courseRepository.findAllByUser_Username(username);
+    }
+
+    @Override
+    public List<Course> getAllActiveCoursesByUsernameCourses(boolean active,String username) {
+        return courseRepository.findAllByActiveAndUser_Username(active,username);
+    }
+
+    @Override
+    public Course getCourseById(Long courseId) {
+        return courseRepository.findByCourseId(courseId);
     }
 
     @Override
@@ -40,7 +56,7 @@ public class CourseServicesImpl implements CourseServices{
         courseDB.setImage(course.getImage());
         courseDB.setPassword(course.getPassword());
         courseDB.setActive(course.isActive());
-
+        courseRepository.save(courseDB);
         return true;
     }
 

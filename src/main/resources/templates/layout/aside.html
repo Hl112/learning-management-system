@@ -60,6 +60,9 @@
                         <span class="menu-title">Bảng điều khiển</span>
                     </a>
                 </div>
+
+
+
                 <th:block th:if="${userLogin.role.roleName.equals('Admin')}">
                     <!-- Managing Account -->
                     <div class="menu-item">
@@ -109,21 +112,29 @@
                             <span class="menu-title">Phân Quyền</span>
                         </a>
                     </div>
-                </th:block>
-                <!-- Course Category-->
-                <div class="menu-item">
-                    <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Quản lý danh mục</span>
+                    <!-- Course Category-->
+                    <div class="menu-item">
+                        <div class="menu-content pt-8 pb-2">
+                            <span class="menu-section text-muted text-uppercase fs-8 ls-1">Quản lý danh mục</span>
+                        </div>
                     </div>
-                </div>
-                <div class="menu-item">
-                    <a class="menu-link" th:href="@{/admin/courseCategory}"
-                       th:classappend="${module == 'courseCategory' ? 'active' : ''}">
+                    <div class="menu-item">
+                        <a class="menu-link" th:href="@{/admin/courseCategory}"
+                           th:classappend="${module == 'courseCategory' ? 'active' : ''}">
 										<span class="menu-icon">
 											<i class="bi bi-person fs-2"></i>
 										</span>
-                        <span class="menu-title">Danh mục khóa học</span>
-                    </a>
+                            <span class="menu-title">Danh mục khóa học</span>
+                        </a>
+                    </div>
+                </th:block>
+
+                <th:block th:if="${userLogin.role.roleName.equals('Teacher')}">
+                <!-- Course -->
+                <div class="menu-item">
+                    <div class="menu-content pt-8 pb-2">
+                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Quản lý khóa học</span>
+                    </div>
                 </div>
                 <div class="menu-item">
                     <a class="menu-link" th:href="@{/teacher/course}"
@@ -135,21 +146,27 @@
                     </a>
                 </div>
                 <div class="menu-item">
-                    <a class="menu-link" href="landing.html">
+                    <a class="menu-link" th:href="@{/teacher/addCourse}" th:classappend="${module == 'addCourse' ? 'active' : ''}">
 										<span class="menu-icon">
 											<i class="bi bi-person fs-2"></i>
 										</span>
-                        <span class="menu-title">Edit Course Category</span>
+                        <span class="menu-title">Thêm & Sửa khóa học</span>
                     </a>
                 </div>
+                <!-- List Course -->
                 <div class="menu-item">
-                    <a class="menu-link" href="landing.html">
-										<span class="menu-icon">
-											<i class="bi bi-person fs-2"></i>
-										</span>
-                        <span class="menu-title">Delete Course Category</span>
-                    </a>
-                </div>
+                        <div class="menu-content pt-8 pb-2">
+                            <span class="menu-section text-muted text-uppercase fs-8 ls-1">Khóa học của bạn</span>
+                        </div>
+                    </div>
+                <th:block th:each="myCourse : ${}">
+
+                </th:block>
+
+                </th:block>
+
+
+
                 <!-- Separator-->
                 <div class="menu-item">
                     <div class="menu-content">

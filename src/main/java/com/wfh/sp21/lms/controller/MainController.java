@@ -1,6 +1,8 @@
 package com.wfh.sp21.lms.controller;
 
+import com.wfh.sp21.lms.model.Course;
 import com.wfh.sp21.lms.model.User;
+import com.wfh.sp21.lms.services.CourseServicesImpl;
 import com.wfh.sp21.lms.services.UserServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.Collection;
+import java.util.List;
 
 @Controller
 public class MainController {
@@ -22,6 +25,8 @@ public class MainController {
     @Autowired
     private UserServicesImpl userServicesImpl;
 
+    @Autowired
+    private CourseServicesImpl courseServicesImpl;
     //Layout
     @GetMapping("/header")
     public String header(Model model, Principal principal){
@@ -33,8 +38,12 @@ public class MainController {
     public String aside(Model model, Principal principal){
         User user = userServicesImpl.getUserByUsername(principal.getName());
         model.addAttribute("userLogin", user);
+        List<Course> courseList =courseServicesImpl.getAllActiveCoursesByUsernameCourses(true, user.getUsername());
+        model.addAttribute("myCourses", courseList);
         return "layout/aside";
     }
+
+
     //Page
     @GetMapping(value = {"/", "/login"})
     public String loginPage() {

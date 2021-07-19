@@ -35,7 +35,7 @@
                              data-kt-place-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                              class="page-title d-flex align-items-center me-3 flex-wrap mb-5 mb-lg-0 lh-1">
                             <!--begin::Title-->
-                            <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Danh mục khóa học</h1>
+                            <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Khóa học</h1>
                             <!--end::Title-->
                             <!--begin::Separator-->
                             <span class="h-20px border-gray-200 border-start mx-4"></span>
@@ -54,15 +54,14 @@
                                 </li>
                                 <!--end::Item-->
                                 <!--begin::Item-->
-                                <li class="breadcrumb-item text-muted">Quản lý danh mục</li>
-                                <!--end::Item-->
-                                <!--begin::Item-->
+                                <li class="breadcrumb-item text-muted">Quản lý khóa học
+                                    <!--begin::Item-->
                                 <li class="breadcrumb-item">
                                     <span class="bullet bg-gray-200 w-5px h-2px"></span>
                                 </li>
                                 <!--end::Item-->
                                 <!--begin::Item-->
-                                <li class="breadcrumb-item text-dark">Danh mục khóa học</li>
+                                <li class="breadcrumb-item text-dark">Khóa học</li>
                                 <!--end::Item-->
                             </ul>
                             <!--end::Breadcrumb-->
@@ -103,7 +102,7 @@
                                         <!--end::Svg Icon-->
                                         <input type="text" data-kt-permissions-table-filter="search"
                                                class="form-control form-control-solid w-250px ps-15"
-                                               placeholder="Tìm kiếm danh mục">
+                                               placeholder="Tìm kiếm khóa học">
                                     </div>
                                     <!--end::Search-->
                                 </div>
@@ -111,8 +110,7 @@
                                 <!--begin::Card toolbar-->
                                 <div class="card-toolbar">
                                     <!--begin::Button-->
-                                    <button type="button" class="btn btn-light-primary" data-bs-toggle="modal"
-                                            data-bs-target="#kt_modal_add_permission">
+                                    <a type="button" class="btn btn-light-primary" th:href="@{/teacher/addCourse}" >
                                         <!--begin::Svg Icon | path: icons/duotone/Interface/Plus-Square.svg-->
                                         <span class="svg-icon svg-icon-3">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -125,8 +123,8 @@
                                                           fill="#12131A"></path>
 												</svg>
 											</span>
-                                        <!--end::Svg Icon-->Thêm danh mục
-                                    </button>
+                                        <!--end::Svg Icon-->Thêm khóa học
+                                    </a>
                                     <!--end::Button-->
                                 </div>
                                 <!--end::Card toolbar-->
@@ -145,19 +143,23 @@
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0"
                                                 role="row">
-                                                <th class="min-w-125px sorting" tabindex="0"
+                                                <th class="min-w-100px sorting" tabindex="0"
                                                     aria-controls="kt_permissions_table" rowspan="1" colspan="1"
-                                                    style="width: 164.983px;"
-                                                    aria-label="Name: activate to sort column ascending">Tên danh mục
+                                                    style="width: 0px;padding-right: 0px"
+                                                    aria-label="Name: activate to sort column ascending">Tên viết tắt
                                                 </th>
                                                 <th class="min-w-250px sorting_disabled" rowspan="1" colspan="1"
-                                                    style="width: 455.65px;" aria-label="Assigned to">Mô tả
+                                                    style="width: 455.65px;" aria-label="Assigned to">Tên đầy đủ
                                                 </th>
                                                 <th class="min-w-125px sorting" tabindex="0"
                                                     aria-controls="kt_permissions_table" rowspan="1" colspan="1"
                                                     style="width: 139.3px;"
-                                                    aria-label="Created Date: activate to sort column ascending">Số khóa
-                                                    học
+                                                    aria-label="Created Date: activate to sort column ascending">Ngày bắt đầu
+                                                </th>
+                                                <th class="min-w-125px sorting" tabindex="0"
+                                                    aria-controls="kt_permissions_table" rowspan="1" colspan="1"
+                                                    style="width: 139.3px;"
+                                                    aria-label="Created Date: activate to sort column ascending">Mật khẩu
                                                 </th>
                                                 <th class="text-end min-w-100px sorting_disabled" rowspan="1"
                                                     colspan="1" style="width: 106.567px;" aria-label="Actions">Hành động
@@ -168,26 +170,25 @@
                                             <!--end::Table head-->
                                             <!--begin::Table body-->
                                             <tbody class="fw-bold text-gray-600">
-                                            <th:block th:each="courseCategory,iState : ${LIST_COURSE_CATEGORY}">
+                                            <th:block th:each="course,iState : ${LIST_COURSE}">
                                                 <tr class="odd">
                                                     <!--begin::Name=-->
-                                                    <td th:text="${courseCategory.categoryName}"></td>
+                                                    <td th:text="${course.shortName}"></td>
                                                     <!--end::Name=-->
                                                     <!--begin::Assigned to=-->
-                                                    <td th:text="${courseCategory.categoryDescription}"></td>
+                                                    <td th:text="${course.fullName}"></td>
                                                     <!--end::Assigned to=-->
                                                     <!--begin::Created Date-->
-                                                    <td th:text="${courseCategory.courses.size()}"></td>
+                                                    <td th:text="${#dates.format(course.startDate,'dd-MM-yyyy')}"></td>
+                                                    <td>
+                                                        <span class="badge badge-light-info fs-7 m-1" th:text="${course.password}" th:if="${course.password != null}"></span>
+                                                        <span class="badge badge-light-dark fs-7 m-1" th:if="${course.password == null}">Không đặt</span>
+                                                    </td>
                                                     <!--end::Created Date-->
                                                     <!--begin::Action=-->
                                                     <td class="text-end">
                                                         <!--begin::Update-->
-                                                        <button class="btn btn-icon btn-active-light-primary w-30px h-30px me-3 btn-update"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_update_permission"
-                                                                th:data="${courseCategory.categoryId}"
-                                                                th:category-name="${courseCategory.categoryName}"
-                                                                th:category-description="${courseCategory.categoryDescription}">
+                                                        <a class="btn btn-icon btn-active-light-primary w-30px h-30px me-3 btn-update" th:href="|/teacher/editCourse/${course.courseId}|">
                                                             <!--begin::Svg Icon | path: icons/duotone/Interface/Settings-02.svg-->
                                                             <span class="svg-icon svg-icon-3">
 																<svg xmlns="http://www.w3.org/2000/svg" width="24"
@@ -205,11 +206,11 @@
 																</svg>
 															</span>
                                                             <!--end::Svg Icon-->
-                                                        </button>
+                                                        </a>
                                                         <!--end::Update-->
                                                         <!--begin::Delete-->
                                                         <button class="btn btn-icon btn-active-light-primary w-30px h-30px btn-delete"
-                                                                data-kt-permissions-table-filter="delete_row">
+                                                                data-kt-permissions-table-filter="delete_row" th:data="${course.courseId}">
                                                             <!--begin::Svg Icon | path: icons/duotone/General/Trash.svg-->
                                                             <span class="svg-icon svg-icon-3">
 																<svg xmlns="http://www.w3.org/2000/svg"
@@ -472,8 +473,8 @@
 <div th:replace="~{/layout/footer::footer1}"></div>
 
 <div th:replace="~{/layout/include::script}"></div>
-<script th:src="@{/js/courseCategory.js}"></script>
-<script th:src="@{/js/updateCourseCategory.js}"></script>
-<script th:src="@{/js/addCourseCategory.js}"></script>
+<script th:src="@{/js/course/tableCourse.js}"></script>
+<script th:src="@{/js/course/addCourse.js}"></script>
+<script th:src="@{/js/course/updateCourse.js}"></script>
 </body>
 </html>

@@ -54,6 +54,17 @@ public class LmsApplication {
         courseCategoryRepository.save(courseCategory2);
         System.out.println("---------- Init Course");
         CourseRepository courseRepository = context.getBean(CourseRepository.class);
-//        Course course = Course.builder().courseCategory(courseCategory).shortName("PRF192").fullName("Program Fundamental").startDate(new Date()).endDate(new Date())..build();
+        Course course = Course.builder()
+                .courseCategory(courseCategory)
+                .shortName("PRF192")
+                .fullName("Program Fundamental")
+                .startDate(new Date()).endDate(new Date())
+                .description("Details for course")
+                .active(true)
+                .password("123")
+                .visible(true)
+                .user(User.builder().username("teacher").build())
+                .build();
+        courseRepository.save(course);
     }
 }
