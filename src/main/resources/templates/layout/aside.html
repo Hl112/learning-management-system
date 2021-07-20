@@ -159,9 +159,16 @@
                             <span class="menu-section text-muted text-uppercase fs-8 ls-1">Khóa học của bạn</span>
                         </div>
                     </div>
-                <th:block th:each="myCourse : ${}">
 
-                </th:block>
+                    <div class="menu-item" th:each="item : ${myCourses}">
+                        <a class="menu-link" th:href="@{/teacher/viewCourse(id=*{item.courseId})}" th:classappend="${module == item.courseId.toString() ? 'active' : ''}">
+										<span class="menu-icon">
+											<i class="bi bi-person fs-2"></i>
+										</span>
+                            <span class="menu-title" th:text="*{item.fullName}"></span>
+                        </a>
+                    </div>
+
 
                 </th:block>
 

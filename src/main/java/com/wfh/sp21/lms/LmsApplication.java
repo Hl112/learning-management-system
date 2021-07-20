@@ -23,6 +23,7 @@ public class LmsApplication {
         ApplicationContext context = SpringApplication.run(LmsApplication.class, args);
         initRole_User(context);
         initCourseCategory_Course(context);
+
     }
 
     public static void initRole_User(ApplicationContext context) {
@@ -66,5 +67,6 @@ public class LmsApplication {
                 .user(User.builder().username("teacher").build())
                 .build();
         courseRepository.save(course);
+
     }
 }

@@ -2,8 +2,10 @@ package com.wfh.sp21.lms.controller;
 
 import com.wfh.sp21.lms.model.Course;
 import com.wfh.sp21.lms.model.CourseCategory;
+import com.wfh.sp21.lms.model.CourseSections;
 import com.wfh.sp21.lms.model.User;
 import com.wfh.sp21.lms.services.CourseCategoryServicesImpl;
+import com.wfh.sp21.lms.services.CourseSectionServicesImpl;
 import com.wfh.sp21.lms.services.CourseServicesImpl;
 import com.wfh.sp21.lms.services.UserServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +31,26 @@ public class TeacherController {
     @Autowired
     private CourseServicesImpl courseServicesImpl;
 
+    @Autowired
+    private CourseSectionServicesImpl courseSectionServicesImpl;
+
     @GetMapping(value = {"", "/"})
     public String teacherPage() {
         return "teacher/teacher";
     }
 
-    //Init Attriute
+    //Init Attribute
     @ModelAttribute("userLogin")
     User userLogin(Principal principal) {
         return userServicesImpl.getUserByUsername(principal.getName());
     }
 
+    @ModelAttribute("myCourses")
+    List<Course> getCourseActiveByUser(Principal principal){
+        String username = principal.getName();
+
+        return courseServicesImpl.getAllActiveCoursesByUsernameCourses(username);
+    }
 
     //Course
     @GetMapping("/course")
@@ -86,9 +97,9 @@ public class TeacherController {
         System.out.println(course.isVisible());
         boolean result = course.getCourseId() != null ? courseServicesImpl.updateCourse(course) : courseServicesImpl.addCourse(course);
         if (result) {
-            return new ResponseEntity<Object>(success, HttpStatus.OK);
+            return new ResponseEntity<>(success, HttpStatus.OK);
         } else {
-            return new ResponseEntity<Object>(fail, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(fail, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -96,10 +107,58 @@ public class TeacherController {
     @ResponseBody
     public ResponseEntity<Object> deleteCourse(@RequestBody Course course) {
         if (courseServicesImpl.deleteCourse(course)) {
-            return new ResponseEntity<Object>("Xóa khóa học thành công", HttpStatus.OK);
+            return new ResponseEntity<>("Xóa khóa học thành công", HttpStatus.OK);
         } else {
-            return new ResponseEntity<Object>("Xóa khóa học thất bại", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Xóa khóa học thất bại", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/viewCourse")
+    public String viewCoursePage(Model model, @RequestParam("id") Long courseId){
+        model.addAttribute("module","" + courseId);
+        Course course = courseServicesImpl.getCourseById(courseId);
+        model.addAttribute("oCourse",course);
+        return "teacher/viewCourse";
+    }
+    //Course Sections
+    @PostMapping("/section")
+    @ResponseBody
+    public ResponseEntity<Object> addCourseSection(@RequestParam("courseID") Long courseId,
+                                                   @RequestParam("num") int numberOfSection){
+        boolean result = courseSectionServicesImpl.addSection(courseId, numberOfSection);
+        if(result){
+            return new ResponseEntity<>("Thêm chủ đề thành công", HttpStatus.OK);
+        }else
+            return new ResponseEntity<>("Thêm chủ đề thất bại", HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("/section")
+    @ResponseBody
+    public ResponseEntity<Object> editCourseSection(@RequestBody CourseSections courseSections){
+        boolean result = courseSectionServicesImpl.editSection(courseSections);
+        if(result){
+            return new ResponseEntity<>("Sửa chủ đề thành công", HttpStatus.OK);
+        }else
+            return new ResponseEntity<>("Sửa chủ đề thất bại", HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("/section/{id}")
+    @ResponseBody
+    public ResponseEntity<Object> hiddenShowCourseSection(@PathVariable("id") Long courseSectionId){
+        boolean result = courseSectionServicesImpl.hiddenShowSection(courseSectionId);
+        String msg = result ? "Ẩn chủ đề thành công" : "Hiện chủ đề thành công";
+            return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/section/{id}")
+    @ResponseBody
+    public ResponseEntity<Object> disableCourseSection(@PathVariable("id") Long courseSectionId){
+        boolean result = courseSectionServicesImpl.disableSection(courseSectionId);
+        if(result){
+            return new ResponseEntity<>("Xóa chủ đề thành công", HttpStatus.OK);
+        }else
+            return new ResponseEntity<>("Xóa chủ đề thất bại", HttpStatus.BAD_REQUEST);
+    }
+
 
 }

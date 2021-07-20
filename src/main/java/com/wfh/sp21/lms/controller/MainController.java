@@ -38,7 +38,9 @@ public class MainController {
     public String aside(Model model, Principal principal){
         User user = userServicesImpl.getUserByUsername(principal.getName());
         model.addAttribute("userLogin", user);
-        List<Course> courseList =courseServicesImpl.getAllActiveCoursesByUsernameCourses(true, user.getUsername());
+//        List<Course> courseList =courseServicesImpl.getAllActiveCoursesByUsernameCourses(true, user.getUsername());
+        List<Course> courseList =courseServicesImpl.getAllActiveCoursesByUsernameCourses(user.getUsername());
+        System.out.println(courseList.size());
         model.addAttribute("myCourses", courseList);
         return "layout/aside";
     }

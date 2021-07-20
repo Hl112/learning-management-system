@@ -15,6 +15,8 @@ public class CourseServicesImpl implements CourseServices{
     private CourseRepository courseRepository;
     @Autowired
     private CourseCategoryRepository courseCategoryRepository;
+    @Autowired
+    private CourseSectionServicesImpl courseSectionServicesImpl;
 
     @Override
     public List<Course> getAllCourses() {
@@ -27,8 +29,8 @@ public class CourseServicesImpl implements CourseServices{
     }
 
     @Override
-    public List<Course> getAllActiveCoursesByUsernameCourses(boolean active,String username) {
-        return courseRepository.findAllByActiveAndUser_Username(active,username);
+    public List<Course> getAllActiveCoursesByUsernameCourses(String username) {
+        return courseRepository.findAllByActiveIsTrueAndVisibleIsTrueAndUser_Username(username);
     }
 
     @Override
@@ -38,7 +40,10 @@ public class CourseServicesImpl implements CourseServices{
 
     @Override
     public boolean addCourse(Course course) {
-        courseRepository.save(course);
+        Course courseDB = courseRepository.save(course);
+        System.out.println("---- Begin Init Section");
+        courseSectionServicesImpl.initCourseSection(courseDB);
+        System.out.println("--- End Init Section");
         return true;
     }
 

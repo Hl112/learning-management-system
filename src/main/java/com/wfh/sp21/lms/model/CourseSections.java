@@ -10,6 +10,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
 public class CourseSections {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
