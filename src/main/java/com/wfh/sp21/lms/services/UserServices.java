@@ -13,5 +13,6 @@ public interface UserServices {
     boolean deleteUserByUsername(List<String> usernames);
     boolean changeRole(User user);
     boolean deactivateListUsers(List<String> usernames) throws SQLException;
+    List<User> listAddCourses(List<User> list);
 
 }

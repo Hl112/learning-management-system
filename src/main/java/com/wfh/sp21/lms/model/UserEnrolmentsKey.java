@@ -1,6 +1,7 @@
 package com.wfh.sp21.lms.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
 public class UserEnrolmentsKey implements Serializable {
     @Column(name = "username")
     private String username;

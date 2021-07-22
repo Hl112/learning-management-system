@@ -4,10 +4,7 @@ import com.wfh.sp21.lms.model.Course;
 import com.wfh.sp21.lms.model.CourseCategory;
 import com.wfh.sp21.lms.model.CourseSections;
 import com.wfh.sp21.lms.model.User;
-import com.wfh.sp21.lms.services.CourseCategoryServicesImpl;
-import com.wfh.sp21.lms.services.CourseSectionServicesImpl;
-import com.wfh.sp21.lms.services.CourseServicesImpl;
-import com.wfh.sp21.lms.services.UserServicesImpl;
+import com.wfh.sp21.lms.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -33,6 +31,9 @@ public class TeacherController {
 
     @Autowired
     private CourseSectionServicesImpl courseSectionServicesImpl;
+
+    @Autowired
+    private UserEnrolmentsServicesImpl userEnrolmentsServicesImpl;
 
     @GetMapping(value = {"", "/"})
     public String teacherPage() {
@@ -159,6 +160,42 @@ public class TeacherController {
         }else
             return new ResponseEntity<>("Xóa chủ đề thất bại", HttpStatus.BAD_REQUEST);
     }
+    //UserEnrolments
+    @GetMapping("/member")
+    public String memberPage(Model model, @RequestParam("id") Long courseId){
+        List<User> userList = userEnrolmentsServicesImpl.getAllEnrolmentsByCourseId(courseId);
+        Course course = courseServicesImpl.getCourseById(courseId);
+        List<String> classList = new ArrayList<>(List.of("bg-light-warning text-warning",
+                "bg-light-danger text-danger",
+                "bg-light-primary text-primary",
+                "bg-light-info text-info",
+                "bg-light-success text-success"));
+        List<User> userListAdd = userServicesImpl.listAddCourses(userList);
+        model.addAttribute("module","mb" + courseId);
+        model.addAttribute("CLASS_IMG", classList);
+        model.addAttribute("LIST_USER",userList);
+        model.addAttribute("USER_ADD", userListAdd);
+        model.addAttribute("CourseSelected",course);
+        return "teacher/member";
+    }
 
+    @PostMapping("/member")
+    public ResponseEntity<Object> addMembers(@RequestBody List<String> usernameList, @RequestParam("id") Long courseId){
+        boolean result = userEnrolmentsServicesImpl.addEnrolment(courseId, usernameList);
+        if(result){
+            return new ResponseEntity<>("Thêm thành viên vào khóa học thành công", HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>("Thêm thành viên vào khóa học thất bại", HttpStatus.BAD_REQUEST);
+        }
+    }
+    @DeleteMapping("/member")
+    public ResponseEntity<Object> deleteMembers(@RequestBody List<String> usernameList, @RequestParam("id") Long courseId){
+        boolean result = userEnrolmentsServicesImpl.deleteEnrolment(usernameList,courseId);
+        if(result){
+            return new ResponseEntity<>("Xóa thành viên khỏi khóa học thành công", HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>("Xóa thành viên khỏi khóa học thất bại", HttpStatus.BAD_REQUEST);
+        }
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.wfh.sp21.lms.model.module;
 
+import com.wfh.sp21.lms.model.CourseModules;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,8 +17,6 @@ public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long quizId;
-    private String quizName;
-    private String description;
     private Date timeOpen;
     private Date timeClose;
     private Date timeLimit;

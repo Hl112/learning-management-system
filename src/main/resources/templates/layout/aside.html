@@ -62,7 +62,6 @@
                 </div>
 
 
-
                 <th:block th:if="${userLogin.role.roleName.equals('Admin')}">
                     <!-- Managing Account -->
                     <div class="menu-item">
@@ -130,48 +129,65 @@
                 </th:block>
 
                 <th:block th:if="${userLogin.role.roleName.equals('Teacher')}">
-                <!-- Course -->
-                <div class="menu-item">
-                    <div class="menu-content pt-8 pb-2">
-                        <span class="menu-section text-muted text-uppercase fs-8 ls-1">Quản lý khóa học</span>
+                    <!-- Course -->
+                    <div class="menu-item">
+                        <div class="menu-content pt-8 pb-2">
+                            <span class="menu-section text-muted text-uppercase fs-8 ls-1">Quản lý khóa học</span>
+                        </div>
                     </div>
-                </div>
-                <div class="menu-item">
-                    <a class="menu-link" th:href="@{/teacher/course}"
-                       th:classappend="${module == 'course' ? 'active' : ''}">
+                    <div class="menu-item">
+                        <a class="menu-link" th:href="@{/teacher/course}"
+                           th:classappend="${module == 'course' ? 'active' : ''}">
 										<span class="menu-icon">
 											<i class="bi bi-person fs-2"></i>
 										</span>
-                        <span class="menu-title">Khóa Học</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a class="menu-link" th:href="@{/teacher/addCourse}" th:classappend="${module == 'addCourse' ? 'active' : ''}">
+                            <span class="menu-title">Khóa Học</span>
+                        </a>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link" th:href="@{/teacher/addCourse}"
+                           th:classappend="${module == 'addCourse' ? 'active' : ''}">
 										<span class="menu-icon">
 											<i class="bi bi-person fs-2"></i>
 										</span>
-                        <span class="menu-title">Thêm & Sửa khóa học</span>
-                    </a>
-                </div>
-                <!-- List Course -->
-                <div class="menu-item">
+                            <span class="menu-title">Thêm & Sửa khóa học</span>
+                        </a>
+                    </div>
+                    <!-- List Course -->
+                    <div class="menu-item">
                         <div class="menu-content pt-8 pb-2">
                             <span class="menu-section text-muted text-uppercase fs-8 ls-1">Khóa học của bạn</span>
                         </div>
                     </div>
 
-                    <div class="menu-item" th:each="item : ${myCourses}">
-                        <a class="menu-link" th:href="@{/teacher/viewCourse(id=*{item.courseId})}" th:classappend="${module == item.courseId.toString() ? 'active' : ''}">
+                    <div class="menu-item menu-accordion" th:each="item : ${myCourses}">
+                        <a class="menu-link" th:href="@{/teacher/viewCourse(id=*{item.courseId})}"
+                           th:classappend="${module == item.courseId.toString() ? 'active' : ''}">
 										<span class="menu-icon">
-											<i class="bi bi-person fs-2"></i>
+											<i class="bi bi-layers fs-3"></i>
 										</span>
                             <span class="menu-title" th:text="*{item.fullName}"></span>
+                            <span class="menu-arrow"></span>
                         </a>
+                        <div class="menu-sub menu-sub-accordion menu-active-bg" style="display: none; overflow: hidden;"
+                             th:style="${module == ('mb' + item.courseId.toString()) ? '':'display: none; overflow: hidden;'}"
+                             th:classappend="${module == ('mb' + item.courseId.toString()) ? 'show':''}"
+                             kt-hidden-height="265">
+                            <div class="menu-item">
+                                <a class="menu-link"
+                                   th:href="@{/teacher/member(id=*{item.courseId})}"
+                                   th:classappend="${module == ('mb' + item.courseId.toString()) ? 'active' : ''}">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+                                    <span class="menu-title">Thành viên</span>
+                                </a>
+                            </div>
+                        </div>
                     </div>
 
 
                 </th:block>
-
 
 
                 <!-- Separator-->
@@ -192,6 +208,16 @@
                 </div>
             </div>
             <!--end::Menu-->
+            <script>
+                var x = document.querySelector('.menu-item > .active').parentNode;
+                if(x.classList.contains('menu-accordion')){
+                    x.classList.add('hover');
+                    x.classList.add('show');
+                    var sub = document.querySelector('.menu-sub.menu-sub-accordion');
+                    sub.classList.add('show');
+                    sub.style = '';
+                }
+            </script>
         </div>
     </div>
     <!--end::Aside menu-->

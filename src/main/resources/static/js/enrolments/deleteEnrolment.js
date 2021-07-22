@@ -1,4 +1,5 @@
 'use strict';
+var courseID = document.getElementById('courseID').value;
 var KTUsersList = function () {
     var e, t, n, r, o = document.getElementById('kt_table_users'),
         c = () =>{
@@ -10,7 +11,7 @@ var KTUsersList = function () {
             a.forEach((e=>{
                 e.addEventListener('click', (function () {
                     setTimeout((function () {
-                        l();
+                        l()
                     }), 50)
                 }))
             })),
@@ -40,34 +41,35 @@ var KTUsersList = function () {
                             xhr.addEventListener("readystatechange", function() {
                                 if(this.readyState === 4) {
                                     console.log(this.responseText);
-                                   if(this.status === 200){
-                                       Swal.fire({
-                                           text: 'Bạn đã xóa tất cả thành viên đã chọn!.',
-                                           icon: 'success',
-                                           buttonsStyling: !1,
-                                           confirmButtonText: 'Ok!',
-                                           customClass: {
-                                               confirmButton: 'btn fw-bold btn-primary'
-                                           }
-                                       }).then((function () {
-                                           a.forEach((t=>{
-                                               t.checked && e.row($(t.closest('tbody tr'))).remove().draw()
-                                           }));
-                                           o.querySelectorAll('[type="checkbox"]') [0].checked = !1
-                                       })).then((function () {
-                                           l(),
-                                               c()
-                                       }))
-                                   }
+                                    if(this.status === 200){
+                                        Swal.fire({
+                                            text: 'Bạn đã xóa tất cả thành viên đã chọn!.',
+                                            icon: 'success',
+                                            buttonsStyling: !1,
+                                            confirmButtonText: 'Ok!',
+                                            customClass: {
+                                                confirmButton: 'btn fw-bold btn-primary'
+                                            }
+                                        }).then((function () {
+                                            // a.forEach((t=>{
+                                            //     t.checked && e.row($(t.closest('tbody tr'))).remove().draw()
+                                            // }));
+                                            // o.querySelectorAll('[type="checkbox"]') [0].checked = !1
+                                            window.location.reload();
+                                        })).then((function () {
+                                            l(),
+                                                c()
+                                        }))
+                                    }
                                 }
                             });
-                            xhr.open("DELETE", "/admin/deleteUser");
+                            xhr.open("DELETE", `/teacher/member?id=${courseID}`);
                             xhr.setRequestHeader("Content-Type", "application/json");
                             xhr.send(data);
                         } else{
                             if('cancel' === t.dismiss){
                                 Swal.fire({
-                                    text: 'Bạn đã hủy xóa thành viên đã chọn.',
+                                    text: 'Bạn đã hủy xóa thành viên đã chọn ra khỏi khóa học.',
                                     icon: 'error',
                                     buttonsStyling: !1,
                                     confirmButtonText: 'Ok, got it!',
@@ -77,33 +79,6 @@ var KTUsersList = function () {
                                 })
                             }
                         }
-
-                        // t.value ? Swal.fire({
-                        //     text: 'Bạn đã xóa tất cả thành viên đã chọn!.',
-                        //     icon: 'success',
-                        //     buttonsStyling: !1,
-                        //     confirmButtonText: 'Ok!',
-                        //     customClass: {
-                        //         confirmButton: 'btn fw-bold btn-primary'
-                        //     }
-                        // }).then((function () {
-                        //     a.forEach((t=>{
-                        //         t.checked && e.row($(t.closest('tbody tr'))).remove().draw()
-                        //     }));
-                        //     o.querySelectorAll('[type="checkbox"]') [0].checked = !1
-                        // })).then((function () {
-                        //     l(),
-                        //         c()
-                        // })) : 'cancel' === t.dismiss && Swal.fire({
-                        //     text: 'Bạn đã hủy xóa thành viên đã chọn.',
-                        //     icon: 'error',
-                        //     buttonsStyling: !1,
-                        //     confirmButtonText: 'Ok, got it!',
-                        //     customClass: {
-                        //         confirmButton: 'btn fw-bold btn-primary'
-                        //     }
-                        // })
-
                     }))
                 }))
         };
@@ -173,7 +148,7 @@ var KTUsersList = function () {
 
                         if(t.value){
                             let listUsername = [];
-                           listUsername.push(username);
+                            listUsername.push(username);
                             let data = JSON.stringify(listUsername);
                             let xhr = new XMLHttpRequest();
                             xhr.withCredentials = true;
@@ -182,7 +157,7 @@ var KTUsersList = function () {
                                     console.log(this.responseText);
                                     if(this.status === 200){
                                         Swal.fire({
-                                            text: 'Bạn đã xóa ' + r +'!.',
+                                            text: 'Bạn đã xóa ' + r +' khỏi khóa học!.',
                                             icon: 'success',
                                             buttonsStyling: !1,
                                             confirmButtonText: 'Ok!',
@@ -197,7 +172,7 @@ var KTUsersList = function () {
                                     }
                                 }
                             });
-                            xhr.open("DELETE", "/admin/deleteUser");
+                            xhr.open("DELETE", `/teacher/member?id=${courseID}`);
                             xhr.setRequestHeader("Content-Type", "application/json");
                             xhr.send(data);
                         } else{
@@ -213,29 +188,6 @@ var KTUsersList = function () {
                                 })
                             }
                         }
-
-                        // t.value ? Swal.fire({
-                        //     text: 'You have deleted ' + r + '!.',
-                        //     icon: 'success',
-                        //     buttonsStyling: !1,
-                        //     confirmButtonText: 'Ok, got it!',
-                        //     customClass: {
-                        //         confirmButton: 'btn fw-bold btn-primary'
-                        //     }
-                        // }).then((function () {
-                        //     e.row($(n)).remove().draw()
-                        // })).then((function () {
-                        //     l()
-                        // })) : 'cancel' === t.dismiss && Swal.fire({
-                        //     text: r + ' was not deleted.',
-                        //     icon: 'error',
-                        //     buttonsStyling: !1,
-                        //     confirmButtonText: 'Ok, got it!',
-                        //     customClass: {
-                        //         confirmButton: 'btn fw-bold btn-primary'
-                        //     }
-                        // })
-
 
                     }))
                 }))

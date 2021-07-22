@@ -2,6 +2,7 @@ package com.wfh.sp21.lms.model;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -15,6 +16,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
 public class UserEnrolments implements Serializable {
     @EmbeddedId
     private UserEnrolmentsKey id;

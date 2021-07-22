@@ -1,13 +1,7 @@
 package com.wfh.sp21.lms;
 
-import com.wfh.sp21.lms.model.Course;
-import com.wfh.sp21.lms.model.CourseCategory;
-import com.wfh.sp21.lms.model.Role;
-import com.wfh.sp21.lms.model.User;
-import com.wfh.sp21.lms.repository.CourseCategoryRepository;
-import com.wfh.sp21.lms.repository.CourseRepository;
-import com.wfh.sp21.lms.repository.RoleRepository;
-import com.wfh.sp21.lms.repository.UserRepository;
+import com.wfh.sp21.lms.model.*;
+import com.wfh.sp21.lms.repository.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,6 +17,7 @@ public class LmsApplication {
         ApplicationContext context = SpringApplication.run(LmsApplication.class, args);
         initRole_User(context);
         initCourseCategory_Course(context);
+        initUserEnrolments(context);
 
     }
 
@@ -67,6 +62,23 @@ public class LmsApplication {
                 .user(User.builder().username("teacher").build())
                 .build();
         courseRepository.save(course);
+
+    }
+
+    public static void initUserEnrolments(ApplicationContext context){
+        UserRepository userRepository = context.getBean(UserRepository.class);
+        CourseRepository courseRepository = context.getBean(CourseRepository.class);
+        UserEnrolmentsRepository enrolmentsRepository = context.getBean(UserEnrolmentsRepository.class);
+        User student = userRepository.findByUsername("student");
+        Course course = courseRepository.findByCourseId(1L);
+        UserEnrolments userEnrolments = UserEnrolments.builder()
+                .id(UserEnrolmentsKey.builder().courseId(course.getCourseId()).username(student.getUsername()).build())
+                .user(student)
+                .course(course)
+                .status(true)
+                .dateEnrolled(new Date()).build();
+        enrolmentsRepository.save(userEnrolments);
+        System.out.println("------- Init UserEnrolment");
 
     }
 }

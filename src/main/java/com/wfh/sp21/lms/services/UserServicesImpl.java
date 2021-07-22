@@ -1,8 +1,10 @@
 package com.wfh.sp21.lms.services;
 
+import com.wfh.sp21.lms.model.Course;
 import com.wfh.sp21.lms.model.CustomUserDetails;
 import com.wfh.sp21.lms.model.Role;
 import com.wfh.sp21.lms.model.User;
+import com.wfh.sp21.lms.repository.CourseRepository;
 import com.wfh.sp21.lms.repository.RoleRepository;
 import com.wfh.sp21.lms.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServicesImpl implements UserDetailsService, UserServices {
@@ -20,6 +23,8 @@ public class UserServicesImpl implements UserDetailsService, UserServices {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private CourseRepository courseRepository;
 
     private static final String STUDENT_ROLE_NAME = "Student";
 
@@ -82,6 +87,11 @@ public class UserServicesImpl implements UserDetailsService, UserServices {
                result = true;
            }
         return result;
+    }
+
+    @Override
+    public List<User> listAddCourses(List<User> list) {
+        return userRepository.findAllByRole_RoleNameAndUsernameNotIn("Student", list.stream().map(User::getUsername).collect(Collectors.toList()));
     }
 
     public boolean changeRole(User user){
