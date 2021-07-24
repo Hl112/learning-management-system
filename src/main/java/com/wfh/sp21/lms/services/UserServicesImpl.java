@@ -70,7 +70,8 @@ public class UserServicesImpl implements UserDetailsService, UserServices {
         for (String username: usernames) {
             User user = userRepository.findByUsername(username);
             if (user == null) return false;
-            userRepository.delete(user);
+            user.setStatus(false);
+            userRepository.save(user);
         }
         return true;
     }

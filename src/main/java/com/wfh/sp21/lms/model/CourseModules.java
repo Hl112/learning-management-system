@@ -6,28 +6,30 @@ import com.wfh.sp21.lms.model.module.Quiz;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.File;
-import java.util.Collection;
 
 @Entity
 @Table(name = "wfh_course_modules")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
 public class CourseModules {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long courseModuleId;
 
     private String name;
     private String description;
     private String typeName;
+    private boolean showDescription;
+    private boolean visible;
 
-
-    @ManyToMany(mappedBy = "courseModules")
+    @ManyToOne
+    @JoinColumn(name = "course_section_id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Collection<CourseSections> courseSections;
+    private CourseSections courseSections;
+
 
     @OneToOne
     @JoinColumn(name = "quiz_id")

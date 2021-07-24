@@ -5,15 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "wfh_file")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class FileModule {
+public class FileModule implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fileId;
     private String fileName;
     private byte[] fileData;

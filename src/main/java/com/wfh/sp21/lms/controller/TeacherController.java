@@ -1,17 +1,18 @@
 package com.wfh.sp21.lms.controller;
 
-import com.wfh.sp21.lms.model.Course;
-import com.wfh.sp21.lms.model.CourseCategory;
-import com.wfh.sp21.lms.model.CourseSections;
-import com.wfh.sp21.lms.model.User;
+import com.wfh.sp21.lms.model.*;
+import com.wfh.sp21.lms.model.module.Assignment;
+import com.wfh.sp21.lms.model.module.ModuleMapper;
 import com.wfh.sp21.lms.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.codec.ByteArrayDecoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Method;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,9 @@ public class TeacherController {
 
     @Autowired
     private UserEnrolmentsServicesImpl userEnrolmentsServicesImpl;
+
+    @Autowired
+    private CourseModulesServicesImpl courseModulesServicesImpl;
 
     @GetMapping(value = {"", "/"})
     public String teacherPage() {
@@ -188,6 +192,7 @@ public class TeacherController {
             return new ResponseEntity<>("Thêm thành viên vào khóa học thất bại", HttpStatus.BAD_REQUEST);
         }
     }
+
     @DeleteMapping("/member")
     public ResponseEntity<Object> deleteMembers(@RequestBody List<String> usernameList, @RequestParam("id") Long courseId){
         boolean result = userEnrolmentsServicesImpl.deleteEnrolment(usernameList,courseId);
@@ -197,5 +202,37 @@ public class TeacherController {
             return new ResponseEntity<>("Xóa thành viên khỏi khóa học thất bại", HttpStatus.BAD_REQUEST);
         }
     }
+    //Module
+    @GetMapping("/addModule")
+    public String addModulePage(Model model,@RequestParam("type") String type, @RequestParam("id") Long courseSectionId){
+        System.out.println(type);
+        System.out.println(courseSectionId);
+        CourseSections courseSections = courseSectionServicesImpl.getCourseSectionById(courseSectionId);
+        model.addAttribute("courseSection",courseSections);
+
+        return "teacher/addModule";
+    }
+
+    @PostMapping("/addModule")
+    @ResponseBody
+    public ResponseEntity<Object> addModule(@RequestBody ModuleMapper module)  {
+        CourseModules courseModules = module.getCourseModules();
+        Object moduleChild = null;
+        System.out.println(courseModules.getTypeName());
+        try {
+            Method method = module.getClass().getMethod("get" + courseModules.getTypeName());
+            moduleChild = method.invoke(module);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Error Type", HttpStatus.BAD_REQUEST);
+        }
+        boolean result = courseModulesServicesImpl.addModule(courseModules,courseModules.getCourseSections().getCourseSectionId(), moduleChild);
+        if(result){
+            return new ResponseEntity<>("Thêm " + courseModules.getTypeName() + " thành công", HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>("Thêm " + courseModules.getTypeName() + " thất bại", HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 }

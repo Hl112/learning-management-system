@@ -1,7 +1,10 @@
 package com.wfh.sp21.lms;
 
 import com.wfh.sp21.lms.model.*;
+import com.wfh.sp21.lms.model.module.Quiz;
 import com.wfh.sp21.lms.repository.*;
+import com.wfh.sp21.lms.services.CourseModulesServicesImpl;
+import com.wfh.sp21.lms.services.CourseSectionServicesImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -18,7 +21,8 @@ public class LmsApplication {
         initRole_User(context);
         initCourseCategory_Course(context);
         initUserEnrolments(context);
-
+        initSection(context);
+        initEmptyModule(context);
     }
 
     public static void initRole_User(ApplicationContext context) {
@@ -63,6 +67,7 @@ public class LmsApplication {
                 .build();
         courseRepository.save(course);
 
+
     }
 
     public static void initUserEnrolments(ApplicationContext context){
@@ -80,5 +85,36 @@ public class LmsApplication {
         enrolmentsRepository.save(userEnrolments);
         System.out.println("------- Init UserEnrolment");
 
+    }
+
+    public static void initSection(ApplicationContext context){
+        CourseSectionServicesImpl sectionServices = context.getBean(CourseSectionServicesImpl.class);
+        CourseRepository courseRepository = context.getBean(CourseRepository.class);
+        Course course = courseRepository.getById(1L);
+        sectionServices.addSection(course.getCourseId(),2);
+        System.out.println("----- Init Course Section");
+    }
+
+    public static void initEmptyModule(ApplicationContext context){
+        CourseSectionServicesImpl courseSectionServices = context.getBean(CourseSectionServicesImpl.class);
+        CourseSections courseSections = courseSectionServices.getCourseSectionById(1L);
+        CourseModulesServicesImpl courseModulesServices = context.getBean(CourseModulesServicesImpl.class);
+        CourseModules courseModules = CourseModules.builder()
+                .name("Quiz 1")
+                .description("hihi haha")
+                .visible(true)
+                .typeName("Quiz")
+                .build();
+        CourseModules courseModules1 = CourseModules.builder()
+                .name("Assignment 1")
+                .description("hihi haha")
+                .visible(true)
+                .typeName("Assignment")
+                .build();
+        courseModulesServices.addModule(courseModules, courseSections.getCourseSectionId());
+
+        courseModulesServices.addModule(courseModules1, courseSections.getCourseSectionId());
+        System.out.println("--- Init Empty Module");
+        System.out.println(Quiz.class.getSimpleName());
     }
 }

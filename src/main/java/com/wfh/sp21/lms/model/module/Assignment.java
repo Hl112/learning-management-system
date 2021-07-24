@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -12,14 +13,15 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Assignment {
+public class Assignment{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long assignmentId;
-    private byte[] file;
+    @Lob
+    private String file;
     private Date startDate;
     private Date dueDate;
     private boolean fileSubmission;
+    private boolean textSubmission;
     private float maximumGrade;
 
 }

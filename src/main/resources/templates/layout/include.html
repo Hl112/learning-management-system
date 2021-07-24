@@ -16,11 +16,20 @@
     <script th:src="@{/js/plugins.bundle.js}"></script>
     <script th:src="@{/js/scripts.bundle.js}"></script>
     <script th:src="@{/js/datatables.bundle.js}"></script>
-
-<!--    <script th:src="@{/js/admin.js}"></script>-->
-
-<!--    <script th:src="@{/js/export-users.js}"></script>-->
-<!--    <script th:src="@{/js/add.js}"></script>-->
+    <script th:src="@{/js/flatpickr.js}"></script>
+    <script>
+        flatpickr(".flatpickr-input",{
+            enableTime: true,
+            dateFormat: "d-m-Y H:i",
+            time_24hr: true
+        });
+        flatpickr(".flatpickr-minute",{
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true
+        });
+    </script>
 </div>
 </body>
 </html>

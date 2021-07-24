@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface CourseSectionServices {
     List<CourseSections> getAllByCourseId(Long courseId);
+    CourseSections getCourseSectionById(Long courseSectionId);
     void initCourseSection(Course course);
     boolean addSection(CourseSections courseSections);
     boolean addSection(Long courseId , int numberOfSections);

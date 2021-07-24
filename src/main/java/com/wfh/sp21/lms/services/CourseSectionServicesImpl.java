@@ -22,6 +22,11 @@ public class CourseSectionServicesImpl implements CourseSectionServices{
     }
 
     @Override
+    public CourseSections getCourseSectionById(Long courseSectionId) {
+        return courseSectionRepository.findByCourseSectionId(courseSectionId);
+    }
+
+    @Override
     public void initCourseSection(Course course) {
         for (int i = 1; i <= 5; i++) {
             CourseSections courseSections = CourseSections.builder()

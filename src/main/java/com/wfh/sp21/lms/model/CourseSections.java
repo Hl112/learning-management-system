@@ -26,15 +26,10 @@ public class CourseSections {
     @ToString.Exclude
     private Course course;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "wfh_section_modules",
-        joinColumns = @JoinColumn(name = "course_section_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_modules_id")
-    )
+    @OneToMany(mappedBy = "courseSections",cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<CourseModules> courseModules;
-
 
 
 }

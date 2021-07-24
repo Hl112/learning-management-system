@@ -13,7 +13,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@ToString
 @Builder
 public class Course {
     @Id
@@ -44,12 +43,10 @@ public class Course {
     @ToString.Exclude
     private User user;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
     private Set<UserEnrolments> userEnrolments;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<CourseSections> courseSections;
 
 }

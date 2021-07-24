@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -13,9 +14,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Quiz {
+public class Quiz implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long quizId;
     private Date timeOpen;
     private Date timeClose;
@@ -23,7 +23,7 @@ public class Quiz {
     private float gradeToPass;
     private int attempt;
     private int gradeMethod;
-    private int questionPerPage;
+//    private int questionPerPage;
     private boolean review;
     private boolean shuffleQuestions;
     private String password;
