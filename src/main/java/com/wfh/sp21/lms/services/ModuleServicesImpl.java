@@ -28,26 +28,22 @@ public class ModuleServicesImpl implements ModuleServices{
 
 
     @Override
-    public boolean addAssignment(Assignment assignment) {
-        assignmentRepository.save(assignment);
-        return true;
+    public Assignment addAssignment(Assignment assignment) {
+        return assignmentRepository.save(assignment);
     }
 
     @Override
-    public boolean addQuiz(Quiz quiz) {
-        quizRepository.save(quiz);
-        return true;
+    public Quiz addQuiz(Quiz quiz) {
+        return quizRepository.save(quiz);
     }
 
     @Override
-    public boolean addFile(FileModule fileModule) {
-        fileModuleRepository.save(fileModule);
-        return true;
+    public FileModule addFile(FileModule fileModule) {
+        return fileModuleRepository.save(fileModule);
     }
 
     @Override
-    public boolean addUrl(Url url) {
-        urlRepository.save(url);
-        return true;
+    public Url addUrl(Url url) {
+        return urlRepository.save(url);
     }
 }

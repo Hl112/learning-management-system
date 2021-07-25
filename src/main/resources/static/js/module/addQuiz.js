@@ -20,7 +20,29 @@ document.getElementById('allowenddate').onclick = function () {
         document.getElementsByName('end_date')[0].style.backgroundColor = '#3a3b3c'
     }
 }
-
+document.getElementById('allowtimelimit').onclick = function () {
+    var check = document.getElementById('allowtimelimit').checked;
+    if (check) {
+        document.getElementsByName('time_limit')[0].disabled = !check;
+        document.getElementsByName('time_limit')[0].style.backgroundColor = '#f5f8fa'
+    } else {
+        document.getElementsByName('time_limit')[0].disabled = !check;
+        document.getElementsByName('time_limit')[0].style.backgroundColor = '#3a3b3c'
+    }
+}
+// hidden show pasword
+document.querySelector('.btn-visible').onclick = function() {
+    var domPass = document.querySelector('[name=password]');
+    if (domPass.type === 'password') {
+        domPass.type = 'text';
+        document.querySelector('.bi.bi-eye-slash').classList.add('d-none');
+        document.querySelector('.bi.bi-eye').classList.remove('d-none');
+    } else {
+        domPass.type = 'password';
+        document.querySelector('.bi.bi-eye-slash').classList.remove('d-none');
+        document.querySelector('.bi.bi-eye').classList.add('d-none');
+    }
+}
 function toDate(value) {
     if(value.length === 0) return null;
     let dateTime = value.split(' ');
@@ -34,6 +56,14 @@ function toDate(value) {
     dateObj.setMinutes(time[1]);
     return dateObj;
 }
+function toTime(value){
+    if(value.length === 0) return null;
+    let dateObj = new Date();
+    let time = value.split(':');
+    dateObj.setHours(time[0]);
+    dateObj.setMinutes(time[1]);
+    return dateObj;
+}
 "use strict";
 var KTCareersApply = function () {
     var t, e, i, file;
@@ -41,7 +71,7 @@ var KTCareersApply = function () {
         init: function () {
             var valObj = {
                 fields: {
-                    name: {validators: {notEmpty: {message: "Vui lòng nhập tên Assignment"}}},
+                    name: {validators: {notEmpty: {message: "Vui lòng nhập tên Quiz"}}},
                     "typeSubmit[]": {validators: {notEmpty: {message: "Vui lòng chọn một loại nộp bài"}}},
                     maxGrade: {
                         validators: {
@@ -49,11 +79,11 @@ var KTCareersApply = function () {
                             , numeric: {message: "Vui lòng nhập số"}
                         }
                     },
-                    start_date: {validators: {notEmpty: {message: "Ngày bắt đầu là bắt buộc"}}},
+                    start_date: {validators: {notEmpty: {message: "Vui lòng chọn thời gian bắt đầu"}}},
                     end_date: {
                         validators: {
                             notEmpty: {
-                                message: "Ngày kết thúc là bắt buộc"
+                                message: "Vui lòng chọn thời gian kết thúc"
                             },
                             identical: {
                                 compare: function () {
@@ -66,7 +96,8 @@ var KTCareersApply = function () {
                                 message: 'Ngày kết thúc phải lớn hơn ngày bắt đầu'
                             }
                         }
-                    }
+                    },
+                    time_limit:{validators: {notEmpty: {message: "Vui lòng chọn thời gian giới hạn"}}}
                 },
                 plugins: {
                     trigger: new FormValidation.plugins.Trigger({
@@ -114,6 +145,14 @@ var KTCareersApply = function () {
                         e.removeField('start_date');
                     }
                 })),
+                $(i.querySelector('#allowtimelimit')).on("click", (function () {
+                    console.log('click');
+                    if (document.getElementById('allowtimelimit').checked) {
+                        e.addField("time_limit", {validators: {notEmpty: {message: "Vui lòng chọn thời gian giới hạn"}}});
+                    } else {
+                        e.removeField('time_limit');
+                    }
+                })),
 
                  t.addEventListener("click", (function (i) {
                 i.preventDefault(), e && e.validate().then((function (e) {
@@ -126,37 +165,47 @@ var KTCareersApply = function () {
                             let name = document.querySelector('[name=name]').value;
                             let description = document.querySelector('[name=description]').value;
                             let showDescription = document.getElementById('showDes').checked;
+
                             let startDate = toDate(document.querySelector('[name=start_date]').value);
                             let endDate = toDate(document.querySelector('[name=end_date]').value);
+                            let timeLimit = toTime(document.querySelector('[name=time_limit]').value);
                             let typeName = document.getElementById('typeName').value;
-                            let textSubmission = document.getElementsByName('typeSubmit[]')[0].checked;
-                            let fileSubmission = document.getElementsByName('typeSubmit[]')[1].checked;
-                            let maximumGrade = document.getElementsByName('maxGrade')[0].value;
+
+                            let password = document.querySelector('[name=password]').value;
+                            let gradeToPass = document.querySelector('[name=gradeToPass]').value;
+                            let attempt = document.querySelector('[name=num_attempt]').value;
+                            let shuffle = document.getElementById('shuffleQuestions').checked;
+                            let review = document.getElementById('review').checked;
                             var objDT = {
                                 "courseModules": {
                                     "name": name,
                                     "description": description,
                                     "typeName": typeName,
-                                    "showDescription": showDescription,
                                     "visible": true,
+                                    "showDescription": showDescription,
                                     "courseSections": {
                                         "courseSectionId": sectionID
                                     }
                                 },
-                                "assignment": {
-                                    "file": file,
-                                    "startDate": startDate,
-                                    "dueDate": endDate,
-                                    "fileSubmission": fileSubmission,
-                                    "textSubmission": textSubmission,
-                                    "maximumGrade": maximumGrade
+                                "quiz": {
+                                    "timeOpen": startDate,
+                                    "timeClose": endDate,
+                                    "timeLimit": timeLimit,
+                                    "gradeToPass": gradeToPass,
+                                    "attempt": attempt,
+                                    "review": review,
+                                    "shuffleQuestions": shuffle,
+                                    "password": password
                                 }
                             };
                             if(!document.getElementById('allowstartdate').checked){
-                                delete objDT.assignment.startDate;
+                                delete objDT.quiz.timeOpen;
                             }
                             if(!document.getElementById('allowenddate').checked){
-                                delete  objDT.assignment.dueDate;
+                                delete  objDT.quiz.timeClose;
+                            }
+                            if(!document.getElementById('allowtimelimit').checked){
+                                delete  objDT.quiz.timeLimit;
                             }
                             var data = JSON.stringify(objDT);
 

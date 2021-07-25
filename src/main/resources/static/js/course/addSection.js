@@ -1,5 +1,5 @@
 "use strict";
-var KTUsersAddPermission = function () {
+var KTUsersAddSection = function () {
     const t = document.getElementById("kt_modal_add_section"), e = t.querySelector("#kt_modal_add_section_form"),
         n = new bootstrap.Modal(t);
     return {
@@ -108,26 +108,6 @@ var KTUsersAddPermission = function () {
                                 }
                             })
                         }
-
-                        // console.log("validated!"), "Valid" == t ? (i.setAttribute("data-kt-indicator", "on"), i.disabled = !0, setTimeout((function () {
-                        //     i.removeAttribute("data-kt-indicator"), i.disabled = !1, Swal.fire({
-                        //         text: "Form has been successfully submitted!",
-                        //         icon: "success",
-                        //         buttonsStyling: !1,
-                        //         confirmButtonText: "Ok, got it!",
-                        //         customClass: {confirmButton: "btn btn-primary"}
-                        //     }).then((function (t) {
-                        //         t.isConfirmed && n.hide()
-                        //     }))
-                        // }), 2e3)) : Swal.fire({
-                        //     text: "Xin lỗi, looks like there are some errors detected, please try again.",
-                        //     icon: "error",
-                        //     buttonsStyling: !1,
-                        //     confirmButtonText: "Ok, got it!",
-                        //     customClass: {confirmButton: "btn btn-primary"}
-                        // })
-
-
                     }))
                 }))
             })()
@@ -135,5 +115,5 @@ var KTUsersAddPermission = function () {
     }
 }();
 KTUtil.onDOMContentLoaded((function () {
-    KTUsersAddPermission.init()
+    KTUsersAddSection.init()
 }));

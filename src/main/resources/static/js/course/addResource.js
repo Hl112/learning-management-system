@@ -15,7 +15,7 @@ document.querySelectorAll('[data-bs-target="#kt_modal_add_resource"]').forEach(t
     }
 })
 "use strict";
-var KTUsersAddPermission = function () {
+var KTUsersAddResource = function () {
     const t = document.getElementById("kt_modal_add_resource"),
         n = new bootstrap.Modal(t);
     return {
@@ -39,5 +39,5 @@ var KTUsersAddPermission = function () {
     }
 }();
 KTUtil.onDOMContentLoaded((function () {
-    KTUsersAddPermission.init()
+    KTUsersAddResource.init()
 }));

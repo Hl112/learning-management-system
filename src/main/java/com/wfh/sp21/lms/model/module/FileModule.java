@@ -16,5 +16,6 @@ public class FileModule implements Serializable {
     @Id
     private Long fileId;
     private String fileName;
-    private byte[] fileData;
+    @Lob
+    private String fileData;
 }

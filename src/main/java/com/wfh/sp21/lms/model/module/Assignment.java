@@ -1,11 +1,10 @@
 package com.wfh.sp21.lms.model.module;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -24,4 +23,9 @@ public class Assignment{
     private boolean textSubmission;
     private float maximumGrade;
 
+
+    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Collection<AssignmentSubmission> assignmentSubmissions;
 }

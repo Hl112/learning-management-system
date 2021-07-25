@@ -22,7 +22,7 @@ public class Quiz implements Serializable {
     private Date timeLimit;
     private float gradeToPass;
     private int attempt;
-    private int gradeMethod;
+//    private int gradeMethod;
 //    private int questionPerPage;
     private boolean review;
     private boolean shuffleQuestions;

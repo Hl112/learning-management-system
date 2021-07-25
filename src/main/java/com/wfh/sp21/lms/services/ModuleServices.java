@@ -6,8 +6,8 @@ import com.wfh.sp21.lms.model.module.Quiz;
 import com.wfh.sp21.lms.model.module.Url;
 
 public interface ModuleServices {
-    boolean addAssignment(Assignment assignment);
-    boolean addQuiz(Quiz quiz);
-    boolean addFile(FileModule fileModule);
-    boolean addUrl(Url url);
+    Assignment addAssignment(Assignment assignment);
+    Quiz addQuiz(Quiz quiz);
+    FileModule addFile(FileModule fileModule);
+    Url addUrl(Url url);
 }

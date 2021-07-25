@@ -3,6 +3,7 @@ package com.wfh.sp21.lms.model;
 import com.wfh.sp21.lms.model.module.Assignment;
 import com.wfh.sp21.lms.model.module.FileModule;
 import com.wfh.sp21.lms.model.module.Quiz;
+import com.wfh.sp21.lms.model.module.Url;
 import lombok.*;
 
 import javax.persistence.*;
@@ -43,4 +44,7 @@ public class CourseModules {
     @JoinColumn(name = "file_id")
     private FileModule file;
 
+    @OneToOne
+    @JoinColumn(name = "url_id")
+    private Url url;
 }

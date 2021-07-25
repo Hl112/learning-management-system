@@ -1,11 +1,13 @@
 package com.wfh.sp21.lms.model;
 
 import com.sun.istack.NotNull;
+import com.wfh.sp21.lms.model.module.AssignmentSubmission;
 import com.wfh.sp21.lms.model.module.Question;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Set;
@@ -72,4 +74,10 @@ public class User {
     public int hashCode() {
         return 562048007;
     }
+
+    //Submission
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Collection<AssignmentSubmission> assignmentSubmissions;
 }

@@ -54,23 +54,28 @@ public class CourseModulesServicesImpl implements CourseModulesServices {
         switch (afterSave.getTypeName()) {
             case "Assignment":
                 ((Assignment)module).setAssignmentId(afterSave.getCourseModuleId());
-                moduleServices.addAssignment((Assignment) module);
+                Assignment assignment = moduleServices.addAssignment((Assignment) module);
+                afterSave.setAssignment(assignment);
                 break;
             case "Quiz":
                 ((Quiz)module).setQuizId(afterSave.getCourseModuleId());
-                moduleServices.addQuiz((Quiz) module);
+                Quiz quiz = moduleServices.addQuiz((Quiz) module);
+                afterSave.setQuiz(quiz);
                 break;
             case "FileModule":
                 ((FileModule)module).setFileId(afterSave.getCourseModuleId());
-                moduleServices.addFile((FileModule) module);
+                FileModule fileModule = moduleServices.addFile((FileModule) module);
+                afterSave.setFile(fileModule);
                 break;
             case "Url":
                 ((Url)module).setUrlId(afterSave.getCourseModuleId());
-                moduleServices.addUrl((Url) module);
+                Url url = moduleServices.addUrl((Url) module);
+                afterSave.setUrl(url);
                 break;
             default:
                 return false;
         }
+        courseModulesRepository.save(courseModules);
         return true;
     }
 
