@@ -27,11 +27,29 @@ var KTCareersApply = function () {
                 // upload
                 document.querySelector('[type=file]').addEventListener('change', function () {
                     var reader = new FileReader();
-                    reader.readAsDataURL(this.files[0]);
-                    console.log(reader);
+
+                    const getSizeImage = this.files[0].size;
+                    if(getSizeImage > 2*1024 * 1024) {
+                        Swal.fire({
+                            text: `Chỉ cho phép tải tệp tin nhỏ hơn 2MB.`,
+                            icon: 'error',
+                            buttonsStyling: !1,
+                            confirmButtonText: 'Ok!',
+                            customClass: {
+                                confirmButton: 'btn btn-primary'
+                            }
+                        })
+                    } else
+                        reader.readAsArrayBuffer(this.files[0]);
+
+                    var fileDT = [];
                     reader.onload = function () {
-                        console.log("finish")
-                        file = this.result;
+                        var arrayBuffer = this.result,
+                            array = new Uint8Array(arrayBuffer);
+                        for (let i = 0; i < array.length; i++) {
+                            fileDT.push(array[i]);
+                        }
+                        file = fileDT;
                         console.log(file);
                         t.removeAttribute('data-kt-indicator');
                         t.disabled = !1;

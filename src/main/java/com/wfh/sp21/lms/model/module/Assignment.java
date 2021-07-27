@@ -25,7 +25,7 @@ public class Assignment{
     private float maximumGrade;
 
 
-    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "assignment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<AssignmentSubmission> assignmentSubmissions;

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Blob;
 
 @Entity
 @Table(name = "wfh_file")
@@ -17,5 +18,5 @@ public class FileModule implements Serializable {
     private Long fileId;
     private String fileName;
     @Lob
-    private String fileData;
+    private byte[] fileData;
 }

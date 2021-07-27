@@ -191,9 +191,10 @@
                                                                 <img th:src="@{|/img/*{courseModule.typeName}.svg|}" style="width: 35px;"  alt="icon">
                                                             </div>
                                                             <div class="d-flex justify-content-start flex-column">
-                                                                <a href="#"
+                                                                <a th:href="@{/teacher/viewModule(id=*{courseModule.courseModuleId})}"
                                                                    class="text-dark fw-bolder text-hover-primary fs-6" th:text="*{courseModule.name}"></a>
                                                                 <span class="text-muted fw-bold d-block fs-7 badge badge-light-success" th:if="*{!courseModule.visible}">Ẩn với sinh viên</span>
+                                                                <span class="badge badge-light-primary" th:if="*{courseModule.showDescription}" th:text="*{courseModule.description}"></span>
                                                             </div>
                                                         </div>
                                                     </td>

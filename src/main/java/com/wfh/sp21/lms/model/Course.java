@@ -1,18 +1,23 @@
 package com.wfh.sp21.lms.model;
 
 import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "wfh_course")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
+
 @Builder
 public class Course {
     @Id
@@ -44,9 +49,24 @@ public class Course {
     private User user;
 
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Set<UserEnrolments> userEnrolments;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Collection<CourseSections> courseSections;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Course course = (Course) o;
+
+        return Objects.equals(courseId, course.courseId);
+    }
+
+    @Override
+    public int hashCode() {
+        return 1702818130;
+    }
 }
