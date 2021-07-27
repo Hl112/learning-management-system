@@ -104,12 +104,14 @@ public class LmsApplication {
                 .description("hihi haha")
                 .visible(true)
                 .typeName("Quiz")
+                .status(true)
                 .build();
         CourseModules courseModules1 = CourseModules.builder()
                 .name("Assignment 1")
                 .description("hihi haha")
                 .visible(true)
                 .typeName("Assignment")
+                .status(true)
                 .build();
         courseModulesServices.addModule(courseModules, courseSections.getCourseSectionId());
 

@@ -24,6 +24,7 @@ public class CourseModules {
     private String typeName;
     private boolean showDescription;
     private boolean visible;
+    private boolean status = true;
 
     @ManyToOne
     @JoinColumn(name = "course_section_id")

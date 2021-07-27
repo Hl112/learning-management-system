@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -26,14 +27,26 @@ public class CourseModulesServicesImpl implements CourseModulesServices {
     @Autowired
     private ModuleServicesImpl moduleServices;
 
+    private Date fixDate(Date datetime){
+        if(datetime == null) return null;
+        int month = datetime.getMonth() -1;
+        datetime.setMonth(month);
+        return datetime;
+    }
+
     @Override
     public List<CourseModules> getAllBySectionId(Long sectionId) {
-        return courseModulesRepository.findAllByCourseSections_CourseSectionId(sectionId);
+        return courseModulesRepository.findAllByStatusIsTrueAndCourseSections_CourseSectionId(sectionId);
     }
 
     @Override
     public List<CourseModules> getAllVisibleBySectionId(Long sectionId) {
         return courseModulesRepository.findAllByVisibleIsTrueAndCourseSections_CourseSectionId(sectionId);
+    }
+
+    @Override
+    public CourseModules getCourseModulesByCourseModulesId(Long courseModulesId) {
+        return courseModulesRepository.findByCourseModuleId(courseModulesId);
     }
 
     @Override
@@ -48,17 +61,38 @@ public class CourseModulesServicesImpl implements CourseModulesServices {
     @Transactional
     @Override
     public boolean addModule(CourseModules courseModules, Long courseSectionId, Object module) {
+        CourseModules courseModulesDB;
+        if(courseModules.getCourseModuleId() != null){
+            courseModulesDB = courseModulesRepository.getById(courseModules.getCourseModuleId());
+            courseModulesDB.setStatus(courseModules.isStatus());
+            courseModulesDB.setName(courseModules.getName());
+            courseModulesDB.setDescription(courseModules.getDescription());
+            courseModulesDB.setShowDescription(courseModules.isShowDescription());
+            courseModulesDB.setVisible(courseModules.isVisible());
+            courseModulesDB.setTypeName(courseModules.getTypeName());
+            courseModulesDB.setAssignment(courseModules.getAssignment());
+            courseModulesDB.setQuiz(courseModules.getQuiz());
+            courseModulesDB.setUrl(courseModules.getUrl());
+            courseModulesDB.setFile(courseModules.getFile());
+        }
+        else courseModulesDB = courseModules;
+
+
         CourseSections courseSections = courseSectionServices.getCourseSectionById(courseSectionId);
-        courseModules.setCourseSections(courseSections);
-        CourseModules afterSave = courseModulesRepository.save(courseModules);
+        courseModulesDB.setCourseSections(courseSections);
+        CourseModules afterSave = courseModulesRepository.save(courseModulesDB);
         switch (afterSave.getTypeName()) {
             case "Assignment":
                 ((Assignment)module).setAssignmentId(afterSave.getCourseModuleId());
+                ((Assignment)module).setStartDate(fixDate(((Assignment) module).getStartDate()));
+                ((Assignment)module).setDueDate(fixDate(((Assignment) module).getDueDate()));
                 Assignment assignment = moduleServices.addAssignment((Assignment) module);
                 afterSave.setAssignment(assignment);
                 break;
             case "Quiz":
                 ((Quiz)module).setQuizId(afterSave.getCourseModuleId());
+                ((Quiz)module).setTimeOpen(fixDate(((Quiz) module).getTimeOpen()));
+                ((Quiz)module).setTimeClose(fixDate(((Quiz) module).getTimeClose()));
                 Quiz quiz = moduleServices.addQuiz((Quiz) module);
                 afterSave.setQuiz(quiz);
                 break;
@@ -75,7 +109,7 @@ public class CourseModulesServicesImpl implements CourseModulesServices {
             default:
                 return false;
         }
-        courseModulesRepository.save(courseModules);
+        courseModulesRepository.save(courseModulesDB);
         return true;
     }
 
@@ -85,12 +119,14 @@ public class CourseModulesServicesImpl implements CourseModulesServices {
         boolean visible = courseModules.isVisible();
         courseModules.setVisible(!visible);
         courseModulesRepository.save(courseModules);
-        return true;
+        return visible;
     }
 
     @Override
     public boolean deleteModule(Long courseModuleId) {
-        courseModulesRepository.deleteById(courseModuleId);
+        CourseModules courseModules = courseModulesRepository.getById(courseModuleId);
+        courseModules.setStatus(false);
+        courseModulesRepository.save(courseModules);
         return true;
     }
 

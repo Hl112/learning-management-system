@@ -22,7 +22,7 @@ document.getElementById('allowenddate').onclick = function () {
 }
 
 function toDate(value) {
-    if(value.length === 0) return null;
+    if (value.length === 0) return null;
     let dateTime = value.split(' ');
     let dateObj = new Date();
     let date = dateTime[0].split('-');
@@ -34,6 +34,7 @@ function toDate(value) {
     dateObj.setMinutes(time[1]);
     return dateObj;
 }
+
 "use strict";
 var KTCareersApply = function () {
     var t, e, i, file;
@@ -55,25 +56,31 @@ var KTCareersApply = function () {
                             notEmpty: {
                                 message: "Ngày kết thúc là bắt buộc"
                             },
-                            identical: {
-                                compare: function () {
+                            callback: {
+                                callback: function () {
                                     var startDate = toDate(document.querySelector('[name=start_date]').value);
-                                    var endDate =toDate(document.querySelector('[name=end_date]').value);
+                                    var endDate = toDate(document.querySelector('[name=end_date]').value);
                                     if (endDate.getTime() - startDate.getTime() >= 0)
-                                        return document.querySelector('[name=end_date]').value;
-                                    return -1;
-                                },
-                                message: 'Ngày kết thúc phải lớn hơn ngày bắt đầu'
+                                        return {
+                                            valid: true
+                                        }
+                                    if (document.querySelector('[name=end_date]').value == '') {
+                                        return {
+                                            valid: false,
+                                            message: "Ngày kết thúc là bắt buộc"
+                                        }
+                                    }
+                                    return {
+                                        valid: false,
+                                        message: 'Ngày kết thúc phải lớn hơn ngày bắt đầu',
+                                    };
+                                }
                             }
                         }
                     }
                 },
                 plugins: {
-                    trigger: new FormValidation.plugins.Trigger({
-                        event: {
-                            start_date: !1
-                        }
-                    }),
+                    trigger: new FormValidation.plugins.Trigger(),
                     bootstrap: new FormValidation.plugins.Bootstrap5({
                         rowSelector: ".fv-row",
                         eleInvalidClass: "",
@@ -89,16 +96,25 @@ var KTCareersApply = function () {
                         e.addField("end_date", {
                             validators: {
                                 notEmpty: {message: "Ngày kết thúc là bắt buộc"}
-                                , identical: {
-                                    compare: function () {
-                                        // return e.querySelector('[name="start_date"]').value
-                                        var startDate = new Date(document.querySelector('[name=start_date]').value);
-                                        var endDate = new Date(document.querySelector('[name=end_date]').value);
+                                , callback: {
+                                    callback: function () {
+                                        var startDate = toDate(document.querySelector('[name=start_date]').value);
+                                        var endDate = toDate(document.querySelector('[name=end_date]').value);
                                         if (endDate.getTime() - startDate.getTime() >= 0)
-                                            return document.querySelector('[name=end_date]').value;
-                                        return -1;
-                                    },
-                                    message: 'Ngày kết thúc phải lớn hơn ngày bắt đầu'
+                                            return {
+                                                valid: true
+                                            }
+                                        if (document.querySelector('[name=end_date]').value == '') {
+                                            return {
+                                                valid: false,
+                                                message: "Ngày kết thúc là bắt buộc"
+                                            }
+                                        }
+                                        return {
+                                            valid: false,
+                                            message: 'Ngày kết thúc phải lớn hơn ngày bắt đầu',
+                                        };
+                                    }
                                 }
                             }
                         });
@@ -113,32 +129,47 @@ var KTCareersApply = function () {
                     } else {
                         e.removeField('start_date');
                     }
-                })),
-                // upload
-                document.querySelector('[type=file]').addEventListener('change', function () {
-                    var reader = new FileReader();
-                    reader.readAsDataURL(this.files[0]);
-                    console.log(reader);
-                    reader.onload = function () {
-                        console.log("finish")
-                        file = this.result;
-                        console.log(file);
-                        t.removeAttribute('data-kt-indicator');
-                        t.disabled = !1;
-                    }
-                    reader.onprogress = function () {
-                        console.log("load")
-                        t.setAttribute('data-kt-indicator', 'on');
-                        t.disabled = !0;
-                    }
-
-                })
+                }))
+            if (!document.getElementById('allowstartdate').checked) {
+                e.removeField('start_date');
+            }
+            if (!document.getElementById('allowenddate').checked) {
+                e.removeField('end_date');
+            }
+            // upload
+            document.querySelector('[type=file]').addEventListener('change', function () {
+                var reader = new FileReader();
+                reader.readAsDataURL(this.files[0]);
+                console.log(reader);
+                reader.onload = function () {
+                    console.log("finish")
+                    file = this.result;
+                    console.log(file);
+                    t.removeAttribute('data-kt-indicator');
+                    t.disabled = !1;
+                }
+                reader.onprogress = function () {
+                    console.log("load")
+                    t.setAttribute('data-kt-indicator', 'on');
+                    t.disabled = !0;
+                }
+            }),
+                document.getElementsByName('start_date')[0].onchange = function () {
+                    e.revalidateField('end_date');
+                }
                 , t.addEventListener("click", (function (i) {
+                console.log(e);
                 i.preventDefault(), e && e.validate().then((function (e) {
+                    if (document.getElementById('allowenddate').checked) {
+                        if (document.querySelector('[name=end_date]').value == '') {
+                            e = 'Invalid';
+                        }
+                    }
                     if ('Valid' === e) {
                         t.setAttribute('data-kt-indicator', 'on');
                         t.disabled = !0;
                         setTimeout(function () {
+                            var moduleID = document.getElementById("courseModuleID") ? document.getElementById("courseModuleID").value : null;
                             let courseID = document.getElementById('courseID').value;
                             let sectionID = document.getElementById('sectionID').value;
                             let name = document.querySelector('[name=name]').value;
@@ -147,11 +178,12 @@ var KTCareersApply = function () {
                             let startDate = toDate(document.querySelector('[name=start_date]').value);
                             let endDate = toDate(document.querySelector('[name=end_date]').value);
                             let typeName = document.getElementById('typeName').value;
-                           let textSubmission = document.getElementsByName('typeSubmit[]')[0].checked;
-                           let fileSubmission = document.getElementsByName('typeSubmit[]')[1].checked;
-                           let maximumGrade = document.getElementsByName('maxGrade')[0].value;
+                            let textSubmission = document.getElementsByName('typeSubmit[]')[0].checked;
+                            let fileSubmission = document.getElementsByName('typeSubmit[]')[1].checked;
+                            let maximumGrade = document.getElementsByName('maxGrade')[0].value;
                             var objDT = {
                                 "courseModules": {
+                                    "courseModuleId": moduleID,
                                     "name": name,
                                     "description": description,
                                     "typeName": typeName,
@@ -170,12 +202,13 @@ var KTCareersApply = function () {
                                     "maximumGrade": maximumGrade
                                 }
                             };
-                           if(!document.getElementById('allowstartdate').checked){
-                               delete objDT.assignment.startDate;
-                           }
-                           if(!document.getElementById('allowenddate').checked){
-                               delete  objDT.assignment.dueDate;
-                           }
+                            if (!document.getElementById('allowstartdate').checked) {
+                                delete objDT.assignment.startDate;
+                            }
+                            if (!document.getElementById('allowenddate').checked) {
+                                delete objDT.assignment.dueDate;
+                            }
+                            if (moduleID == null) delete objDT.courseModules.courseModuleId;
                             var data = JSON.stringify(objDT);
 
                             var xhr = new XMLHttpRequest();
@@ -193,7 +226,7 @@ var KTCareersApply = function () {
                                             confirmButtonText: "Ok!",
                                             customClass: {confirmButton: "btn btn-primary"}
                                         }).then((function (t) {
-                                           window.location.href = `/teacher/viewCourse?id=${courseID}`;
+                                            window.location.href = `/teacher/viewCourse?id=${courseID}`;
                                         }))
                                     } else {
                                         Swal.fire({

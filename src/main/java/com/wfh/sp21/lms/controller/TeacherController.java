@@ -208,17 +208,39 @@ public class TeacherController {
         System.out.println(type);
         System.out.println(courseSectionId);
         CourseSections courseSections = courseSectionServicesImpl.getCourseSectionById(courseSectionId);
+        model.addAttribute("addPage", true);
         model.addAttribute("courseSection",courseSections);
-
         return "teacher/addModule";
     }
+
+    @GetMapping("/editModule")
+    public String editModulePage(Model model,@RequestParam("type") String type, @RequestParam("id") Long courseModuleId){
+        CourseModules courseModules = courseModulesServicesImpl.getCourseModulesByCourseModulesId(courseModuleId);
+        CourseSections courseSections = courseModules.getCourseSections();
+        model.addAttribute("addPage", false);
+        model.addAttribute("courseSection",courseSections);
+        model.addAttribute("courseModule", courseModules);
+        return "teacher/addModule";
+//        return "layout/addModuleChild";
+    }
+    @GetMapping("/editLayout")
+    public String editLayoutPage(Model model,@RequestParam("type") String type, @RequestParam("id") Long courseModuleId){
+        CourseModules courseModules = courseModulesServicesImpl.getCourseModulesByCourseModulesId(courseModuleId);
+        CourseSections courseSections = courseModules.getCourseSections();
+        model.addAttribute("addPage", false);
+        model.addAttribute("courseSection",courseSections);
+        model.addAttribute("courseModule", courseModules);
+//        return "teacher/addModule";
+        return "layout/addModuleChild";
+    }
+
 
     @PostMapping("/addModule")
     @ResponseBody
     public ResponseEntity<Object> addModule(@RequestBody ModuleMapper module)  {
         CourseModules courseModules = module.getCourseModules();
+        System.out.println(courseModules.getCourseModuleId());
         Object moduleChild = null;
-        System.out.println(courseModules.getTypeName());
         try {
             Method method = module.getClass().getMethod("get" + courseModules.getTypeName());
             moduleChild = method.invoke(module);
@@ -228,11 +250,33 @@ public class TeacherController {
         }
         boolean result = courseModulesServicesImpl.addModule(courseModules,courseModules.getCourseSections().getCourseSectionId(), moduleChild);
         if(result){
-            return new ResponseEntity<>("Thêm " + courseModules.getTypeName() + " thành công", HttpStatus.OK);
+            return new ResponseEntity<>( " Thành công", HttpStatus.OK);
         }else {
-            return new ResponseEntity<>("Thêm " + courseModules.getTypeName() + " thất bại", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>( " Thất bại", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PostMapping("/hiddenShowModule/{id}")
+    public ResponseEntity<Object> hiddenShowModule(@PathVariable("id") Long moduleId){
+        boolean result = courseModulesServicesImpl.hiddenShowModule(moduleId);
+        if(result){
+            return new ResponseEntity<>("Ẩn thành công", HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>("Hiện thành công", HttpStatus.OK);
+        }
+    }
+
+    @DeleteMapping("/module/{id}")
+    public ResponseEntity<Object> disableModule(@PathVariable("id") Long moduleId){
+        boolean result =  courseModulesServicesImpl.deleteModule(moduleId);
+        if(result){
+            return new ResponseEntity<>("Xóa thành công", HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>("Xóa thất bại", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 
 
 }

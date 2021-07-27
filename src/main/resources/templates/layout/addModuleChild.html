@@ -47,10 +47,10 @@
                             <!--begin::Link-->
 <!--                            <a href="#" class="text-hover-primary fs-5 fw-bolder mb-2">File Upload</a>-->
                             <input type="file" name="files[]" id="file" class="box__file text-hover-primary fs-5 fw-bolder mb-2" data-multiple-caption="{count} files selected" multiple="">
-                            <label for="file"><strong class="text-hover-primary fs-5 fw-bolder mb-2">Choose a file</strong><span class="box__dragndrop"> or drag it here</span>.</label>
+                            <label for="file"><strong class="text-hover-primary fs-5 fw-bolder mb-2">Chọn tập tin</strong><span class="box__dragndrop"> để tải lên</span>.</label>
                             <!--end::Link-->
                             <!--begin::Description-->
-                            <div class="fs-7 fw-bold text-gray-400 mt-auto">Drag and drop files here</div>
+<!--                            <div class="fs-7 fw-bold text-gray-400 mt-auto">Drag and drop files here</div>-->
                             <!--end::Description-->
                         </div>
 
@@ -95,7 +95,11 @@
                             <!--begin::Datepicker-->
                             <input class="form-control form-control-solid ps-12 flatpickr-input"
                                    placeholder="Chọn thời điểm bắt đầu" name="start_date" type="text"
-                                   readonly="readonly">
+                                   readonly="readonly"
+                                   th:value="${!addPage ? #dates.format(courseModule.assignment.startDate, 'dd-MM-yyyy HH:mm') :''}"
+                                   th:disabled="${!addPage ? courseModule.assignment.startDate == null : false}"
+                                   th:style="${!addPage ? (courseModule.assignment.startDate == null ? 'background-color: rgb(58, 59, 60);' : '') : ''}"
+                             >
                             <!--end::Datepicker-->
                         </div>
                         <!--end::Input-->
@@ -108,7 +112,7 @@
                         <div class="form-check form-check-solid form-switch fv-row pt-3">
                             <label class="form-check-label" for="allowstartdate"></label>
                             <input class="form-check-input w-45px h-30px" type="checkbox" id="allowstartdate"
-                                   checked="checked">
+                                   th:checked="${!addPage ? courseModule.assignment.startDate != null : true}">
 
                         </div>
                     </div>
@@ -150,7 +154,11 @@
                             <!--begin::Datepicker-->
                             <input class="form-control form-control-solid ps-12 flatpickr-input"
                                    placeholder="Chọn thời điểm kết thúc" name="end_date" type="text"
-                                   readonly="readonly">
+                                   readonly="readonly"
+                                   th:value="${!addPage ? #dates.format(courseModule.assignment.dueDate, 'dd-MM-yyyy HH:mm') :''}"
+                                   th:disabled="${!addPage ? courseModule.assignment.dueDate == null : false}"
+                                   th:style="${!addPage ? (courseModule.assignment.dueDate == null ? 'background-color: rgb(58, 59, 60);' : '') : ''}"
+                            >
                             <!--end::Datepicker-->
                         </div>
                         <!--end::Input-->
@@ -163,7 +171,7 @@
                         <div class="form-check form-check-solid form-switch fv-row pt-3">
                             <label class="form-check-label" for="allowenddate"></label>
                             <input class="form-check-input w-45px h-30px" type="checkbox" id="allowenddate"
-                                   checked="checked">
+                                   th:checked="${!addPage ? courseModule.assignment.dueDate != null : true}">
 
                         </div>
                     </div>
@@ -179,13 +187,17 @@
                         <div class="d-flex align-items-center mt-3">
                             <!--begin::Option-->
                             <label class="form-check form-check-inline form-check-solid me-5 is-valid">
-                                <input class="form-check-input" name="typeSubmit[]" type="checkbox" value="1">
+                                <input class="form-check-input" name="typeSubmit[]" type="checkbox" value="1"
+                                th:checked="${!addPage ? courseModule.assignment.textSubmission : false}"
+                                >
                                 <span class="fw-bold ps-2 fs-6">Văn bản</span>
                             </label>
                             <!--end::Option-->
                             <!--begin::Option-->
                             <label class="form-check form-check-inline form-check-solid is-valid">
-                                <input class="form-check-input" name="typeSubmit[]" type="checkbox" value="1" checked>
+                                <input class="form-check-input" name="typeSubmit[]" type="checkbox" value="1"
+                                th:checked="${!addPage ? courseModule.assignment.fileSubmission : true}"
+                                >
                                 <span class="fw-bold ps-2 fs-6">Tập tin</span>
                             </label>
                             <!--end::Option-->
@@ -208,7 +220,7 @@
                             <div class="col-lg-6 fv-row fv-plugins-icon-container">
                                 <input type="text" name="maxGrade"
                                        class="form-control form-control-lg form-control-solid mb-3 mb-lg-0"
-                                       placeholder="Nhập điểm cao nhất" value="100">
+                                       placeholder="Nhập điểm cao nhất" th:value="${!addPage ? courseModule.assignment.maximumGrade : '100'}">
                                 <div class="fv-plugins-message-container invalid-feedback"></div>
                             </div>
                             <!--end::Col-->
@@ -256,7 +268,11 @@
                             <!--begin::Datepicker-->
                             <input class="form-control form-control-solid ps-12 flatpickr-input"
                                    placeholder="Chọn thời điểm bắt đầu" name="start_date" type="text"
-                                   readonly="readonly">
+                                   readonly="readonly"
+                                   th:value="${!addPage ? #dates.format(courseModule.quiz.timeOpen, 'dd-MM-yyyy HH:mm') :''}"
+                                   th:disabled="${!addPage ? courseModule.quiz.timeOpen == null : false}"
+                                   th:style="${!addPage ? (courseModule.quiz.timeOpen  == null ? 'background-color: rgb(58, 59, 60);' : '') : ''}"
+                            >
                             <!--end::Datepicker-->
                         </div>
                         <!--end::Input-->
@@ -269,7 +285,7 @@
                         <div class="form-check form-check-solid form-switch fv-row pt-3">
                             <label class="form-check-label" for="allowstartdate"></label>
                             <input class="form-check-input w-45px h-30px" type="checkbox" id="allowstartdate"
-                                   checked="checked">
+                                   th:checked="${!addPage ? courseModule.quiz.timeOpen != null : true}">
 
                         </div>
                     </div>
@@ -311,7 +327,12 @@
                             <!--begin::Datepicker-->
                             <input class="form-control form-control-solid ps-12 flatpickr-input"
                                    placeholder="Chọn thời điểm kết thúc" name="end_date" type="text"
-                                   readonly="readonly">
+                                   readonly="readonly"
+                                   th:value="${!addPage ? #dates.format(courseModule.quiz.timeClose, 'dd-MM-yyyy HH:mm') :''}"
+                                   th:disabled="${!addPage ? courseModule.quiz.timeClose == null : false}"
+                                   th:style="${!addPage ? (courseModule.quiz.timeClose  == null ? 'background-color: rgb(58, 59, 60);' : '') : ''}"
+
+                            >
                             <!--end::Datepicker-->
                         </div>
                         <!--end::Input-->
@@ -324,7 +345,7 @@
                         <div class="form-check form-check-solid form-switch fv-row pt-3">
                             <label class="form-check-label" for="allowenddate"></label>
                             <input class="form-check-input w-45px h-30px" type="checkbox" id="allowenddate"
-                                   checked="checked">
+                                   th:checked="${!addPage ? courseModule.quiz.timeClose != null : true}">
 
                         </div>
                     </div>
@@ -366,7 +387,11 @@
                             <!--begin::Datepicker-->
                             <input class="form-control form-control-solid ps-12 flatpickr-minute"
                                    placeholder="Chọn thời gian giới hạn" name="time_limit" type="text"
-                                   readonly="readonly">
+                                   readonly="readonly"
+                                   th:value="${!addPage ? #dates.format(courseModule.quiz.timeLimit, 'HH:mm') :''}"
+                                   th:disabled="${!addPage ? courseModule.quiz.timeLimit == null : false}"
+                                   th:style="${!addPage ? (courseModule.quiz.timeLimit == null ? 'background-color: rgb(58, 59, 60);' : '') : ''}"
+                            >
                             <!--end::Datepicker-->
                         </div>
                         <!--end::Input-->
@@ -379,8 +404,7 @@
                         <div class="form-check form-check-solid form-switch fv-row pt-3">
                             <label class="form-check-label" for="allowtimelimit"></label>
                             <input class="form-check-input w-45px h-30px" type="checkbox" id="allowtimelimit"
-                                   checked="checked">
-
+                                   th:checked="${!addPage ? courseModule.quiz.timeLimit != null : true}">
                         </div>
                     </div>
                 </div>
@@ -395,7 +419,9 @@
                         <div class="row">
                             <!--begin::Col-->
                             <div class="position-relative mb-3">
-                                <input class="form-control form-control-lg form-control-solid" type="password" placeholder="Nhập mật khẩu quiz nếu có" name="password" autocomplete="off">
+                                <input class="form-control form-control-lg form-control-solid" type="password" placeholder="Nhập mật khẩu quiz nếu có" name="password" autocomplete="off"
+                                th:value="${!addPage ? courseModule.quiz.password : ''}"
+                                >
                                 <span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2 btn-visible" data-kt-password-meter-control="visibility">
 												<i class="bi bi-eye-slash fs-2"></i>
 												<i class="bi bi-eye fs-2 d-none"></i>
@@ -418,7 +444,8 @@
                         <div class="row">
                             <!--begin::Col-->
                             <div class="col-lg-3 fv-row fv-plugins-icon-container">
-                                <input type="text" name="gradeToPass" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0" placeholder="Nhập số điểm" value="">
+                                <input type="text" name="gradeToPass" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0" placeholder="Nhập số điểm"
+                                       th:value="${!addPage ? courseModule.quiz.gradeToPass : ''}">
                                 <div class="fv-plugins-message-container invalid-feedback"></div></div>
                             <!--end::Col-->
                         </div>
@@ -448,7 +475,9 @@
                     <!--begin::Label-->
                     <div class="col-lg-8 d-flex align-items-center">
                         <div class="form-check form-check-solid form-switch fv-row">
-                            <input class="form-check-input w-45px h-30px" type="checkbox" id="shuffleQuestions">
+                            <input class="form-check-input w-45px h-30px" type="checkbox" id="shuffleQuestions"
+                            th:checked="${!addPage ? courseModule.quiz.shuffleQuestions : false}"
+                            >
                             <label class="form-check-label" for="shuffleQuestions"></label>
                         </div>
                     </div>
@@ -462,7 +491,8 @@
                     <!--begin::Label-->
                     <div class="col-lg-8 d-flex align-items-center">
                         <div class="form-check form-check-solid form-switch fv-row">
-                            <input class="form-check-input w-45px h-30px" type="checkbox" id="review">
+                            <input class="form-check-input w-45px h-30px" type="checkbox" id="review"
+                            th:checked="${!addPage ? courseModule.quiz.review : false}">
                             <label class="form-check-label" for="review"></label>
                         </div>
                     </div>
@@ -491,12 +521,12 @@
                             <!--begin::Link-->
                             <input type="file" name="filesUp" id="fileUp" class="box__file text-hover-primary fs-5 fw-bolder mb-2">
                             <label for="fileUp">
-                                <strong class="text-hover-primary fs-5 fw-bolder mb-2">Choose a file</strong>
-                                <span class="box__dragndrop"> or drag it here</span>.
+                                <strong class="text-hover-primary fs-5 fw-bolder mb-2">Chọn tập tin</strong>
+                                <span class="box__dragndrop"> để tải lên</span>.
                             </label>
                             <!--end::Link-->
                             <!--begin::Description-->
-                            <div class="fs-7 fw-bold text-gray-400 mt-auto">Drag and drop files here</div>
+<!--                            <div class="fs-7 fw-bold text-gray-400 mt-auto">Drag and drop files here</div>-->
                             <!--end::Description-->
 <!--                        </div>-->
                         <div class="fv-plugins-message-container invalid-feedback"></div>
@@ -513,7 +543,8 @@
                     <!--end::Label-->
                     <!--begin::Col-->
                     <div class="col-lg-8 fv-row fv-plugins-icon-container">
-                        <input type="text" name="link" class="form-control form-control-lg form-control-solid" placeholder="Nhập liên kết" value="">
+                        <input type="text" name="link" class="form-control form-control-lg form-control-solid" placeholder="Nhập liên kết"
+                               th:value="${!addPage ? courseModule.url.link : ''}">
                         <div class="fv-plugins-message-container invalid-feedback"></div></div>
                     <!--end::Col-->
                 </div>

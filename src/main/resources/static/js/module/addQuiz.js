@@ -153,13 +153,26 @@ var KTCareersApply = function () {
                         e.removeField('time_limit');
                     }
                 })),
-
+                document.getElementsByName('start_date')[0].onchange = function () {
+                    e.revalidateField('start_date');
+                    e.revalidateField('end_date');
+                }
+            if (!document.getElementById('allowstartdate').checked) {
+                e.removeField('start_date');
+            }
+            if (!document.getElementById('allowenddate').checked) {
+                e.removeField('end_date');
+            }
+            if (!document.getElementById('allowtimelimit').checked) {
+                e.removeField('time_limit');
+            }
                  t.addEventListener("click", (function (i) {
                 i.preventDefault(), e && e.validate().then((function (e) {
                     if ('Valid' === e) {
                         t.setAttribute('data-kt-indicator', 'on');
                         t.disabled = !0;
                         setTimeout(function () {
+                            var moduleID = document.getElementById("courseModuleID") ? document.getElementById("courseModuleID").value : null;
                             let courseID = document.getElementById('courseID').value;
                             let sectionID = document.getElementById('sectionID').value;
                             let name = document.querySelector('[name=name]').value;
@@ -178,6 +191,7 @@ var KTCareersApply = function () {
                             let review = document.getElementById('review').checked;
                             var objDT = {
                                 "courseModules": {
+                                    "courseModuleId": moduleID,
                                     "name": name,
                                     "description": description,
                                     "typeName": typeName,
@@ -207,6 +221,7 @@ var KTCareersApply = function () {
                             if(!document.getElementById('allowtimelimit').checked){
                                 delete  objDT.quiz.timeLimit;
                             }
+                            if(moduleID == null)  delete objDT.courseModules.courseModuleId;
                             var data = JSON.stringify(objDT);
 
                             var xhr = new XMLHttpRequest();

@@ -177,8 +177,8 @@
                                                 <!--end::Table head-->
                                                 <!--begin::Table body-->
                                                 <tbody>
-
-                                                <tr th:each="courseModule : *{section.courseModules}">
+                                                <th:block  th:each="courseModule : *{section.courseModules}">
+                                                <tr th:if="*{courseModule.status}" th:style="${courseModule.visible ? '' : 'opacity: .7;'}">
                                                     <td>
                                                         <div class="form-check form-check-sm form-check-custom form-check-solid">
                                                             <input class="form-check-input widget-9-check"
@@ -193,23 +193,25 @@
                                                             <div class="d-flex justify-content-start flex-column">
                                                                 <a href="#"
                                                                    class="text-dark fw-bolder text-hover-primary fs-6" th:text="*{courseModule.name}"></a>
-<!--                                                                <span class="text-muted fw-bold text-muted d-block fs-7">HTML, JS, ReactJS</span>-->
+                                                                <span class="text-muted fw-bold d-block fs-7 badge badge-light-success" th:if="*{!courseModule.visible}">Ẩn với sinh viên</span>
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td></td>
                                                     <td class="text-end"></td>
                                                     <td class="text-end">
-                                                        <a href="#"
-                                                           class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
+                                                        <button href="#"
+                                                                th:data="*{courseModule.courseModuleId}"
+                                                           class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1 btn-hs"
                                                            data-bs-trigger="hover"
                                                            data-bs-original-title="Ẩn/Hiện tài nguyên"
                                                            data-bs-toggle="tooltip"
                                                         >
-                                                            <i class="bi bi-eye-slash fs-2"></i>
-                                                            <i class="bi bi-eye fs-2 d-none"></i>
-                                                        </a>
-                                                        <a href="#"
+                                                            <i class="bi bi-eye-slash fs-2"
+                                                               th:classappend="${courseModule.visible ? '': 'd-none'}"></i>
+                                                            <i class="bi bi-eye fs-2" th:classappend="${!courseModule.visible ? '': 'd-none'}"></i>
+                                                        </button>
+                                                        <a th:href="@{/teacher/editModule(type=*{courseModule.typeName}, id=*{courseModule.courseModuleId})}"
                                                            data-bs-trigger="hover"
                                                            data-bs-original-title="Sửa tài nguyên"
                                                            data-bs-toggle="tooltip"
@@ -229,11 +231,13 @@
 																		</span>
                                                             <!--end::Svg Icon-->
                                                         </a>
-                                                        <a href="#"
+                                                        <button
+                                                                th:data="*{courseModule.courseModuleId}"
+                                                                th:data-title="*{courseModule.name}"
                                                            data-bs-trigger="hover"
                                                            data-bs-original-title="Xóa tài nguyên"
                                                            data-bs-toggle="tooltip"
-                                                           class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                                                           class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm btn-dl">
                                                             <!--begin::Svg Icon | path: icons/duotone/General/Trash.svg-->
                                                             <span class="svg-icon svg-icon-3">
 																			<svg xmlns="http://www.w3.org/2000/svg"
@@ -254,9 +258,10 @@
 																			</svg>
 																		</span>
                                                             <!--end::Svg Icon-->
-                                                        </a>
+                                                        </button>
                                                     </td>
                                                 </tr>
+                                                </th:block>
                                                 </tbody>
                                                 <!--end::Table body-->
                                             </table>
@@ -727,5 +732,7 @@
 <script th:src="@{/js/course/hiddenShowSection.js}"></script>
 <script th:src="@{/js/course/addResource.js}"></script>
 <script th:src="@{/js/course/addSection.js}"></script>
+<script th:src="@{/js/module/hiddenShowModule.js}"></script>
+<script th:src="@{/js/module/deleteModule.js}"></script>
 </body>
 </html>

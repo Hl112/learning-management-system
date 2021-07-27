@@ -48,6 +48,7 @@ var KTCareersApply = function () {
                         t.setAttribute('data-kt-indicator', 'on');
                         t.disabled = !0;
                         setTimeout(function () {
+                            var moduleID = document.getElementById("courseModuleID") ? document.getElementById("courseModuleID").value : null;
                             let courseID = document.getElementById('courseID').value;
                             let sectionID = document.getElementById('sectionID').value;
                             let name = document.querySelector('[name=name]').value;
@@ -60,6 +61,7 @@ var KTCareersApply = function () {
 
                             var objDT = {
                                 "courseModules": {
+                                    "courseModuleId": moduleID,
                                     "name": name,
                                     "description": description,
                                     "typeName": typeName,
@@ -74,6 +76,7 @@ var KTCareersApply = function () {
                                     "fileName": fileName
                                 }
                             };
+                            if(moduleID == null)  delete objDT.courseModules.courseModuleId;
                             var data = JSON.stringify(objDT);
 
                             var xhr = new XMLHttpRequest();

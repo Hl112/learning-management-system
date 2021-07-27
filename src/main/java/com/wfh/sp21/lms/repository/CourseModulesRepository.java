@@ -9,5 +9,7 @@ import java.util.List;
 @Repository
 public interface CourseModulesRepository extends JpaRepository<CourseModules, Long> {
     List<CourseModules> findAllByCourseSections_CourseSectionId(Long courseSectionId);
+    List<CourseModules> findAllByStatusIsTrueAndCourseSections_CourseSectionId(Long courseSectionId);
     List<CourseModules> findAllByVisibleIsTrueAndCourseSections_CourseSectionId(Long courseSectionId);
+    CourseModules findByCourseModuleId(Long courseModuleId);
 }

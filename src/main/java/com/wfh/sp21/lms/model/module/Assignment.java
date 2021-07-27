@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
+
 @Entity
 @Table(name = "wfh_assignment")
 @NoArgsConstructor

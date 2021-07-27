@@ -95,6 +95,7 @@
                     <!--begin::Form-->
                     <form action="" class="form mb-15 fv-plugins-bootstrap5 fv-plugins-framework"
                           method="post" id="kt_careers_form">
+                      <input type="hidden" name="courseModuleID" id="courseModuleID" th:if="${courseModule!= null}" th:value="${courseModule.courseModuleId}">
                       <input type="hidden" name="sectionID" id="sectionID" th:value="${courseSection.courseSectionId}">
                       <input type="hidden" name="typeName" id="typeName" th:value="${param.type}">
                       <input type="hidden" name="courseID" id="courseID" th:value="${courseSection.course.courseId}">
@@ -117,8 +118,9 @@
                           <label class="required fs-5 fw-bold mb-2" th:text="|Tên ${param.type}|"></label>
                           <!--end::Label-->
                           <!--end::Input-->
+                          <input type="text" class="form-control form-control-solid" placeholder="" name="name" th:if="${courseModule==null}">
                           <input type="text" class="form-control form-control-solid"
-                                 placeholder="" name="name">
+                                 placeholder="" name="name" th:if="${courseModule!=null}" th:value="${courseModule.name}">
                           <!--end::Input-->
                           <div class="fv-plugins-message-container invalid-feedback"></div>
                         </div>
@@ -129,7 +131,7 @@
                       <div class="d-flex flex-column mb-9">
                         <label class="fs-6 fw-bold mb-2">Thông tin mô tả</label>
                         <textarea class="form-control form-control-solid" rows="4"
-                                  name="description" placeholder=""></textarea>
+                                  name="description" placeholder="" th:text="${!addPage ? courseModule.description : ''}"></textarea>
                       </div>
                       <div class="row mb-5">
                         <!--begin::Label-->
@@ -140,7 +142,7 @@
                         <!--begin::Label-->
                         <div class="col-lg-4 d-flex align-items-center">
                           <div class="form-check form-check-solid form-switch fv-row">
-                            <input class="form-check-input w-45px h-30px" type="checkbox" id="showDes">
+                            <input class="form-check-input w-45px h-30px" type="checkbox" id="showDes" th:checked="${!addPage ? courseModule.showDescription: false}">
                             <label class="form-check-label" for="showDes"></label>
                           </div>
                         </div>
@@ -185,7 +187,8 @@
                         <!--begin::Submit-->
                         <button type="submit" class="col-md-6 btn btn-primary" id="kt_module_submit_button">
                           <!--begin::Indicator-->
-                          <span class="indicator-label" th:text="|Thêm ${param.type}|">Thêm khóa học</span>
+                          <span class="indicator-label" th:text="|Thêm ${param.type}|" th:if="${addPage}"></span>
+                          <span class="indicator-label" th:text="|Sửa ${param.type}|" th:if="${!addPage}"></span>
                           <span class="indicator-progress">Vui lòng chờ...
 														<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                           <!--end::Indicator-->
