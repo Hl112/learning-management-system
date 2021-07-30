@@ -294,8 +294,6 @@ public class TeacherController {
             case "Assignment":
                 int totalMember = courseModules.getCourseSections().getCourse().getUserEnrolments() != null ? courseModules.getCourseSections().getCourse().getUserEnrolments().size() : 0;
                 int totalSubmission = 0;
-                System.out.println(totalMember);
-                System.out.println(totalSubmission);
                 model.addAttribute("totalMember", totalMember);
                 model.addAttribute("totalSubmission", totalSubmission);
                 return "teacher/viewAssignment";

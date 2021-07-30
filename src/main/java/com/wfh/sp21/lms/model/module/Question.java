@@ -24,19 +24,35 @@ public class Question {
     private boolean hidden;
     private int questionType;
 
-
-    @ManyToOne
-    @JoinColumn(name = "question_category")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private QuestionCategory questionCategory;
-
     @ManyToOne
     @JoinColumn(name = "create_by")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private User createdBy;
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JoinTable(name = "wfh_quiz_question",
+            joinColumns = @JoinColumn(name = "question_id"),
+    inverseJoinColumns = @JoinColumn(name = "quiz_id"))
+    private Collection<Quiz> quizCollection;
+
+
+
+
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private Collection<QuestionAnswers> answers;
+
+    @OneToOne
+    @JoinColumn(name = "q_multichoice_id")
+    private QuestionMultichoice questionMultichoice;
+
+    @OneToOne
+    @JoinColumn(name = "q_truefalse_id")
+    private QuestionTrueFalse questionTrueFalse;
+
+    @OneToOne
+    @JoinColumn(name = "q_essay")
+    private QuestionEssay questionEssay;
 }

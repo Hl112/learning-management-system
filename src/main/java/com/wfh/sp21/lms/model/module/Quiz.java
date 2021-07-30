@@ -1,12 +1,11 @@
 package com.wfh.sp21.lms.model.module;
 
 import com.wfh.sp21.lms.model.CourseModules;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -22,9 +21,16 @@ public class Quiz implements Serializable {
     private Date timeLimit;
     private float gradeToPass;
     private int attempt;
+    private boolean start = false;
 //    private int gradeMethod;
 //    private int questionPerPage;
     private boolean review;
     private boolean shuffleQuestions;
     private String password;
+
+    @ManyToMany
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Collection<Question> questionList;
+
 }

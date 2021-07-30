@@ -18,6 +18,7 @@ public class QuestionAnswers {
     private String answer;
     private String feedback;
     private boolean correct;
+    private float fraction;
     private int position;
     @ManyToOne
     @JoinColumn(name = "question_id")
