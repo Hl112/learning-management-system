@@ -1,22 +1,22 @@
 package com.wfh.sp21.lms.controller;
 
+import com.wfh.sp21.lms.mapper.QuestionMapper;
 import com.wfh.sp21.lms.model.*;
 import com.wfh.sp21.lms.model.module.FileModule;
-import com.wfh.sp21.lms.model.module.ModuleMapper;
-import com.wfh.sp21.lms.services.*;
+import com.wfh.sp21.lms.mapper.ModuleMapper;
+import com.wfh.sp21.lms.model.module.Question;
+import com.wfh.sp21.lms.services.impl.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.security.Principal;
@@ -44,6 +44,7 @@ public class TeacherController {
 
     @Autowired
     private CourseModulesServicesImpl courseModulesServicesImpl;
+
 
     @GetMapping(value = {"", "/"})
     public String teacherPage() {
@@ -105,7 +106,7 @@ public class TeacherController {
         course.setCourseCategory(category);
         String success = course.getCourseId() != null ? "Sửa khóa học thành công" : "Thêm khóa học thành công";
         String fail = course.getCourseId() != null ? "Sửa khóa học thất bại" : "Thêm khóa học thất bại";
-        System.out.println(course.isVisible());
+
         boolean result = course.getCourseId() != null ? courseServicesImpl.updateCourse(course) : courseServicesImpl.addCourse(course);
         if (result) {
             return new ResponseEntity<>(success, HttpStatus.OK);
@@ -214,8 +215,6 @@ public class TeacherController {
     //Module
     @GetMapping("/addModule")
     public String addModulePage(Model model, @RequestParam("type") String type, @RequestParam("id") Long courseSectionId) {
-        System.out.println(type);
-        System.out.println(courseSectionId);
         CourseSections courseSections = courseSectionServicesImpl.getCourseSectionById(courseSectionId);
         model.addAttribute("addPage", true);
         model.addAttribute("courseSection", courseSections);
@@ -244,12 +243,10 @@ public class TeacherController {
         return "layout/addModuleChild";
     }
 
-
     @PostMapping("/addModule")
     @ResponseBody
     public ResponseEntity<Object> addModule(@RequestBody ModuleMapper module) {
         CourseModules courseModules = module.getCourseModules();
-        System.out.println(courseModules.getCourseModuleId());
         Object moduleChild = null;
         try {
             Method method = module.getClass().getMethod("get" + courseModules.getTypeName());
@@ -309,14 +306,37 @@ public class TeacherController {
                     response.setContentLength(fileData.length);
                     InputStream inputStream = new BufferedInputStream(new ByteArrayInputStream(fileData));
                     FileCopyUtils.copy(inputStream, response.getOutputStream());
-                }catch (Exception x){
+                } catch (Exception x) {
                     x.printStackTrace();
                 }
-               break;
+                break;
             case "Url":
                 return "redirect://" + courseModules.getUrl().getLink();
         }
         return "404";
     }
 
+    @GetMapping("/addQuestion")
+    public String addQuestionPage(@RequestParam("question_type") String questionType, @RequestParam("quizID") Long quizID, Model model) {
+        CourseModules courseModules = courseModulesServicesImpl.getCourseModulesByCourseModulesId(quizID);
+        model.addAttribute("addQuestion", true);
+        model.addAttribute("courseModule", courseModules);
+        model.addAttribute("question_type", questionType);
+        String questionName = "";
+        switch (questionType){
+            case "QuestionMultichoice":  questionName = "Câu hỏi lựa chọn(MultiChoice)"; break;
+            case "QuestionTrueFalse":  questionName = "Câu hỏi đúng sai(True/False)"; break;
+            case "QuestionEssay":  questionName = "Câu hỏi bài văn(Essay)"; break;
+        }
+        model.addAttribute("questionName",questionName);
+        model.addAttribute("question", new Question());
+        System.out.println(questionType);
+        System.out.println(quizID);
+        return "teacher/editQuestion";
+    }
+
+    @PostMapping("/addQuestion/{id}")
+    public ResponseEntity<Object> addUpdateQuestion(@RequestBody QuestionMapper questionMapper, @PathVariable("id") Long quizId){
+        return  null;
+    }
 }

@@ -1,4 +1,4 @@
-package com.wfh.sp21.lms.services;
+package com.wfh.sp21.lms.services.impl;
 
 import com.wfh.sp21.lms.model.CourseModules;
 import com.wfh.sp21.lms.model.CourseSections;
@@ -7,11 +7,11 @@ import com.wfh.sp21.lms.model.module.FileModule;
 import com.wfh.sp21.lms.model.module.Quiz;
 import com.wfh.sp21.lms.model.module.Url;
 import com.wfh.sp21.lms.repository.CourseModulesRepository;
+import com.wfh.sp21.lms.services.CourseModulesServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 

@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "wfh_quiz")
@@ -28,9 +29,8 @@ public class Quiz implements Serializable {
     private boolean shuffleQuestions;
     private String password;
 
-    @ManyToMany
-    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "quiz")
     @ToString.Exclude
-    private Collection<Question> questionList;
+    private Set<QuizQuestion> quizQuestion;
 
 }

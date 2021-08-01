@@ -1,6 +1,10 @@
-package com.wfh.sp21.lms.model.module;
+package com.wfh.sp21.lms.mapper;
 
 import com.wfh.sp21.lms.model.CourseModules;
+import com.wfh.sp21.lms.model.module.Assignment;
+import com.wfh.sp21.lms.model.module.FileModule;
+import com.wfh.sp21.lms.model.module.Quiz;
+import com.wfh.sp21.lms.model.module.Url;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

@@ -2,8 +2,8 @@ package com.wfh.sp21.lms.controller;
 
 import com.wfh.sp21.lms.model.Course;
 import com.wfh.sp21.lms.model.User;
-import com.wfh.sp21.lms.services.CourseServicesImpl;
-import com.wfh.sp21.lms.services.UserServicesImpl;
+import com.wfh.sp21.lms.services.impl.CourseServicesImpl;
+import com.wfh.sp21.lms.services.impl.UserServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

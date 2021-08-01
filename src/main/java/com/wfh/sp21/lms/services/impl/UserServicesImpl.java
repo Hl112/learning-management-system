@@ -1,4 +1,4 @@
-package com.wfh.sp21.lms.services;
+package com.wfh.sp21.lms.services.impl;
 
 import com.wfh.sp21.lms.model.Course;
 import com.wfh.sp21.lms.model.CustomUserDetails;
@@ -7,6 +7,7 @@ import com.wfh.sp21.lms.model.User;
 import com.wfh.sp21.lms.repository.CourseRepository;
 import com.wfh.sp21.lms.repository.RoleRepository;
 import com.wfh.sp21.lms.repository.UserRepository;
+import com.wfh.sp21.lms.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

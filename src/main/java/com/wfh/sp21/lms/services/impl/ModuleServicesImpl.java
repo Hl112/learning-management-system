@@ -1,4 +1,4 @@
-package com.wfh.sp21.lms.services;
+package com.wfh.sp21.lms.services.impl;
 
 import com.wfh.sp21.lms.model.module.Assignment;
 import com.wfh.sp21.lms.model.module.FileModule;
@@ -8,11 +8,12 @@ import com.wfh.sp21.lms.repository.AssignmentRepository;
 import com.wfh.sp21.lms.repository.FileModuleRepository;
 import com.wfh.sp21.lms.repository.QuizRepository;
 import com.wfh.sp21.lms.repository.UrlRepository;
+import com.wfh.sp21.lms.services.ModuleServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ModuleServicesImpl implements ModuleServices{
+public class ModuleServicesImpl implements ModuleServices {
 
     @Autowired
     private AssignmentRepository assignmentRepository;

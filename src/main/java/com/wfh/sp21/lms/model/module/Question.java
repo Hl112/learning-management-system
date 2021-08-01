@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "wfh_question")
@@ -21,8 +22,9 @@ public class Question {
     private float defaultMark;
     private Date timeCreated;
     private Date timeModified;
-    private boolean hidden;
-    private int questionType;
+    private boolean hidden = false;
+    private String questionType;
+    private boolean status = true;
 
     @ManyToOne
     @JoinColumn(name = "create_by")
@@ -30,16 +32,9 @@ public class Question {
     @ToString.Exclude
     private User createdBy;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "question")
     @ToString.Exclude
-    @JoinTable(name = "wfh_quiz_question",
-            joinColumns = @JoinColumn(name = "question_id"),
-    inverseJoinColumns = @JoinColumn(name = "quiz_id"))
-    private Collection<Quiz> quizCollection;
-
-
-
+    private Set<QuizQuestion> quizQuestions;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private Collection<QuestionAnswers> answers;

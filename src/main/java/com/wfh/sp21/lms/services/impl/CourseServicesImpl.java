@@ -1,15 +1,17 @@
-package com.wfh.sp21.lms.services;
+package com.wfh.sp21.lms.services.impl;
 
 import com.wfh.sp21.lms.model.Course;
 import com.wfh.sp21.lms.model.CourseCategory;
 import com.wfh.sp21.lms.repository.CourseCategoryRepository;
 import com.wfh.sp21.lms.repository.CourseRepository;
+import com.wfh.sp21.lms.services.CourseServices;
+import com.wfh.sp21.lms.services.impl.CourseSectionServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class CourseServicesImpl implements CourseServices{
+public class CourseServicesImpl implements CourseServices {
 
     @Autowired
     private CourseRepository courseRepository;

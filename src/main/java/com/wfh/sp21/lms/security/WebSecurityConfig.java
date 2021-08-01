@@ -1,6 +1,6 @@
 package com.wfh.sp21.lms.security;
 
-import com.wfh.sp21.lms.services.UserServicesImpl;
+import com.wfh.sp21.lms.services.impl.UserServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

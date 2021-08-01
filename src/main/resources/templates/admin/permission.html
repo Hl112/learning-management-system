@@ -293,10 +293,10 @@
                                                             <!--begin::Radio-->
                                                             <div class="form-check form-check-custom form-check-solid">
                                                                 <!--begin::Input-->
-                                                                <input class="form-check-input me-3" name="user_role" type="radio" th:value="*{role.roleName}" id="kt_modal_update_role_option_1">
+                                                                <input class="form-check-input me-3" name="user_role" type="radio" th:value="*{role.roleName}" th:id="*{role.roleName}">
                                                                 <!--end::Input-->
                                                                 <!--begin::Label-->
-                                                                <label class="form-check-label" for="kt_modal_update_role_option_1">
+                                                                <label class="form-check-label" th:for="*{role.roleName}">
                                                                     <div class="fw-bolder text-gray-800" th:text="*{role.roleName}"></div>
                                                                     <div class="text-gray-600" th:text="*{role.roleDescription}"></div>
                                                                 </label>

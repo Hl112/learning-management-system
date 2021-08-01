@@ -18,4 +18,5 @@ public class QuestionMultichoice {
     private Long questionId;
     private boolean singleAnswer;
     private boolean numberTheChoice;
+    private boolean showInstructions = false;
 }

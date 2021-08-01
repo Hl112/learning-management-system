@@ -1,10 +1,13 @@
-package com.wfh.sp21.lms.services;
+package com.wfh.sp21.lms.services.impl;
 
 import com.wfh.sp21.lms.model.Course;
 import com.wfh.sp21.lms.model.User;
 import com.wfh.sp21.lms.model.UserEnrolments;
 import com.wfh.sp21.lms.model.UserEnrolmentsKey;
 import com.wfh.sp21.lms.repository.UserEnrolmentsRepository;
+import com.wfh.sp21.lms.services.UserEnrolmentsServices;
+import com.wfh.sp21.lms.services.UserServices;
+import com.wfh.sp21.lms.services.impl.CourseServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 @Service
-public class UserEnrolmentsServicesImpl implements UserEnrolmentsServices{
+public class UserEnrolmentsServicesImpl implements UserEnrolmentsServices {
 
     @Autowired
     private UserEnrolmentsRepository userEnrolmentsRepository;
