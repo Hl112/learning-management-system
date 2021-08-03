@@ -121,7 +121,7 @@
                         <a class="menu-link" th:href="@{/admin/courseCategory}"
                            th:classappend="${module == 'courseCategory' ? 'active' : ''}">
 										<span class="menu-icon">
-											<i class="bi bi-person fs-2"></i>
+											<i class="bi bi-layers fs-3"></i>
 										</span>
                             <span class="menu-title">Danh mục khóa học</span>
                         </a>
@@ -197,28 +197,26 @@
                     </div>
                 </div>
                 <!-- Separator-->
-                <div class="menu-item">
-                    <a class="menu-link"
-                       href="https://preview.keenthemes.com/metronic8/demo5/layout-builder.html">
-										<span class="menu-icon">
-											<i class="bi bi-layers fs-3"></i>
-										</span>
-                        <span class="menu-title">Profile</span>
-                    </a>
-                </div>
+<!--                <div class="menu-item">-->
+<!--                    <a class="menu-link"-->
+<!--                       href="https://preview.keenthemes.com/metronic8/demo5/layout-builder.html">-->
+<!--										<span class="menu-icon">-->
+<!--											<i class="bi bi-layers fs-3"></i>-->
+<!--										</span>-->
+<!--                        <span class="menu-title">Profile</span>-->
+<!--                    </a>-->
+<!--                </div>-->
             </div>
             <!--end::Menu-->
             <script>
                 var p = document.querySelector('.menu-item > .active');
                 if(p!=null){
                     var x = p.parentNode;
-                    if(x.classList.contains('menu-accordion')){
-                        x.classList.add('hover');
-                        x.classList.add('show');
-                        var sub = document.querySelector('.menu-sub.menu-sub-accordion');
-                        sub.classList.add('show');
-                        sub.style = '';
-                    }
+                    var subMenu = x.childNodes[3];
+                    console.log(x);
+                    subMenu.style='';
+                    subMenu.classList.add('hover');
+                    subMenu.classList.add('show');
                 }
             </script>
         </div>

@@ -1,8 +1,8 @@
 package com.wfh.sp21.lms.controller;
 
-import com.wfh.sp21.lms.model.CourseCategory;
-import com.wfh.sp21.lms.model.Role;
-import com.wfh.sp21.lms.model.User;
+import com.wfh.sp21.lms.model.*;
+import com.wfh.sp21.lms.services.RoleServices;
+import com.wfh.sp21.lms.services.UserServices;
 import com.wfh.sp21.lms.services.impl.CourseCategoryServicesImpl;
 import com.wfh.sp21.lms.services.impl.RoleServicesImpl;
 import com.wfh.sp21.lms.services.impl.UserServicesImpl;
@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -30,10 +30,10 @@ public class AdminController {
     private String defaultPassword;
 
     @Autowired
-    private UserServicesImpl userServicesImpl;
+    private UserServices userServicesImpl;
 
     @Autowired
-    private RoleServicesImpl roleServicesImpl;
+    private RoleServices roleServicesImpl;
     //Init Attriute
     @ModelAttribute("userLogin")
     User userLogin(Principal principal) {
@@ -42,9 +42,14 @@ public class AdminController {
     //Page
     @GetMapping(value = {"","/"})
     public String adminPage(Model model,Principal principal){
-        model.addAttribute("module","home");
+        List<String> classList = new ArrayList<>(List.of("warning","success","danger","info"));
         User user = userServicesImpl.getUserByUsername(principal.getName());
+        List<CourseCategory> courseCategoryList = courseCategoryServicesImpl.getAllCourseCategories().subList(0,4);
+
+        model.addAttribute("CLASS_LIST",classList);
+        model.addAttribute("module","home");
         model.addAttribute("userLogin",user);
+        model.addAttribute("LIST_COURSE_CATEGORY", courseCategoryList);
         return "admin/admin";
     }
     //Begin Manage Account
@@ -66,10 +71,29 @@ public class AdminController {
 
     @GetMapping("/userList/{username}")
     public String userDetailsPage(@PathVariable("username") String username, Model model){
-        System.out.println(username);
+
         User user = userServicesImpl.getUserByUsername(username);
         if(user == null) return "404";
+        int role = 2;
+        if(user.getRole().getRoleName().equals("Teacher")) role = 1; else role = 0;
+        List<Course> courseList = role == 1 ? (List<Course>) user.getListCourses() : (user.getUserEnrolments() != null ? user.getUserEnrolments().stream().map(UserEnrolments::getCourse).collect(Collectors.toList()) : null);
+        Map<CourseCategory, List<Course>> courseMap = courseList != null ? new HashMap<>() : null;
+        if(courseList != null)
+        for (Course course: courseList) {
+            if(courseMap.containsKey(course.getCourseCategory())){
+                List<Course> lC = courseMap.get(course.getCourseCategory());
+                lC.add(course);
+                courseMap.put(course.getCourseCategory(),lC);
+            }else{
+                List<Course> lC = new ArrayList<>();
+                lC.add(course);
+                courseMap.put(course.getCourseCategory(),lC);
+            }
+        }
+        System.out.println(courseMap);
+        model.addAttribute("role",role);
         model.addAttribute("user", user);
+        model.addAttribute("courseMap",courseMap);
         model.addAttribute("module","userDetails");
         return "admin/userDetails";
     }

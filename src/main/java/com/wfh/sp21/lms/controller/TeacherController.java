@@ -1,11 +1,11 @@
 package com.wfh.sp21.lms.controller;
 
+import com.wfh.sp21.lms.mapper.ModuleMapper;
 import com.wfh.sp21.lms.mapper.QuestionMapper;
 import com.wfh.sp21.lms.model.*;
 import com.wfh.sp21.lms.model.module.FileModule;
-import com.wfh.sp21.lms.mapper.ModuleMapper;
 import com.wfh.sp21.lms.model.module.Question;
-import com.wfh.sp21.lms.services.impl.*;
+import com.wfh.sp21.lms.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,26 +28,36 @@ import java.util.List;
 public class TeacherController {
 
     @Autowired
-    private UserServicesImpl userServicesImpl;
+    private UserServices userServicesImpl;
 
     @Autowired
-    private CourseCategoryServicesImpl courseCategoryServicesImpl;
+    private CourseCategoryServices courseCategoryServicesImpl;
 
     @Autowired
-    private CourseServicesImpl courseServicesImpl;
+    private CourseServices courseServicesImpl;
 
     @Autowired
-    private CourseSectionServicesImpl courseSectionServicesImpl;
+    private CourseSectionServices courseSectionServicesImpl;
 
     @Autowired
-    private UserEnrolmentsServicesImpl userEnrolmentsServicesImpl;
+    private UserEnrolmentsServices userEnrolmentsServicesImpl;
 
     @Autowired
-    private CourseModulesServicesImpl courseModulesServicesImpl;
+    private CourseModulesServices courseModulesServicesImpl;
+
+    @Autowired
+    private QuestionServices questionServices;
+
+    @Autowired
+    private QuizQuestionServices quizQuestionServices;
 
 
     @GetMapping(value = {"", "/"})
-    public String teacherPage() {
+    public String teacherPage(Model model, Principal principal) {
+        String username = principal!=null ? principal.getName() : null;
+        if(username == null) return "redirect://afterLogin";
+        List<Course> course = courseServicesImpl.getAllCourseByUsername(username);
+        model.addAttribute("lCourse", course);
         return "teacher/teacher";
     }
 
@@ -295,6 +305,10 @@ public class TeacherController {
                 model.addAttribute("totalSubmission", totalSubmission);
                 return "teacher/viewAssignment";
             case "Quiz":
+                List<Question> questionList = questionServices.getQuestionsByQuizId(courseModules.getCourseModuleId());
+                model.addAttribute("listQuestion", questionList);
+                double totalMark =  questionList.stream().mapToDouble(Question::getDefaultMark).sum();
+                model.addAttribute("totalMark", totalMark);
                 return "teacher/viewQuiz";
             case "FileModule":
                 FileModule fileModule = courseModules.getFile();
@@ -335,8 +349,78 @@ public class TeacherController {
         return "teacher/editQuestion";
     }
 
-    @PostMapping("/addQuestion/{id}")
-    public ResponseEntity<Object> addUpdateQuestion(@RequestBody QuestionMapper questionMapper, @PathVariable("id") Long quizId){
-        return  null;
+    @GetMapping("/editQuestion")
+    public String editQuestionPage(@RequestParam("quizID") Long quizID,@RequestParam("id") Long questionID, Model model) {
+        CourseModules courseModules = courseModulesServicesImpl.getCourseModulesByCourseModulesId(quizID);
+        Question question = questionServices.getQuestionById(questionID);
+        String questionType = question.getQuestionType();
+        model.addAttribute("addQuestion", false);
+        model.addAttribute("courseModule", courseModules);
+        model.addAttribute("question_type", questionType);
+        String questionName = "";
+        switch (questionType){
+            case "QuestionMultichoice":  questionName = "Câu hỏi lựa chọn(MultiChoice)"; break;
+            case "QuestionTrueFalse":  questionName = "Câu hỏi đúng sai(True/False)"; break;
+            case "QuestionEssay":  questionName = "Câu hỏi bài văn(Essay)"; break;
+        }
+        model.addAttribute("questionName",questionName);
+        model.addAttribute("question", question);
+        return "teacher/editQuestion";
     }
+
+    @GetMapping("/editQuestionLayout")
+    public String editQuestionLayout(@RequestParam("quizID") Long quizID,@RequestParam("id") Long questionID, Model model) {
+        CourseModules courseModules = courseModulesServicesImpl.getCourseModulesByCourseModulesId(quizID);
+        Question question = questionServices.getQuestionById(questionID);
+        String questionType = question.getQuestionType();
+        model.addAttribute("addQuestion", false);
+        model.addAttribute("courseModule", courseModules);
+        model.addAttribute("question_type", questionType);
+        String questionName = "";
+        switch (questionType){
+            case "QuestionMultichoice":  questionName = "Câu hỏi lựa chọn(MultiChoice)"; break;
+            case "QuestionTrueFalse":  questionName = "Câu hỏi đúng sai(True/False)"; break;
+            case "QuestionEssay":  questionName = "Câu hỏi bài văn(Essay)"; break;
+        }
+        model.addAttribute("questionName",questionName);
+        question.getAnswers();
+        model.addAttribute("question", question);
+        return "layout/questionChild";
+    }
+
+    @PostMapping("/addQuestion/{id}")
+    public ResponseEntity<Object> addUpdateQuestion(@RequestBody QuestionMapper questionMapper, @PathVariable("id") Long quizId,Principal principal){
+        boolean result;
+        Question question = questionMapper.getQuestion();
+        String username = principal != null ? principal.getName() : null;
+        if(username == null) return new ResponseEntity<>("Vui lòng đăng nhập", HttpStatus.BAD_REQUEST);
+        Object questionType = null;
+        try {
+            Method method = questionMapper.getClass().getMethod("get" + question.getQuestionType());
+            questionType = method.invoke(questionMapper);
+            result = questionServices.addUpdateQuestion(question,quizId,questionType, username);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>("Error Type", HttpStatus.BAD_REQUEST);
+        }
+
+        if(result){
+            return new ResponseEntity<>(" Thành công", HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(" Thất bại", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/deleteQuestion/{id}")
+    public ResponseEntity<Object> deleteQuestion(@RequestBody Long questionId, @PathVariable("id") Long quizId){
+       try {
+        quizQuestionServices.removeQuestionFromQuiz(questionId,quizId);
+        questionServices.deleteQuestion(questionId);
+       }catch (Exception e){
+           return new ResponseEntity<>("Xóa câu hỏi thất bại", HttpStatus.BAD_REQUEST);
+       }
+       return new ResponseEntity<>("Xóa câu hỏi thành công", HttpStatus.OK);
+    }
+
+
 }

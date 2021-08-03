@@ -50,16 +50,16 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     @ToString.Exclude
-    private Set<UserEnrolments> userEnrolments;
+    private Collection<UserEnrolments> userEnrolments;
 
     @OneToMany(mappedBy = "createdBy")
     @ToString.Exclude
-    private Set<Question> listQuestions;
+    private Collection<Question> listQuestions;
 
     @OneToMany(mappedBy = "user")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Set<Course> listCourses;
+    private Collection<Course> listCourses;
 
     @Override
     public boolean equals(Object o) {

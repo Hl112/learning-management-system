@@ -1,16 +1,18 @@
 package com.wfh.sp21.lms.model.module;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "wfh_question_answers")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
 public class QuestionAnswers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +26,17 @@ public class QuestionAnswers {
     @JoinColumn(name = "question_id")
     private Question question;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        QuestionAnswers that = (QuestionAnswers) o;
+
+        return Objects.equals(questionAnswersId, that.questionAnswersId);
+    }
+
+    @Override
+    public int hashCode() {
+        return 2091289396;
+    }
 }

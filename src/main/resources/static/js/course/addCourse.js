@@ -83,7 +83,10 @@ var KTCareersApply = function () {
                         e.removeField('end_date');
                     }
                 }))
-                , t.addEventListener("click", (function (i) {
+                if(!document.getElementById('allowenddate').checked){
+                    e.removeField('end_date');
+                }
+                 t.addEventListener("click", (function (i) {
                 i.preventDefault(), e && e.validate().then((function (e) {
 
                     if ('Valid' === e) {

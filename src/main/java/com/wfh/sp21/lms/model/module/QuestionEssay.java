@@ -18,4 +18,7 @@ public class QuestionEssay {
     private Long questionId;
     private boolean required;
     private int inputBoxSize = 10;
+    private int minimumWordLimit;
+    private int maximumWordLimit;
+    private boolean shortAnswer;
 }

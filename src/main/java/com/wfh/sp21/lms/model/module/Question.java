@@ -2,17 +2,21 @@ package com.wfh.sp21.lms.model.module;
 
 import com.wfh.sp21.lms.model.User;
 import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "wfh_question")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +41,7 @@ public class Question {
     private Set<QuizQuestion> quizQuestions;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Collection<QuestionAnswers> answers;
 
     @OneToOne
@@ -50,4 +55,18 @@ public class Question {
     @OneToOne
     @JoinColumn(name = "q_essay")
     private QuestionEssay questionEssay;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Question question = (Question) o;
+
+        return Objects.equals(questionId, question.questionId);
+    }
+
+    @Override
+    public int hashCode() {
+        return 1344421622;
+    }
 }

@@ -51,7 +51,17 @@ var KTMultichoiceQuestion = function () {
                     name: {validators: {notEmpty: {message: "Vui lòng nhập tên câu hỏi"}}},
                     questionText: {validators: {notEmpty: {message: "Vui lòng nhập nôi dung câu hỏi"}}},
                     defaultMark: {validators: {notEmpty: {message: "Vui lòng nhập số điểm của câu hỏi"},
-                        integer: {message: "Số điểm của câu hỏi phải là số nguyên"}}},
+                        integer: {message: "Số điểm của câu hỏi phải là số nguyên"},
+                        callback:{
+                        callback : function () {
+                            let val = document.querySelector('[name=defaultMark]').value;
+                            if(val > 0){
+                                return {
+                                    valid: true
+                                }
+                            }else return {valid : false , message: 'Điểm phải lớn hơn 0'}
+                        }
+                        }}},
                     "c_ans[]": {validators: {notEmpty: {message: "Vui lòng chọn tối thiểu một đáp án đúng"}}},
                     "ans[]": {validators: {
                         callback:{
@@ -92,6 +102,8 @@ var KTMultichoiceQuestion = function () {
                     var ans = document.getElementsByClassName('ans')[0].cloneNode(true);
                     var title = ans.childNodes[1].childNodes[1].childNodes[3].childNodes[1];
                     title.innerHTML = `Lựa chọn ${numOfAns}`;
+                    ans.childNodes[1].childNodes[1].childNodes[7].childNodes[1].value = '';
+                    ans.childNodes[1].childNodes[3].childNodes[9].childNodes[1].value = '';
                     var check = ans.childNodes[3].childNodes[1].childNodes[1];
                     check.id = `c_ans${numOfAns}`;
                     var lable = ans.childNodes[3].childNodes[1].childNodes[3];
@@ -121,6 +133,7 @@ var KTMultichoiceQuestion = function () {
                             }}});
                 initNumberC();
                 initClickCheck(e);
+                blockClick();
                 }
 
             t.addEventListener("click", (function (i) {
@@ -129,35 +142,50 @@ var KTMultichoiceQuestion = function () {
                         t.setAttribute('data-kt-indicator', 'on');
                         t.disabled = !0;
                         setTimeout(function () {
-                            var moduleID = document.getElementById("courseModuleID") ? document.getElementById("courseModuleID").value : null;
-                            let courseID = document.getElementById('courseID').value;
-                            let sectionID = document.getElementById('sectionID').value;
-                            let name = document.querySelector('[name=name]').value;
-                            let description = document.querySelector('[name=description]').value;
-                            let showDescription = document.getElementById('showDes').checked;
+                            let moduleID = document.getElementById('moduleID').value;
+                            let quizID = document.getElementById('quizID').value;
+                            let questionID = document.querySelector('[name=questionID]') != null ? document.querySelector('[name=questionID]').value : null;
+                            let questionName = document.querySelector('[name=name]').value;
+                            let questionText = document.querySelector('[name=questionText]').value;
+                            let defaultMark = document.querySelector('[name=defaultMark]').value;
+                            let questionType = document.querySelector('[name=qType]').value;
 
-                            let fileName = document.getElementById('fileUp').files.length != 0 ? document.getElementById('fileUp').files[0].name : '';
-                            let typeName = document.getElementById('typeName').value;
-
-
-                            var objDT = {
-                                "courseModules": {
-                                    "courseModuleId": moduleID,
-                                    "name": name,
-                                    "description": description,
-                                    "typeName": typeName,
-                                    "showDescription": showDescription,
-                                    "visible": true,
-                                    "courseSections": {
-                                        "courseSectionId": sectionID
+                            let singleAns = document.querySelector('[name=singleAnswer]').value === '1';
+                            let numOfChoice = document.querySelector('[name=numberTheChoice]').value === '1';
+                            let ansID = document.getElementsByName('ansID[]');
+                            let ansText = document.getElementsByName('ans[]');
+                            let ansCheck = document.getElementsByName('c_ans[]');
+                            let ansFeedback = document.getElementsByName('feedback[]');
+                            let ansList = [];
+                            for (let i = 0; i < ansText.length; i++) {
+                                if (ansText[i].value.trim().length !== 0) {
+                                    let ans = {
+                                        "answer": ansText[i].value,
+                                        "feedback": ansFeedback[i].value,
+                                        "correct": ansCheck[i].checked
                                     }
+                                    if(ansID.length !== 0)
+                                        ans['questionAnswersId'] = ansID[i].value;
+                                    ansList.push(ans);
+                                }
+                            }
+                            var objDT = {
+                                "question": {
+                                    "questionId": questionID,
+                                    "questionName": questionName,
+                                    "questionText": questionText,
+                                    "defaultMark": defaultMark,
+                                    "questionType": questionType,
+                                    "timeCreated": new Date(),
+                                    "timeModified": new Date(),
+                                    "answers": ansList
                                 },
-                                "fileModule": {
-                                    "fileData": file,
-                                    "fileName": fileName
+                                "questionMultichoice": {
+                                    "singleAnswer": singleAns,
+                                    "numberTheChoice": numOfChoice
                                 }
                             };
-                            if(moduleID == null)  delete objDT.courseModules.courseModuleId;
+                            if(questionID == null)  delete objDT.question.questionId;
                             var data = JSON.stringify(objDT);
 
                             var xhr = new XMLHttpRequest();
@@ -175,7 +203,7 @@ var KTMultichoiceQuestion = function () {
                                             confirmButtonText: "Ok!",
                                             customClass: {confirmButton: "btn btn-primary"}
                                         }).then((function (t) {
-                                            window.location.href = `/teacher/viewCourse?id=${courseID}`;
+                                            window.location.href = `/teacher/viewModule?id=${moduleID}`;
                                         }))
                                     } else {
                                         Swal.fire({
@@ -190,7 +218,7 @@ var KTMultichoiceQuestion = function () {
                                     }
                                 }
                             });
-                            xhr.open("POST", "/teacher/addModule");
+                            xhr.open("POST", `/teacher/addQuestion/${quizID}`);
                             xhr.setRequestHeader("Content-Type", "application/json");
                             xhr.send(data);
                         }, 700);

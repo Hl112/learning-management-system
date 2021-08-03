@@ -2,6 +2,8 @@ package com.wfh.sp21.lms.controller;
 
 import com.wfh.sp21.lms.model.Course;
 import com.wfh.sp21.lms.model.User;
+import com.wfh.sp21.lms.services.CourseServices;
+import com.wfh.sp21.lms.services.UserServices;
 import com.wfh.sp21.lms.services.impl.CourseServicesImpl;
 import com.wfh.sp21.lms.services.impl.UserServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +25,10 @@ import java.util.List;
 public class MainController {
 
     @Autowired
-    private UserServicesImpl userServicesImpl;
+    private UserServices userServicesImpl;
 
     @Autowired
-    private CourseServicesImpl courseServicesImpl;
+    private CourseServices courseServicesImpl;
     //Layout
     @GetMapping("/header")
     public String header(Model model, Principal principal){

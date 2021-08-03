@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,7 +94,12 @@ public class UserServicesImpl implements UserDetailsService, UserServices {
 
     @Override
     public List<User> listAddCourses(List<User> list) {
-        return userRepository.findAllByRole_RoleNameAndUsernameNotIn("Student", list.stream().map(User::getUsername).collect(Collectors.toList()));
+        List<String> uNotIn = list != null ? list.stream().map(User::getUsername).collect(Collectors.toList()) : null;
+        List<User> listAddCourse = userRepository.findAllByRole_RoleName("Student");
+        if(uNotIn != null)
+        if(listAddCourse != null)
+            listAddCourse.removeIf(user -> uNotIn.contains(user.getUsername()));
+        return listAddCourse;
     }
 
     public boolean changeRole(User user){

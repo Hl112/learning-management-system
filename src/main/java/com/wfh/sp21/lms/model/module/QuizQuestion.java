@@ -1,9 +1,6 @@
 package com.wfh.sp21.lms.model.module;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 @Entity
@@ -11,6 +8,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
 public class QuizQuestion {
     @EmbeddedId
     private QuizQuestionKey quizQuestionKey;

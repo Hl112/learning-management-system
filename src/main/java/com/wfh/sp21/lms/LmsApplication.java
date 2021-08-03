@@ -5,6 +5,7 @@ import com.wfh.sp21.lms.model.module.Quiz;
 import com.wfh.sp21.lms.repository.*;
 import com.wfh.sp21.lms.services.impl.CourseModulesServicesImpl;
 import com.wfh.sp21.lms.services.impl.CourseSectionServicesImpl;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -15,9 +16,15 @@ import java.util.Date;
 @SpringBootApplication
 @EnableConfigurationProperties
 public class LmsApplication {
+    @Value("${hl.init}")
+    static boolean init;
 
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(LmsApplication.class, args);
+//            initAll(context);
+    }
+
+    public static void initAll(ApplicationContext context) {
         initRole_User(context);
         initCourseCategory_Course(context);
         initUserEnrolments(context);
@@ -70,7 +77,7 @@ public class LmsApplication {
 
     }
 
-    public static void initUserEnrolments(ApplicationContext context){
+    public static void initUserEnrolments(ApplicationContext context) {
         UserRepository userRepository = context.getBean(UserRepository.class);
         CourseRepository courseRepository = context.getBean(CourseRepository.class);
         UserEnrolmentsRepository enrolmentsRepository = context.getBean(UserEnrolmentsRepository.class);
@@ -87,15 +94,15 @@ public class LmsApplication {
 
     }
 
-    public static void initSection(ApplicationContext context){
+    public static void initSection(ApplicationContext context) {
         CourseSectionServicesImpl sectionServices = context.getBean(CourseSectionServicesImpl.class);
         CourseRepository courseRepository = context.getBean(CourseRepository.class);
         Course course = courseRepository.getById(1L);
-        sectionServices.addSection(course.getCourseId(),2);
+        sectionServices.addSection(course.getCourseId(), 2);
         System.out.println("----- Init Course Section");
     }
 
-    public static void initEmptyModule(ApplicationContext context){
+    public static void initEmptyModule(ApplicationContext context) {
         CourseSectionServicesImpl courseSectionServices = context.getBean(CourseSectionServicesImpl.class);
         CourseSections courseSections = courseSectionServices.getCourseSectionById(1L);
         CourseModulesServicesImpl courseModulesServices = context.getBean(CourseModulesServicesImpl.class);
@@ -106,6 +113,11 @@ public class LmsApplication {
                 .typeName("Quiz")
                 .status(true)
                 .build();
+        Quiz quiz = Quiz.builder().attempt(1)
+                .gradeToPass(10f)
+                .review(true)
+                .start(false)
+                .build();
         CourseModules courseModules1 = CourseModules.builder()
                 .name("Assignment 1")
                 .description("hihi haha")
@@ -113,7 +125,7 @@ public class LmsApplication {
                 .typeName("Assignment")
                 .status(true)
                 .build();
-        courseModulesServices.addModule(courseModules, courseSections.getCourseSectionId());
+        courseModulesServices.addModule(courseModules, courseSections.getCourseSectionId(), quiz);
 
         courseModulesServices.addModule(courseModules1, courseSections.getCourseSectionId());
         System.out.println("--- Init Empty Module");

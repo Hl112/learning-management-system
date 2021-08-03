@@ -4,6 +4,7 @@ import com.wfh.sp21.lms.model.Course;
 import com.wfh.sp21.lms.model.CourseCategory;
 import com.wfh.sp21.lms.repository.CourseCategoryRepository;
 import com.wfh.sp21.lms.repository.CourseRepository;
+import com.wfh.sp21.lms.services.CourseSectionServices;
 import com.wfh.sp21.lms.services.CourseServices;
 import com.wfh.sp21.lms.services.impl.CourseSectionServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class CourseServicesImpl implements CourseServices {
     @Autowired
     private CourseCategoryRepository courseCategoryRepository;
     @Autowired
-    private CourseSectionServicesImpl courseSectionServicesImpl;
+    private CourseSectionServices courseSectionServicesImpl;
 
     @Override
     public List<Course> getAllCourses() {

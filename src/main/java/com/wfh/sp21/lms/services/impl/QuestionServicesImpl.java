@@ -1,12 +1,16 @@
 package com.wfh.sp21.lms.services.impl;
 
-import com.wfh.sp21.lms.model.module.Question;
+import com.wfh.sp21.lms.model.User;
+import com.wfh.sp21.lms.model.module.*;
 import com.wfh.sp21.lms.repository.QuestionRepository;
-import com.wfh.sp21.lms.services.QuestionServices;
+import com.wfh.sp21.lms.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
+
 @Service
 public class QuestionServicesImpl implements QuestionServices {
 
@@ -14,10 +18,26 @@ public class QuestionServicesImpl implements QuestionServices {
     private QuestionRepository questionRepository;
 
     @Autowired
-    private QuizQuestionServicesImpl quizQuestionServicesImpl;
+    private QuizQuestionServices quizQuestionServices;
 
     @Autowired
-    private QuizServicesImpl quizServicesImpl;
+    private QuizServices quizServices;
+
+    @Autowired
+    private UserServices userServices;
+
+    @Autowired
+    private QuestionAnswersServices questionAnswersServices;
+
+    @Autowired
+    private QuestionTypeServices questionTypeServices;
+
+    private Date fixDate(Date datetime){
+        if(datetime == null) return null;
+        int month = datetime.getMonth() -1;
+        datetime.setMonth(month);
+        return datetime;
+    }
 
     @Override
     public Question getQuestionById(Long questionId) {
@@ -26,12 +46,65 @@ public class QuestionServicesImpl implements QuestionServices {
 
     @Override
     public List<Question> getQuestionsByQuizId(Long quizId) {
-        return quizQuestionServicesImpl.getAllQuestionsByQuizId(quizId);
+        return quizQuestionServices.getAllQuestionsByQuizId(quizId);
     }
 
+    @Transactional
     @Override
-    public boolean addUpdateQuestion(Question question, Long quizId) {
-        return false;
+    public boolean addUpdateQuestion(Question question, Long quizId, Object questionType, String username) {
+        Quiz quiz = quizServices.getQuizById(quizId);
+        User user = userServices.getUserByUsername(username);
+        Question questionDB;
+        if(question.getQuestionId() != null){
+            questionDB = questionRepository.findByQuestionId(question.getQuestionId());
+            questionDB.setQuestionName(question.getQuestionName());
+            questionDB.setQuestionText(question.getQuestionText());
+            questionDB.setDefaultMark(question.getDefaultMark());
+            questionDB.setStatus(question.isStatus());
+            questionDB.setHidden(question.isHidden());
+            questionDB.setCreatedBy(question.getCreatedBy());
+            questionDB.setQuestionMultichoice(question.getQuestionMultichoice());
+            questionDB.setQuestionTrueFalse(question.getQuestionTrueFalse());
+            questionDB.setQuestionEssay(question.getQuestionEssay());
+            questionDB.setTimeModified(new Date());
+            questionDB.setAnswers(question.getAnswers());
+            questionDB.setQuestionType(question.getQuestionType());
+        }else questionDB = question;
+        questionDB.setCreatedBy(user);
+        System.out.println("----");
+        Question afterSave = questionRepository.save(questionDB);
+        if(questionDB.getAnswers() != null)
+        for (QuestionAnswers answer: question.getAnswers()) {
+            answer.setQuestion(questionDB);
+            System.out.println(answer);
+            questionAnswersServices.addAnswer(answer);
+        }
+        switch (afterSave.getQuestionType()){
+            case "QuestionMultichoice":
+                ((QuestionMultichoice)questionType).setQuestionId(afterSave.getQuestionId());
+                QuestionMultichoice questionMultichoice = questionTypeServices.auQuestionMultichoice((QuestionMultichoice) questionType);
+                afterSave.setQuestionMultichoice(questionMultichoice);
+                break;
+            case "QuestionTrueFalse":
+                ((QuestionTrueFalse)questionType).setQuestionId(afterSave.getQuestionId());
+                QuestionTrueFalse questionTrueFalse = questionTypeServices.auQuestionTrueFalse((QuestionTrueFalse) questionType);
+                afterSave.setQuestionTrueFalse(questionTrueFalse);
+                break;
+            case "QuestionEssay":
+                ((QuestionEssay)questionType).setQuestionId(afterSave.getQuestionId());
+                QuestionEssay questionEssay = questionTypeServices.auQuestionEssay((QuestionEssay) questionType);
+                afterSave.setQuestionEssay(questionEssay);
+                break;
+            default:
+                return false;
+        }
+        if(questionDB.getAnswers() != null) {
+            List<QuestionAnswers> listAnswers = questionAnswersServices.getAllAnswerByQuestionId(afterSave.getQuestionId());
+            afterSave.setAnswers(listAnswers);
+        }
+        questionRepository.save(questionDB);
+        quizQuestionServices.addQuestionToQuiz(afterSave,quiz);
+        return true;
     }
 
     @Override

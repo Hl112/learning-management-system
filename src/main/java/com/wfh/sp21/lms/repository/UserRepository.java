@@ -12,5 +12,5 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, String> {
     User findByUsername(String username);
     List<User> findAllByStatusTrue();
-    List<User> findAllByRole_RoleNameAndUsernameNotIn(String roleName, List<String> listUsername);
+    List<User> findAllByRole_RoleName(String roleName);
 }
