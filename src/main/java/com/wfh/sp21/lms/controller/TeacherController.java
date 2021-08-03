@@ -31,6 +31,9 @@ public class TeacherController {
     private UserServices userServicesImpl;
 
     @Autowired
+    private RoleServices roleServices;
+
+    @Autowired
     private CourseCategoryServices courseCategoryServicesImpl;
 
     @Autowired
@@ -187,6 +190,7 @@ public class TeacherController {
     @GetMapping("/member")
     public String memberPage(Model model, @RequestParam("id") Long courseId) {
         List<User> userList = userEnrolmentsServicesImpl.getAllEnrolmentsByCourseId(courseId);
+        List<Role> roleList = roleServices.getAllRoleList();
         Course course = courseServicesImpl.getCourseById(courseId);
         List<String> classList = new ArrayList<>(List.of("bg-light-warning text-warning",
                 "bg-light-danger text-danger",
@@ -197,6 +201,7 @@ public class TeacherController {
         model.addAttribute("module", "mb" + courseId);
         model.addAttribute("CLASS_IMG", classList);
         model.addAttribute("LIST_USER", userList);
+        model.addAttribute("LIST_ROLE", roleList);
         model.addAttribute("USER_ADD", userListAdd);
         model.addAttribute("CourseSelected", course);
         return "teacher/member";

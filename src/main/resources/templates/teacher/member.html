@@ -156,7 +156,9 @@
                                                             data-allow-clear="true" data-kt-user-table-filter="role"
                                                             data-hide-search="true">
                                                         <option></option>
-                                                        <option th:value="1" th:text="1"></option>
+                                                        <th:block th:each="role : ${LIST_ROLE}">
+                                                            <option th:value="*{role.roleName}" th:text="*{role.roleName}"></option>
+                                                        </th:block>
                                                     </select>
                                                 </div>
                                                 <!--end::Input group-->
@@ -168,7 +170,7 @@
                                                             data-allow-clear="true" data-kt-user-table-filter="two-step"
                                                             data-hide-search="true">
                                                         <option></option>
-                                                        <option value="Enabled">Enabled</option>
+                                                        <option value="Kích Hoạt">Kích hoạt</option>
                                                     </select>
                                                 </div>
                                                 <!--end::Input group-->
@@ -405,7 +407,7 @@
                                                                             <!--begin::Two step=-->
                                                                             <td>
                                                                                 <div class="badge badge-light-success fw-bolder"
-                                                                                     th:if="*{user.status}">Enabled
+                                                                                     th:if="*{user.status}">Kích hoạt
                                                                                 </div>
                                                                                 <div class="badge badge-danger fw-bolder"
                                                                                      th:if="*{!user.status}">Đã xóa
@@ -548,7 +550,7 @@
                                         <!--begin::Two step=-->
                                         <td>
                                             <div class="badge badge-light-success fw-bolder" th:if="*{user.status}">
-                                                Enabled
+                                                Kích hoạt
                                             </div>
                                             <div class="badge badge-danger fw-bolder" th:if="*{!user.status}">Đã xóa
                                             </div>
