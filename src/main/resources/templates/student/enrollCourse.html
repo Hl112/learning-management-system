@@ -60,9 +60,14 @@
                                     <input type="hidden" name="courseID" th:value="${course.courseId}">
                                     <input type="hidden" name="username" th:value="${userLogin.username}">
                                 <!--begin::Heading-->
-                                <div class="card-px d-flex flex-column justify-content-center text-center py-20 my-10">
+                                <div class="card-px d-flex flex-column justify-content-center text-center py-5 my-10">
+                                    <!--begin::Illustration-->
+                                    <div class="text-center d-flex flex-column justify-content-center px-5 mb-5" th:if="${course.image != null}">
+                                        <div class="image-input-wrapper min-h-200px" th:style="|background-image: ${course.image};background-size: contain;background-repeat: no-repeat;  background-position: center; |"></div>
+                                    </div>
+                                    <!--end::Illustration-->
                                     <!--begin::Title-->
-                                    <h2 class="fs-2x fw-bolder mb-10" th:text="|${course.shortName} - ${course.fullName}|"></h2>
+                                    <h2 class="fs-2x fw-bolder mb-5 mt-5" th:text="|${course.shortName} - ${course.fullName}|"></h2>
                                     <!--end::Title-->
                                     <!--begin::Description-->
                                     <p class="text-gray-400 fs-5 fw-bold mb-13" th:text="${course.description}"></p>
@@ -101,12 +106,6 @@
                                     </div>
                                     <!--end::Input group=-->
 
-                                    <!--begin::Illustration-->
-                                    <div class="text-center px-5">
-                                        <img src="assets/media/illustrations/networks.png" alt=""
-                                             class="mw-100 mh-300px">
-                                    </div>
-                                    <!--end::Illustration-->
                                     <!--begin::Action-->
                                     <div class="d-flex flex-stack pt-15">
                                         <!--begin::Wrapper-->
