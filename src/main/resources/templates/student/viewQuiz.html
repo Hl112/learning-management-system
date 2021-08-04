@@ -75,6 +75,48 @@
                                             <span class="text-danger"  th:text="|${courseModule.quiz.attempt} lần|"></span>
                                         </p>
                                         <!--end::Description-->
+                                        <th:block th:if="${listAttempts != null}">
+                                            <div class="table-responsive">
+                                                <!--begin::Table-->
+                                                <table class="table align-middle gs-0 gy-4">
+                                                    <!--begin::Table head-->
+                                                    <thead>
+                                                    <tr class="fw-bolder text-muted bg-light">
+                                                        <th class="ps-4 min-w-50px rounded-start">#</th>
+                                                        <th class="min-w-125px">Bắt đầu lúc</th>
+                                                        <th class="min-w-125px">Kết thúc vào lúc</th>
+                                                        <th class="min-w-200px">Tổng điểm</th>
+                                                        <th class="min-w-150px">Xem lại</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <!--end::Table head-->
+                                                    <!--begin::Table body-->
+                                                    <tbody>
+                                                    <tr th:each="at,iState : ${listAttempts}">
+                                                        <td>
+                                                            <a href="#" class="text-dark fw-bolder text-hover-primary mb-1 fs-6" th:text="|#*{iState.count}|"></a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="#" class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6" th:if="${at.timeStart != null}" th:text="${#dates.format(at.timeStart,'dd-MM-yyyy HH:mm')}"></a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="#" class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6" th:if="${at.timeFinish != null}" th:text="${#dates.format(at.timeFinish,'dd-MM-yyyy HH:mm')}"></a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="#" class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6" th:text="|${at.gradeScore} điểm|"></a>
+                                                        </td>
+                                                        <td class="text-end d-flex justify-content-center">
+                                                            <a href="#" class="btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4 me-2">Coming soon</a>
+                                                        </td>
+                                                    </tr>
+
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
+                                                <!--end::Table-->
+                                            </div>
+                                        </th:block>
+
                                         <!--begin::Input group-->
                                         <div class="mb-5 d-flex flex-column justify-content-center fv-row fv-plugins-icon-container" data-kt-password-meter="true" th:if="${expiredQuiz || courseModule.quiz.password != null}">
                                             <!--begin::Wrapper-->
@@ -110,7 +152,7 @@
                                         <!--end::Input group=-->
 
                                         <!--begin::Action-->
-                                        <div class="d-flex flex-stack pt-15">
+                                        <div class="d-flex flex-stack pt-5">
                                             <!--begin::Wrapper-->
                                             <div class="mr-2">
                                                 <a th:href="@{/student/view(id=${courseModule.courseSections.course.courseId})}" type="button"

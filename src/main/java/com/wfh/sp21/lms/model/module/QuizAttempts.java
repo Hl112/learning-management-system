@@ -23,6 +23,7 @@ public class QuizAttempts {
     private Date timeFinish;
     private boolean finished = false;
     private String listQuestions;
+    private float gradeScore;
 
     @ManyToOne
     @JoinColumn(name = "quiz_id")

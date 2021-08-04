@@ -15,4 +15,12 @@ public class QuizServicesImpl implements QuizServices {
     public Quiz getQuizById(Long quizId) {
         return quizRepository.findByQuizId(quizId);
     }
+
+    @Override
+    public boolean makeStarted(Long quizId) {
+        Quiz quiz = quizRepository.findByQuizId(quizId);
+        quiz.setStart(true);
+        quizRepository.save(quiz);
+        return true;
+    }
 }

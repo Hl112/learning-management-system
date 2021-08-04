@@ -50,36 +50,65 @@ var KTSubmitQuiz = function () {
                 t.setAttribute('data-kt-indicator', 'on');
                 t.disabled = !0;
                 setTimeout(function () {
-                    let username = document.querySelector('[name=username]').value;
-                    let assignmentID = document.querySelector('[name=assignmentID]').value;
-                    let assS = document.querySelector('[name=assS]') != null ? document.querySelector('[name=assS]').value : null;
-                    let textSubmission = document.getElementById('textSubmission');
-                    let fileSubmission = document.getElementById('fileSubmission');
-
-                    let fileName = document.getElementById('fileUp').files.length != 0 ? document.getElementById('fileUp').files[0].name : '';
-                    let text = document.querySelector('.ql-editor').innerHTML;
-
-                    var objDT = {
-                        "assignmentSubmissionId":assS,
-                        "grade": false,
-                        "fileName": fileName,
-                        "fileData": file,
-                        "text": text,
-                        "assignment": {
-                            "assignmentId": assignmentID
-                        },
-                        "user": {
-                            "username": username
+                    let attemptAns = [];
+                    var quizAttemptsID = document.getElementById('quizAttempsID').value
+                    var quizID = document.getElementById('quizID').value;
+                    let question = document.getElementsByClassName('question');
+                    for (let questionElement of question) {
+                        var questionID = questionElement.querySelector('.qid').getAttribute('data');
+                        var questionType = questionElement.querySelector(`#qid${questionID}`).getAttribute('data-type');
+                        var ans;
+                        switch (questionType){
+                            case 'QuestionMultichoice':
+                                ans = document.querySelectorAll(`input[name=qid${questionID}]:checked`);
+                                for (const an of ans) {
+                                    let ansValue = an.value;
+                                    let attempObj = {
+                                        "questionAnswers":{
+                                            "questionAnswersId": ansValue
+                                        },
+                                        "question":{
+                                            "questionId": questionID
+                                        },
+                                        "quizAttempts":{
+                                            "quizAttemptId":quizAttemptsID
+                                        }
+                                    }
+                                    attemptAns.push(attempObj);
+                                }
+                                break;
+                            case 'QuestionTrueFalse' :
+                                ans = document.querySelector(`input[name=qid${questionID}]:checked`) != null ? document.querySelector('input[name=qid2]:checked').value : null ;
+                                let aObj = {
+                                    "answerTF": ans === '1',
+                                    "question":{
+                                        "questionId": questionID
+                                    },
+                                    "quizAttempts":{
+                                        "quizAttemptId":quizAttemptsID
+                                    }
+                                }
+                                if(ans == null) delete aObj.answerTF;
+                                attemptAns.push(aObj);
+                                break;
+                            case 'QuestionEssay' :
+                                let essay = document.querySelector('[name=qid3]').value;
+                                let eObj = {
+                                    "answerEssay": essay,
+                                    "question":{
+                                        "questionId": questionID
+                                    },
+                                    "quizAttempts":{
+                                        "quizAttemptId":quizAttemptsID
+                                    }
+                                }
+                                    attemptAns.push(eObj);
+                                break;
                         }
+
                     }
-                    if(assS == null) delete objDT.assignmentSubmissionId;
-                    if(textSubmission == null){
-                        delete objDT.text;
-                    }
-                    if(fileSubmission == null){
-                        delete objDT.fileName;
-                        delete objDT.fileData;
-                    }
+                    var objDT = attemptAns;
+                    console.log(objDT);
                     var data = JSON.stringify(objDT);
 
                     var xhr = new XMLHttpRequest();
@@ -97,7 +126,7 @@ var KTSubmitQuiz = function () {
                                     confirmButtonText: "Ok!",
                                     customClass: {confirmButton: "btn btn-primary"}
                                 }).then((function (t) {
-                                    window.location.href = `/student/viewModule?id=${assignmentID}`;
+                                    window.location.href = `/student/viewModule?id=${quizID}`;
                                 }))
                             } else {
                                 Swal.fire({
@@ -112,7 +141,7 @@ var KTSubmitQuiz = function () {
                             }
                         }
                     });
-                    xhr.open("POST", "/student/submission");
+                    xhr.open("POST", `/student/submitQuiz/${quizAttemptsID}`);
                     xhr.setRequestHeader("Content-Type", "application/json");
                     xhr.send(data);
                 }, 700);

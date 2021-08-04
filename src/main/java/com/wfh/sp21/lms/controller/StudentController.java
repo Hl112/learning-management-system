@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +47,14 @@ public class StudentController {
     @Autowired
     private QuestionServices questionServices;
 
+    @Autowired
+    private QuestionAnswersServices questionAnswersServices;
+
+    @Autowired
+    private AttemptsAnswersServices attemptsAnswersServices;
+
+    @Autowired
+    private QuizServices quizServices;
 
     //Init Attriute
     @ModelAttribute("userLogin")
@@ -156,7 +165,14 @@ public class StudentController {
                     if (quiz.getTimeOpen().getTime() - (new Date()).getTime() > 0) earlyQuiz = true;
                 if (quiz.getTimeClose() != null)
                     if (quiz.getTimeClose().getTime() - (new Date()).getTime() < 0) expiredQuiz = true;
-
+                List<QuizAttempts> quizAttemptsList = quizAttemptsServices.getAllFinishedQuizAttempts(principal.getName(),quiz.getQuizId());
+                if(quizAttemptsList != null && quizAttemptsList.size() !=0){
+                    for (QuizAttempts quizAttempt:quizAttemptsList) {
+                        float totalScore = quizAttempt.getAttemptsAnswers().stream().map(AttemptsAnswers::getGrade).reduce(0f,Float::sum);
+                        quizAttempt.setGradeScore(totalScore);
+                    }
+                    model.addAttribute("listAttempts",quizAttemptsList);
+                }
                 model.addAttribute("earlyQuiz", earlyQuiz);
                 model.addAttribute("expiredQuiz", expiredQuiz);
                 return "student/viewQuiz";
@@ -242,16 +258,25 @@ public class StudentController {
         QuizAttempts onProgress = quizAttemptsServices.getOnProgressAttempts(principal.getName(), courseModules.getCourseModuleId());
         boolean progress = true;
         if (onProgress != null) {
-            if (onProgress.getQuiz().getTimeClose() != null) {
-                if(onProgress.getQuiz().getTimeClose().getTime() - (new Date()).getTime() <= 0){
+            if (onProgress.getQuiz().getTimeLimit() != null) {
+                Date timeR = new Date(onProgress.getTimeStart().getTime());
+                timeR.setHours(timeR.getHours() + onProgress.getQuiz().getTimeLimit().getHours());
+                timeR.setMinutes(timeR.getMinutes() + onProgress.getQuiz().getTimeLimit().getMinutes());
+                if (timeR.getTime() - (new Date()).getTime() <= 0) {
                     quizAttemptsServices.makeFinished(onProgress.getQuizAttemptId());
                     progress = false;
                 }
             }
-            if(progress){
+            if (onProgress.getQuiz().getTimeClose() != null) {
+                if (onProgress.getQuiz().getTimeClose().getTime() - (new Date()).getTime() <= 0) {
+                    quizAttemptsServices.makeFinished(onProgress.getQuizAttemptId());
+                    System.out.println("-------");
+                    progress = false;
+                }
+            }
+            if (progress) {
                 return new ResponseEntity<>("/student/takeQuiz?id=" + onProgress.getQuizAttemptId(), HttpStatus.OK);
             }
-
         }
         List<QuizAttempts> quizAttemptsList = quizAttemptsServices.getAllFinishedQuizAttempts(principal.getName(), courseModules.getCourseModuleId());
         if (quizAttemptsList != null) {
@@ -259,38 +284,84 @@ public class StudentController {
                 return new ResponseEntity<>("Bạn đã hết số lần được làm lại", HttpStatus.BAD_REQUEST);
             }
         }
-
         List<QuizQuestion> questionList = (List<QuizQuestion>) courseModules.getQuiz().getQuizQuestion();
         if (courseModules.getQuiz().isShuffleQuestions())
             Collections.shuffle(questionList);
         List<Long> questionIds = questionList.stream().map(qq -> qq.getQuestion().getQuestionId()).collect(Collectors.toList());
         QuizAttempts quizAttempts = quizAttemptsServices.addQuizAttempts(principal.getName(), courseModules.getCourseModuleId(), questionIds);
+        quizServices.makeStarted(courseModules.getQuiz().getQuizId());
         return new ResponseEntity<>("/student/takeQuiz?id=" + quizAttempts.getQuizAttemptId(), HttpStatus.OK);
     }
 
     @GetMapping("/takeQuiz")
-    public String takeQuiz(@RequestParam("id") Long quizAttemptId, Model model,Principal principal){
-        if(quizAttemptId == null) return "404";
+    public String takeQuiz(@RequestParam("id") Long quizAttemptId, Model model, Principal principal) {
+        if (quizAttemptId == null) return "404";
         QuizAttempts quizAttempts = quizAttemptsServices.getAttemptsById(quizAttemptId);
-        if(quizAttempts != null){
+        if (quizAttempts != null) {
             CourseModules courseModules = courseModulesServicesImpl.getCourseModulesByCourseModulesId(quizAttempts.getQuiz().getQuizId());
             String listIDStr = quizAttempts.getListQuestions().substring(1, quizAttempts.getListQuestions().length() - 1);
-            List<Integer> listIdQues = Arrays.stream(listIDStr.split(",")).map(id -> Integer.parseInt(id.trim())).collect(Collectors.toList());
+            List<Long> listIdQues = Arrays.stream(listIDStr.split(",")).map(id -> Long.parseLong(id.trim())).collect(Collectors.toList());
             Quiz quiz = courseModules.getQuiz();
             Long timeRemaining = null;
-            if(quiz.getTimeLimit() != null){
+            if (quiz.getTimeLimit() != null) {
                 Date timeR = new Date(quizAttempts.getTimeStart().getTime());
                 timeR.setHours(timeR.getHours() + quiz.getTimeLimit().getHours());
                 timeR.setMinutes(timeR.getMinutes() + quiz.getTimeLimit().getMinutes());
                 timeRemaining = timeR.getTime() - (new Date()).getTime();
-            }else{
-                if(quiz.getTimeClose() != null){
+            } else {
+                if (quiz.getTimeClose() != null) {
                     timeRemaining = quiz.getTimeClose().getTime() - (new Date()).getTime();
                 }
             }
+            if (timeRemaining >= 0) {
+                List<Question> questionList = null;
+                if (listIdQues != null) {
+                    for (Long id : listIdQues) {
+                        Question q = questionServices.getQuestionById(id);
+                        if (questionList == null) questionList = new ArrayList<>();
+                        questionList.add(q);
+                    }
+                    model.addAttribute("lQuestion", questionList);
+                }
+            }
+            model.addAttribute("quizAttempt", quizAttempts);
             model.addAttribute("timeLeft", timeRemaining);
-            model.addAttribute("courseModule",courseModules);
-        }else return "404";
+            model.addAttribute("courseModule", courseModules);
+        } else return "404";
         return "student/takeQuiz";
+    }
+
+    @PostMapping("/submitQuiz/{id}")
+    @ResponseBody
+    @Transactional
+    public ResponseEntity<Object> submitQuiz(@RequestBody List<AttemptsAnswers> attemptsAnswers, @PathVariable("id") Long quizAttemptId) {
+        QuizAttempts quizAttempts = quizAttemptsServices.getAttemptsById(quizAttemptId);
+        for (AttemptsAnswers aans : attemptsAnswers) {
+            aans.setQuizAttempts(quizAttempts);
+            Question question = questionServices.getQuestionById(aans.getQuestion().getQuestionId());
+            aans.setQuestion(question);
+            switch (question.getQuestionType()) {
+                case "QuestionMultichoice":
+                    QuestionAnswers questionAnswers = questionAnswersServices.getAnswerById(aans.getQuestionAnswers().getQuestionAnswersId());
+                    aans.setQuestionAnswers(questionAnswers);
+                    if(questionAnswers.isCorrect()){
+                       if(question.getQuestionMultichoice().isSingleAnswer())
+                           aans.setGrade(question.getDefaultMark());
+                       else {
+                           aans.setGrade(question.getDefaultMark() / question.getAnswers().size());
+                       }
+                    }
+                    break;
+                case "QuestionTrueFalse":
+                    if(question.getQuestionTrueFalse().isSelection() == aans.isAnswerTF())
+                        aans.setGrade(question.getDefaultMark());
+                    break;
+                case "QuestionEssay":
+                    break;
+            }
+            attemptsAnswersServices.addUpdateAnswer(aans);
+        }
+        quizAttemptsServices.makeFinished(quizAttemptId);
+        return new ResponseEntity<>("Nộp bài thành công",HttpStatus.OK);
     }
 }

@@ -190,21 +190,7 @@
                 </th:block>
 
                 <th:block th:if="${userLogin.role.roleName.equals('Student')}">
-                    <!-- Course -->
-                    <div class="menu-item">
-                        <div class="menu-content pt-8 pb-2">
-                            <span class="menu-section text-muted text-uppercase fs-8 ls-1">Quản lý khóa học</span>
-                        </div>
-                    </div>
-                    <div class="menu-item">
-                        <a class="menu-link" th:href="@{/teacher/course}"
-                           th:classappend="${module == 'course' ? 'active' : ''}">
-										<span class="menu-icon">
-											<i class="bi bi-person fs-2"></i>
-										</span>
-                            <span class="menu-title">Khóa Học</span>
-                        </a>
-                    </div>
+
                     <!-- List Course -->
                     <div class="menu-item">
                         <div class="menu-content pt-8 pb-2">

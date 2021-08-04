@@ -20,6 +20,8 @@ public class AttemptsAnswers {
     private String answerEssay;
     private boolean answerTF;
 
+    private float grade = 0;
+
     @OneToOne
     @JoinColumn(name = "question_answers_id")
     private QuestionAnswers questionAnswers;

@@ -249,7 +249,7 @@
                                         <!--begin::Joined-->
                                         <!--begin::Action=-->
                                         <td class="text-end">
-                                            <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">Hành động
+                                            <a href="#" class="btn btn-light btn-active-light-primary btn-sm" th:if="${userLogin.username != user.username}" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">Hành động
                                                 <!--begin::Svg Icon | path: icons/duotone/Navigation/Angle-down.svg-->
                                                 <span class="svg-icon svg-icon-5 m-0">
 															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -263,9 +263,9 @@
                                             <!--begin::Menu-->
                                             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
                                                 <!--begin::Menu item-->
-                                                <div class="menu-item px-3">
-                                                    <a th:href="|@{/admin/userList}/${user.username}|" class="menu-link px-3">Sửa</a>
-                                                </div>
+<!--                                                <div class="menu-item px-3">-->
+<!--                                                    <a th:href="|@{/admin/userList}/${user.username}|" class="menu-link px-3">Sửa</a>-->
+<!--                                                </div>-->
                                                 <!--end::Menu item-->
                                                 <!--begin::Menu item-->
                                                 <div class="menu-item px-3">

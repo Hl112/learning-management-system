@@ -26,7 +26,7 @@ public class LmsApplication {
 
     public static void initAll(ApplicationContext context) {
         initRole_User(context);
-        initCourseCategory_Course(context);
+//        initCourseCategory_Course(context);
 //        initUserEnrolments(context);
 //        initSection(context);
 //        initEmptyModule(context);
