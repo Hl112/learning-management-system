@@ -16,8 +16,10 @@ import java.util.Date;
 public class Assignment{
     @Id
     private Long assignmentId;
-    @Lob
+
     private String file;
+    @Lob
+    private byte[] fileData;
     private Date startDate;
     private Date dueDate;
     private boolean fileSubmission;

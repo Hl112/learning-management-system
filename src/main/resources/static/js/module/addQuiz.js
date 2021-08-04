@@ -114,6 +114,14 @@ var KTCareersApply = function () {
             }
 
             i = document.querySelector("#kt_careers_form"), t = document.getElementById("kt_module_submit_button"), e = FormValidation.formValidation(i, valObj),
+                $(i.querySelector('#allowstartdate')).on("click", (function () {
+                    console.log('click');
+                    if (document.getElementById('allowstartdate').checked) {
+                        e.addField("start_date", {validators: {notEmpty: {message: "Ngày bắt đầu là bắt buộc"}}});
+                    } else {
+                        e.removeField('start_date');
+                    }
+                })),
                 $(i.querySelector('#allowenddate')).on("click", (function () {
                     console.log('click');
                     if (document.getElementById('allowenddate').checked) {
@@ -122,9 +130,8 @@ var KTCareersApply = function () {
                                 notEmpty: {message: "Ngày kết thúc là bắt buộc"}
                                 , identical: {
                                     compare: function () {
-                                        // return e.querySelector('[name="start_date"]').value
-                                        var startDate = new Date(document.querySelector('[name=start_date]').value);
-                                        var endDate = new Date(document.querySelector('[name=end_date]').value);
+                                        var startDate = toDate(document.querySelector('[name=start_date]').value);
+                                        var endDate =toDate(document.querySelector('[name=end_date]').value);
                                         if (endDate.getTime() - startDate.getTime() >= 0)
                                             return document.querySelector('[name=end_date]').value;
                                         return -1;
@@ -135,14 +142,6 @@ var KTCareersApply = function () {
                         });
                     } else {
                         e.removeField('end_date');
-                    }
-                })),
-                $(i.querySelector('#allowstartdate')).on("click", (function () {
-                    console.log('click');
-                    if (document.getElementById('allowstartdate').checked) {
-                        e.addField("start_date", {validators: {notEmpty: {message: "Ngày bắt đầu là bắt buộc"}}});
-                    } else {
-                        e.removeField('start_date');
                     }
                 })),
                 $(i.querySelector('#allowtimelimit')).on("click", (function () {
@@ -157,6 +156,10 @@ var KTCareersApply = function () {
                     e.revalidateField('start_date');
                     e.revalidateField('end_date');
                 }
+            document.getElementsByName('end_date')[0].onchange = function () {
+                e.revalidateField('start_date');
+                e.revalidateField('end_date');
+            }
             if (!document.getElementById('allowstartdate').checked) {
                 e.removeField('start_date');
             }

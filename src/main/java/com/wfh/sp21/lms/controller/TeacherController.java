@@ -301,6 +301,7 @@ public class TeacherController {
     @GetMapping("/viewModule")
     public String viewModule(Model model, @RequestParam("id") Long courseModuleId, HttpServletResponse response) {
         CourseModules courseModules = courseModulesServicesImpl.getCourseModulesByCourseModulesId(courseModuleId);
+        model.addAttribute("module", "" + courseModules.getCourseSections().getCourse().getCourseId());
         model.addAttribute("courseModule", courseModules);
         switch (courseModules.getTypeName()) {
             case "Assignment":

@@ -9,6 +9,7 @@ import com.wfh.sp21.lms.model.module.Url;
 import com.wfh.sp21.lms.repository.CourseModulesRepository;
 import com.wfh.sp21.lms.services.CourseModulesServices;
 import com.wfh.sp21.lms.services.CourseSectionServices;
+import com.wfh.sp21.lms.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,10 +30,7 @@ public class CourseModulesServicesImpl implements CourseModulesServices {
     private ModuleServicesImpl moduleServices;
 
     private Date fixDate(Date datetime){
-        if(datetime == null) return null;
-        int month = datetime.getMonth() -1;
-        datetime.setMonth(month);
-        return datetime;
+       return Utility.fixDate(datetime);
     }
 
     @Override

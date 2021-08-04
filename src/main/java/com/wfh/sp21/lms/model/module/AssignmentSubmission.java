@@ -13,10 +13,16 @@ import java.util.Date;
 @Data
 public class AssignmentSubmission {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long assignmentSubmissionId;
     private Date timeCreated = new Date();
     private Date timeModified;
-
+    private boolean grade;
+    private String fileName;
+    @Lob
+    private byte[] fileData;
+    @Lob
+    private String text;
 
     @ManyToOne
     @JoinColumn(name = "assignment_id")

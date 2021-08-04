@@ -189,7 +189,42 @@
 
                 </th:block>
 
+                <th:block th:if="${userLogin.role.roleName.equals('Student')}">
+                    <!-- Course -->
+                    <div class="menu-item">
+                        <div class="menu-content pt-8 pb-2">
+                            <span class="menu-section text-muted text-uppercase fs-8 ls-1">Quản lý khóa học</span>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <a class="menu-link" th:href="@{/teacher/course}"
+                           th:classappend="${module == 'course' ? 'active' : ''}">
+										<span class="menu-icon">
+											<i class="bi bi-person fs-2"></i>
+										</span>
+                            <span class="menu-title">Khóa Học</span>
+                        </a>
+                    </div>
+                    <!-- List Course -->
+                    <div class="menu-item">
+                        <div class="menu-content pt-8 pb-2">
+                            <span class="menu-section text-muted text-uppercase fs-8 ls-1">Khóa học của bạn</span>
+                        </div>
+                    </div>
 
+                    <div class="menu-item menu-accordion" th:each="item : ${myCourses}">
+                        <a class="menu-link" th:href="@{/student/view(id=*{item.courseId})}"
+                           th:classappend="${module == item.courseId.toString() ? 'active' : ''}">
+										<span class="menu-icon">
+											<i class="bi bi-layers fs-3"></i>
+										</span>
+                            <span class="menu-title" th:text="*{item.fullName}"></span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                    </div>
+
+
+                </th:block>
                 <!-- Separator-->
                 <div class="menu-item">
                     <div class="menu-content">
@@ -197,24 +232,24 @@
                     </div>
                 </div>
                 <!-- Separator-->
-<!--                <div class="menu-item">-->
-<!--                    <a class="menu-link"-->
-<!--                       href="https://preview.keenthemes.com/metronic8/demo5/layout-builder.html">-->
-<!--										<span class="menu-icon">-->
-<!--											<i class="bi bi-layers fs-3"></i>-->
-<!--										</span>-->
-<!--                        <span class="menu-title">Profile</span>-->
-<!--                    </a>-->
-<!--                </div>-->
+                <!--                <div class="menu-item">-->
+                <!--                    <a class="menu-link"-->
+                <!--                       href="https://preview.keenthemes.com/metronic8/demo5/layout-builder.html">-->
+                <!--										<span class="menu-icon">-->
+                <!--											<i class="bi bi-layers fs-3"></i>-->
+                <!--										</span>-->
+                <!--                        <span class="menu-title">Profile</span>-->
+                <!--                    </a>-->
+                <!--                </div>-->
             </div>
             <!--end::Menu-->
             <script>
                 var p = document.querySelector('.menu-item > .active');
-                if(p!=null){
+                if (p != null) {
                     var x = p.parentNode;
                     var subMenu = x.childNodes[3];
                     console.log(x);
-                    subMenu.style='';
+                    subMenu.style = '';
                     subMenu.classList.add('hover');
                     subMenu.classList.add('show');
                 }

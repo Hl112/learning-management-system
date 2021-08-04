@@ -139,12 +139,28 @@ var KTCareersApply = function () {
             // upload
             document.querySelector('[type=file]').addEventListener('change', function () {
                 var reader = new FileReader();
-                reader.readAsDataURL(this.files[0]);
+                const getSizeImage = this.files[0].size;
+                if(getSizeImage > 2*1024 * 1024) {
+                    Swal.fire({
+                        text: `Chỉ cho phép tải tệp tin nhỏ hơn 2MB.`,
+                        icon: 'error',
+                        buttonsStyling: !1,
+                        confirmButtonText: 'Ok!',
+                        customClass: {
+                            confirmButton: 'btn btn-primary'
+                        }
+                    })
+                } else
+                    reader.readAsArrayBuffer(this.files[0]);
+                var fileDT = [];
                 console.log(reader);
                 reader.onload = function () {
-                    console.log("finish")
-                    file = this.result;
-                    console.log(file);
+                    var arrayBuffer = this.result,
+                        array = new Uint8Array(arrayBuffer);
+                    for (let i = 0; i < array.length; i++) {
+                        fileDT.push(array[i]);
+                    }
+                    file = fileDT;
                     t.removeAttribute('data-kt-indicator');
                     t.disabled = !1;
                 }
@@ -181,6 +197,7 @@ var KTCareersApply = function () {
                             let textSubmission = document.getElementsByName('typeSubmit[]')[0].checked;
                             let fileSubmission = document.getElementsByName('typeSubmit[]')[1].checked;
                             let maximumGrade = document.getElementsByName('maxGrade')[0].value;
+                            var fileNames = document.getElementById('file').files.length != 0 ? document.getElementById('file').files[0].name : '';
                             var objDT = {
                                 "courseModules": {
                                     "courseModuleId": moduleID,
@@ -194,7 +211,8 @@ var KTCareersApply = function () {
                                     }
                                 },
                                 "assignment": {
-                                    "file": file,
+                                    "file": fileNames,
+                                    "fileData": file,
                                     "startDate": startDate,
                                     "dueDate": endDate,
                                     "fileSubmission": fileSubmission,
@@ -209,6 +227,10 @@ var KTCareersApply = function () {
                                 delete objDT.assignment.dueDate;
                             }
                             if (moduleID == null) delete objDT.courseModules.courseModuleId;
+                            if(fileNames == '') {
+                                delete objDT.assignment.file;
+                                delete objDT.assignment.fileData;
+                            }
                             var data = JSON.stringify(objDT);
 
                             var xhr = new XMLHttpRequest();
