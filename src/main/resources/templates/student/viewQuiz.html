@@ -113,7 +113,7 @@
                                         <div class="d-flex flex-stack pt-15">
                                             <!--begin::Wrapper-->
                                             <div class="mr-2">
-                                                <a th:href="@{/student/view(id=${courseModule.courseModuleId})}" type="button"
+                                                <a th:href="@{/student/view(id=${courseModule.courseSections.course.courseId})}" type="button"
                                                    class="btn btn-lg btn-light-primary me-3"
                                                    data-kt-stepper-action="previous">
                                                     <!--begin::Svg Icon | path: icons/duotone/Navigation/Left-2.svg-->
@@ -193,7 +193,6 @@
                                                 </span>
                                                     </button>
                                                 </th:block>
-
                                                 <th:block th:if="${!earlyQuiz && !expiredQuiz}">
                                                     <button type="submit" id="kt_sign_in_submit"
                                                             class="btn btn-lg btn-primary w-100 me-3">

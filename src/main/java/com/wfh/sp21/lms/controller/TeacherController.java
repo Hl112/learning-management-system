@@ -60,6 +60,7 @@ public class TeacherController {
         String username = principal!=null ? principal.getName() : null;
         if(username == null) return "redirect://afterLogin";
         List<Course> course = courseServicesImpl.getAllCourseByUsername(username);
+        model.addAttribute("module","home");
         model.addAttribute("lCourse", course);
         return "teacher/teacher";
     }

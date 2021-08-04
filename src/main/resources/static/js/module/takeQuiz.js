@@ -1,4 +1,4 @@
-console.log("Do Assignment");
+console.log("Take Quiz");
 //coundDown
 var time = document.querySelector('[name=timeLeft]') != null ? document.querySelector('[name=timeLeft]').value : null;
 if (time != null) {
@@ -27,47 +27,23 @@ if (time != null) {
 }
 
 "use strict";
-var KTSubmitAss = function () {
+var KTSubmitQuiz = function () {
     var t, e, i, file;
     return {
         init: function () {
+            //Init Table
+            (e = document.querySelector("#kt_permissions_table")) && (e.querySelectorAll("tbody tr").forEach((t => {
+                const e = t.querySelectorAll("td"), n = moment(e[2].innerHTML, "DD MMM YYYY, LT").format();
+                e[2].setAttribute("data-order", n)
+            })), t = $(e).DataTable({
+                info: !1,
+                order: [],
+                columnDefs: [{orderable: !1, targets: 1}, {orderable: !1, targets: 3}]
+            }))
+
+
+            //Init Submit Quiz
             t = document.getElementById("kt_submit_assignment")
-            // upload
-            document.querySelector('[type=file]').addEventListener('change', function () {
-                var reader = new FileReader();
-
-                const getSizeImage = this.files[0].size;
-                if (getSizeImage > 2 * 1024 * 1024) {
-                    Swal.fire({
-                        text: `Chỉ cho phép tải tệp tin nhỏ hơn 2MB.`,
-                        icon: 'error',
-                        buttonsStyling: !1,
-                        confirmButtonText: 'Ok!',
-                        customClass: {
-                            confirmButton: 'btn btn-primary'
-                        }
-                    })
-                } else
-                    reader.readAsArrayBuffer(this.files[0]);
-
-                var fileDT = [];
-                reader.onload = function () {
-                    var arrayBuffer = this.result,
-                        array = new Uint8Array(arrayBuffer);
-                    for (let i = 0; i < array.length; i++) {
-                        fileDT.push(array[i]);
-                    }
-                    file = fileDT;
-                    console.log(file);
-                    t.removeAttribute('data-kt-indicator');
-                    t.disabled = !1;
-                }
-                reader.onprogress = function () {
-                    console.log("load")
-                    t.setAttribute('data-kt-indicator', 'on');
-                    t.disabled = !0;
-                }
-            })
             t.addEventListener("click", (function (i) {
                 i.preventDefault();
 
@@ -147,5 +123,5 @@ var KTSubmitAss = function () {
     }
 }();
 KTUtil.onDOMContentLoaded((function () {
-    KTSubmitAss.init()
+    KTSubmitQuiz.init()
 }));

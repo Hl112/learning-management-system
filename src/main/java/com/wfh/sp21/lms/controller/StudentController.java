@@ -4,9 +4,7 @@ import com.wfh.sp21.lms.model.Course;
 import com.wfh.sp21.lms.model.CourseModules;
 import com.wfh.sp21.lms.model.User;
 import com.wfh.sp21.lms.model.UserEnrolments;
-import com.wfh.sp21.lms.model.module.AssignmentSubmission;
-import com.wfh.sp21.lms.model.module.FileModule;
-import com.wfh.sp21.lms.model.module.Quiz;
+import com.wfh.sp21.lms.model.module.*;
 import com.wfh.sp21.lms.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,9 +19,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -43,6 +39,9 @@ public class StudentController {
 
     @Autowired
     private AssignmentSubmissionServices assignmentSubmissionServices;
+
+    @Autowired
+    private QuizAttemptsServices quizAttemptsServices;
 
     @Autowired
     private QuestionServices questionServices;
@@ -71,6 +70,7 @@ public class StudentController {
                 list_NotEnrolled.remove(course);
             }
         }
+        model.addAttribute("module", "home");
         model.addAttribute("allC", list_AllCourse);
         model.addAttribute("enrollC", list_EnrollmentCourse);
         model.addAttribute("nEnrollC", list_NotEnrolled);
@@ -135,17 +135,16 @@ public class StudentController {
                 if (courseModules.getAssignment().getDueDate() != null)
                     if (courseModules.getAssignment().getDueDate().getTime() - (new Date()).getTime() > 0) {
                         long diff = courseModules.getAssignment().getDueDate().getTime() - (new Date()).getTime();
-                        long noDay = diff / (24 *3600 * 1000);
-                        long hours = (diff % (24 *3600 * 1000)) / 3600000;
-                        long minutes = ((diff % (24 *3600 * 1000)) % 3600000) / 60000;
-                        model.addAttribute("dayR",noDay);
-                        model.addAttribute("hourR",hours);
-                        model.addAttribute("minuteR",minutes);
+                        long noDay = diff / (24 * 3600 * 1000);
+                        long hours = (diff % (24 * 3600 * 1000)) / 3600000;
+                        long minutes = ((diff % (24 * 3600 * 1000)) % 3600000) / 60000;
+                        model.addAttribute("dayR", noDay);
+                        model.addAttribute("hourR", hours);
+                        model.addAttribute("minuteR", minutes);
                         timeRemaining = new Date(diff);
 
-                    }
-                    else submission = false;
-                    model.addAttribute("submission",submission);
+                    } else submission = false;
+                model.addAttribute("submission", submission);
                 model.addAttribute("timeRemaining", timeRemaining);
                 model.addAttribute("assignmentSubmission", assignmentSubmission);
                 return "student/viewAssignment";
@@ -182,21 +181,21 @@ public class StudentController {
     }
 
     @GetMapping("/submission")
-    public String submissionAssignment(@RequestParam("id") Long assignmentId,Model model, Principal principal){
+    public String submissionAssignment(@RequestParam("id") Long assignmentId, Model model, Principal principal) {
         CourseModules courseModules = courseModulesServicesImpl.getCourseModulesByCourseModulesId(assignmentId);
         AssignmentSubmission assignmentSubmission = assignmentSubmissionServices.getByAssignmentIdAndUsername(assignmentId, principal.getName());
 
-        if(courseModules.getAssignment().getDueDate() != null){
+        if (courseModules.getAssignment().getDueDate() != null) {
             long timeLeft = courseModules.getAssignment().getDueDate().getTime() - (new Date()).getTime();
-            model.addAttribute("timeLeft",timeLeft);
+            model.addAttribute("timeLeft", timeLeft);
         }
-        model.addAttribute("assignmentSubmission",assignmentSubmission);
+        model.addAttribute("assignmentSubmission", assignmentSubmission);
         model.addAttribute("courseModule", courseModules);
         return "student/submission";
     }
 
     @GetMapping("/fileAssignment")
-    public void downloadAssignmentFile(HttpServletResponse response, @RequestParam("id") Long assignmentId){
+    public void downloadAssignmentFile(HttpServletResponse response, @RequestParam("id") Long assignmentId) {
         CourseModules courseModules = courseModulesServicesImpl.getCourseModulesByCourseModulesId(assignmentId);
         try {
             byte[] fileData = courseModules.getAssignment().getFileData();
@@ -213,18 +212,85 @@ public class StudentController {
 
     @PostMapping("/submission")
     @ResponseBody
-    public ResponseEntity<Object> submissionAss(@RequestBody AssignmentSubmission assignmentSubmission, Principal principal){
+    public ResponseEntity<Object> submissionAss(@RequestBody AssignmentSubmission assignmentSubmission, Principal principal) {
         User user = userServicesImpl.getUserByUsername(principal.getName());
         CourseModules courseModules = courseModulesServicesImpl.getCourseModulesByCourseModulesId(assignmentSubmission.getAssignment().getAssignmentId());
         assignmentSubmission.setUser(user);
         assignmentSubmission.setAssignment(courseModules.getAssignment());
         try {
             assignmentSubmissionServices.addUpdateSubmission(assignmentSubmission);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("Nộp bài thất bại", HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>("Nộp bài thành công",HttpStatus.OK);
+        return new ResponseEntity<>("Nộp bài thành công", HttpStatus.OK);
+    }
+
+    //Quiz
+    @PostMapping("/takeQuiz")
+    @ResponseBody
+    public ResponseEntity<Object> takeQuiz(@RequestBody Quiz quiz, Principal principal) {
+        User user = userServicesImpl.getUserByUsername(principal.getName());
+        CourseModules courseModules = courseModulesServicesImpl.getCourseModulesByCourseModulesId(quiz.getQuizId());
+        if (courseModules.getQuiz().getPassword() != null) {
+            if (!courseModules.getQuiz().getPassword().equals(quiz.getPassword())) {
+                return new ResponseEntity<>("Mật khẩu không chính xác", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        QuizAttempts onProgress = quizAttemptsServices.getOnProgressAttempts(principal.getName(), courseModules.getCourseModuleId());
+        boolean progress = true;
+        if (onProgress != null) {
+            if (onProgress.getQuiz().getTimeClose() != null) {
+                if(onProgress.getQuiz().getTimeClose().getTime() - (new Date()).getTime() <= 0){
+                    quizAttemptsServices.makeFinished(onProgress.getQuizAttemptId());
+                    progress = false;
+                }
+            }
+            if(progress){
+                return new ResponseEntity<>("/student/takeQuiz?id=" + onProgress.getQuizAttemptId(), HttpStatus.OK);
+            }
+
+        }
+        List<QuizAttempts> quizAttemptsList = quizAttemptsServices.getAllFinishedQuizAttempts(principal.getName(), courseModules.getCourseModuleId());
+        if (quizAttemptsList != null) {
+            if (courseModules.getQuiz().getAttempt() != 0 && quizAttemptsList.size() >= courseModules.getQuiz().getAttempt()) {
+                return new ResponseEntity<>("Bạn đã hết số lần được làm lại", HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        List<QuizQuestion> questionList = (List<QuizQuestion>) courseModules.getQuiz().getQuizQuestion();
+        if (courseModules.getQuiz().isShuffleQuestions())
+            Collections.shuffle(questionList);
+        List<Long> questionIds = questionList.stream().map(qq -> qq.getQuestion().getQuestionId()).collect(Collectors.toList());
+        QuizAttempts quizAttempts = quizAttemptsServices.addQuizAttempts(principal.getName(), courseModules.getCourseModuleId(), questionIds);
+        return new ResponseEntity<>("/student/takeQuiz?id=" + quizAttempts.getQuizAttemptId(), HttpStatus.OK);
+    }
+
+    @GetMapping("/takeQuiz")
+    public String takeQuiz(@RequestParam("id") Long quizAttemptId, Model model,Principal principal){
+        if(quizAttemptId == null) return "404";
+        QuizAttempts quizAttempts = quizAttemptsServices.getAttemptsById(quizAttemptId);
+        if(quizAttempts != null){
+            CourseModules courseModules = courseModulesServicesImpl.getCourseModulesByCourseModulesId(quizAttempts.getQuiz().getQuizId());
+            String listIDStr = quizAttempts.getListQuestions().substring(1, quizAttempts.getListQuestions().length() - 1);
+            List<Integer> listIdQues = Arrays.stream(listIDStr.split(",")).map(id -> Integer.parseInt(id.trim())).collect(Collectors.toList());
+            Quiz quiz = courseModules.getQuiz();
+            Long timeRemaining = null;
+            if(quiz.getTimeLimit() != null){
+                Date timeR = new Date(quizAttempts.getTimeStart().getTime());
+                timeR.setHours(timeR.getHours() + quiz.getTimeLimit().getHours());
+                timeR.setMinutes(timeR.getMinutes() + quiz.getTimeLimit().getMinutes());
+                timeRemaining = timeR.getTime() - (new Date()).getTime();
+            }else{
+                if(quiz.getTimeClose() != null){
+                    timeRemaining = quiz.getTimeClose().getTime() - (new Date()).getTime();
+                }
+            }
+            model.addAttribute("timeLeft", timeRemaining);
+            model.addAttribute("courseModule",courseModules);
+        }else return "404";
+        return "student/takeQuiz";
     }
 }

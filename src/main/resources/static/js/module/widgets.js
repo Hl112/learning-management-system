@@ -784,7 +784,8 @@ var KTWidgets = {
                     grid: {padding: {top: 10}, borderColor: r, strokeDashArray: 4, yaxis: {lines: {show: !0}}}
                 }).render()
             }))
-        }(), (i = document.querySelector("#kt_forms_widget_1_form")) && i && new Quill("#kt_forms_widget_1_editor", {
+        }(),
+        (i = document.querySelector("#kt_forms_widget_1_form")) && i && new Quill("#kt_forms_widget_1_editor", {
             modules: {toolbar: {container: "#kt_forms_widget_1_editor_toolbar"}},
             placeholder: "Nhập bài làm của bạn vào đây ?",
             theme: "snow"

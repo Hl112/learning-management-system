@@ -32,6 +32,10 @@ public class Quiz implements Serializable {
 
     @OneToMany(mappedBy = "quiz")
     @ToString.Exclude
-    private Set<QuizQuestion> quizQuestion;
+    private Collection<QuizQuestion> quizQuestion;
 
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Collection<QuizAttempts> quizAttempts;
 }
