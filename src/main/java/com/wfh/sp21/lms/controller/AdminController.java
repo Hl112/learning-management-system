@@ -44,7 +44,7 @@ public class AdminController {
     public String adminPage(Model model,Principal principal){
         List<String> classList = new ArrayList<>(List.of("warning","success","danger","info"));
         User user = userServicesImpl.getUserByUsername(principal.getName());
-        List<CourseCategory> courseCategoryList = courseCategoryServicesImpl.getAllCourseCategories().subList(0,4);
+        List<CourseCategory> courseCategoryList = courseCategoryServicesImpl.getAllCourseCategories();
 
         model.addAttribute("CLASS_LIST",classList);
         model.addAttribute("module","home");
