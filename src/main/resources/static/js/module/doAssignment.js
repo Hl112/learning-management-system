@@ -81,7 +81,8 @@ var KTSubmitAss = function () {
                     let fileSubmission = document.getElementById('fileSubmission');
 
                     let fileName = document.getElementById('fileUp').files.length != 0 ? document.getElementById('fileUp').files[0].name : '';
-                    let text = document.querySelector('.ql-editor').innerHTML;
+
+                    let text = document.querySelector('.ql-editor') != null ? document.querySelector('.ql-editor').innerHTML : null;
 
                     var objDT = {
                         "assignmentSubmissionId":assS,

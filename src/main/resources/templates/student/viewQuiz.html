@@ -103,7 +103,7 @@
                                                             <a href="#" class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6" th:if="${at.timeFinish != null}" th:text="${#dates.format(at.timeFinish,'dd-MM-yyyy HH:mm')}"></a>
                                                         </td>
                                                         <td>
-                                                            <a href="#" class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6" th:text="|${at.gradeScore} điểm|"></a>
+                                                            <a href="#" class="text-dark fw-bolder text-hover-primary d-block mb-1 fs-6" th:text="|${#numbers.formatDecimal(at.gradeScore,0,2)} điểm|"></a>
                                                         </td>
                                                         <td class="text-end d-flex justify-content-center">
                                                             <a href="#" class="btn btn-bg-light btn-color-muted btn-active-color-primary btn-sm px-4 me-2">Coming soon</a>

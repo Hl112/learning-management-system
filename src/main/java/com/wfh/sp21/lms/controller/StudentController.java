@@ -153,6 +153,7 @@ public class StudentController {
                         timeRemaining = new Date(diff);
 
                     } else submission = false;
+                model.addAttribute("module", "" + courseModules.getCourseSections().getCourse().getCourseId());
                 model.addAttribute("submission", submission);
                 model.addAttribute("timeRemaining", timeRemaining);
                 model.addAttribute("assignmentSubmission", assignmentSubmission);
@@ -324,6 +325,7 @@ public class StudentController {
                     model.addAttribute("lQuestion", questionList);
                 }
             }
+            model.addAttribute("module", "" + courseModules.getCourseSections().getCourse().getCourseId());
             model.addAttribute("quizAttempt", quizAttempts);
             model.addAttribute("timeLeft", timeRemaining);
             model.addAttribute("courseModule", courseModules);
@@ -348,7 +350,8 @@ public class StudentController {
                        if(question.getQuestionMultichoice().isSingleAnswer())
                            aans.setGrade(question.getDefaultMark());
                        else {
-                           aans.setGrade(question.getDefaultMark() / question.getAnswers().size());
+                           List<QuestionAnswers> qA = (List<QuestionAnswers>) question.getAnswers().stream().filter(QuestionAnswers::isCorrect).collect(Collectors.toList());
+                           aans.setGrade(question.getDefaultMark() / qA.size());
                        }
                     }
                     break;
