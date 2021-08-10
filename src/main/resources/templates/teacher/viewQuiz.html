@@ -186,6 +186,7 @@
                                                           th:if="${ques.questionType == 'QuestionEssay'}">Câu hỏi bài văn</span>
                                                 </td>
                                                 <td class="text-end">
+                                                    <div th:if="${!courseModule.quiz.start}">
                                                     <a th:href="@{/teacher/editQuestion(quizID=${courseModule.courseModuleId}, id=*{ques.questionId})}"
                                                        class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
                                                        data-bs-toggle="tooltip" data-bs-placement="top"
@@ -234,6 +235,7 @@
 																</span>
                                                         <!--end::Svg Icon-->
                                                     </a>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </th:block>
@@ -339,7 +341,12 @@
                                                 <div class="fs-6 text-gray-600">Bạn không thể thêm hoặc sửa câu hỏi của
                                                     bài kiểm tra này
                                                 </div>
+
                                             </div>
+                                            <a th:href="@{/teacher/quizAttemp(id=${courseModule.courseSections.course.courseId}, quiz=${courseModule.courseModuleId})}"
+                                                    class="btn btn-light-primary align-items-center">
+                                                <!--end::Svg Icon--> Xem các bài đã nộp
+                                            </a>
                                             <!--end::Content-->
                                         </div>
                                         <!--end::Wrapper-->
@@ -575,132 +582,7 @@
                                             <!--end::Action-->
                                         </div>
                                         <!--end::Options-->
-                                        <!--begin::Apps-->
-                                        <div class="d-none" data-kt-element="apps">
-                                            <!--begin::Heading-->
-                                            <h3 class="text-dark fw-bolder mb-7">Authenticator Apps</h3>
-                                            <!--end::Heading-->
-                                            <!--begin::Description-->
-                                            <div class="text-gray-500 fw-bold fs-6 mb-10">Using an authenticator app
-                                                like
-                                                <a href="https://support.google.com/accounts/answer/1066447?hl=en"
-                                                   target="_blank">Google Authenticator</a>,
-                                                <a href="https://www.microsoft.com/en-us/account/authenticator"
-                                                   target="_blank">Microsoft Authenticator</a>,
-                                                <a href="https://authy.com/download/" target="_blank">Authy</a>, or
-                                                <a href="https://support.1password.com/one-time-passwords/"
-                                                   target="_blank">1Password</a>, scan the QR code. It will generate a 6
-                                                digit code for you to enter below.
-                                                <!--begin::QR code image-->
-                                                <div class="pt-5 text-center">
-                                                    <img src="assets/media/misc/qr.png" alt="" class="mw-150px">
-                                                </div>
-                                                <!--end::QR code image--></div>
-                                            <!--end::Description-->
-                                            <!--begin::Notice-->
-                                            <div class="notice d-flex bg-light-warning rounded border-warning border border-dashed mb-10 p-6">
-                                                <!--begin::Icon-->
-                                                <!--begin::Svg Icon | path: icons/duotone/Code/Warning-1-circle.svg-->
-                                                <span class="svg-icon svg-icon-2tx svg-icon-warning me-4">
-															<svg xmlns="http://www.w3.org/2000/svg" width="24px"
-                                                                 height="24px" viewBox="0 0 24 24" version="1.1">
-																<circle fill="#000000" opacity="0.3" cx="12" cy="12"
-                                                                        r="10"></circle>
-																<rect fill="#000000" x="11" y="7" width="2" height="8"
-                                                                      rx="1"></rect>
-																<rect fill="#000000" x="11" y="16" width="2" height="2"
-                                                                      rx="1"></rect>
-															</svg>
-														</span>
-                                                <!--end::Svg Icon-->
-                                                <!--end::Icon-->
-                                                <!--begin::Wrapper-->
-                                                <div class="d-flex flex-stack flex-grow-1">
-                                                    <!--begin::Content-->
-                                                    <div class="fw-bold">
-                                                        <div class="fs-6 text-gray-600">If you having trouble using the
-                                                            QR code, select manual entry on your app, and enter your
-                                                            username and the code:
-                                                            <div class="fw-bolder text-dark pt-2">
-                                                                KBSS3QDAAFUMCBY63YCKI5WSSVACUMPN
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--end::Content-->
-                                                </div>
-                                                <!--end::Wrapper-->
-                                            </div>
-                                            <!--end::Notice-->
-                                            <!--begin::Form-->
-                                            <form data-kt-element="apps-form"
-                                                  class="form fv-plugins-bootstrap5 fv-plugins-framework" action="#">
-                                                <!--begin::Input group-->
-                                                <div class="mb-10 fv-row fv-plugins-icon-container">
-                                                    <input type="text"
-                                                           class="form-control form-control-lg form-control-solid"
-                                                           placeholder="Enter authentication code" name="code">
-                                                    <div class="fv-plugins-message-container invalid-feedback"></div>
-                                                </div>
-                                                <!--end::Input group-->
-                                                <!--begin::Actions-->
-                                                <div class="d-flex flex-center">
-                                                    <button type="reset" data-kt-element="apps-cancel"
-                                                            class="btn btn-white me-3">Cancel
-                                                    </button>
-                                                    <button type="submit" data-kt-element="apps-submit"
-                                                            class="btn btn-primary">
-                                                        <span class="indicator-label">Submit</span>
-                                                        <span class="indicator-progress">Please wait...
-																<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                                    </button>
-                                                </div>
-                                                <!--end::Actions-->
-                                                <div></div>
-                                            </form>
-                                            <!--end::Form-->
-                                        </div>
-                                        <!--end::Options-->
-                                        <!--begin::SMS-->
-                                        <div class="d-none" data-kt-element="sms">
-                                            <!--begin::Heading-->
-                                            <h3 class="text-dark fw-bolder fs-3 mb-5">SMS: Verify Your Mobile
-                                                Number</h3>
-                                            <!--end::Heading-->
-                                            <!--begin::Notice-->
-                                            <div class="text-gray-400 fw-bold mb-10">Enter your mobile phone number with
-                                                country code and we will send you a verification code upon request.
-                                            </div>
-                                            <!--end::Notice-->
-                                            <!--begin::Form-->
-                                            <form data-kt-element="sms-form"
-                                                  class="form fv-plugins-bootstrap5 fv-plugins-framework" action="#">
-                                                <!--begin::Input group-->
-                                                <div class="mb-10 fv-row fv-plugins-icon-container">
-                                                    <input type="text"
-                                                           class="form-control form-control-lg form-control-solid"
-                                                           placeholder="Mobile number with country code..."
-                                                           name="mobile">
-                                                    <div class="fv-plugins-message-container invalid-feedback"></div>
-                                                </div>
-                                                <!--end::Input group-->
-                                                <!--begin::Actions-->
-                                                <div class="d-flex flex-center">
-                                                    <button type="reset" data-kt-element="sms-cancel"
-                                                            class="btn btn-white me-3">Cancel
-                                                    </button>
-                                                    <button type="submit" data-kt-element="sms-submit"
-                                                            class="btn btn-primary">
-                                                        <span class="indicator-label">Submit</span>
-                                                        <span class="indicator-progress">Please wait...
-																<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-                                                    </button>
-                                                </div>
-                                                <!--end::Actions-->
-                                                <div></div>
-                                            </form>
-                                            <!--end::Form-->
-                                        </div>
-                                        <!--end::SMS-->
+
                                     </div>
                                     <!--begin::Modal body-->
                                 </div>

@@ -5,6 +5,7 @@ import com.wfh.sp21.lms.mapper.QuestionMapper;
 import com.wfh.sp21.lms.model.*;
 import com.wfh.sp21.lms.model.module.FileModule;
 import com.wfh.sp21.lms.model.module.Question;
+import com.wfh.sp21.lms.model.module.QuizAttempts;
 import com.wfh.sp21.lms.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,9 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/teacher")
@@ -53,6 +56,9 @@ public class TeacherController {
 
     @Autowired
     private QuizQuestionServices quizQuestionServices;
+
+    @Autowired
+    private QuizAttemptsServices quizAttemptsServices;
 
 
     @GetMapping(value = {"", "/"})
@@ -429,5 +435,28 @@ public class TeacherController {
        return new ResponseEntity<>("Xóa câu hỏi thành công", HttpStatus.OK);
     }
 
+    @GetMapping("/quizAttemp")
+    public String viewAttempt(Model model, @RequestParam("id") Long courseId, @RequestParam("quiz") Long quizId){
+        List<User> userList = userEnrolmentsServicesImpl.getAllEnrolmentsByCourseId(courseId);
+        List<Role> roleList = roleServices.getAllRoleList();
+        Course course = courseServicesImpl.getCourseById(courseId);
+        List<String> classList = new ArrayList<>(List.of("bg-light-warning text-warning",
+                "bg-light-danger text-danger",
+                "bg-light-primary text-primary",
+                "bg-light-info text-info",
+                "bg-light-success text-success"));
+        Map<User, List<QuizAttempts>> listGrade = new HashMap<>();
+        for (User user: userList) {
+           List<QuizAttempts> attempts = quizAttemptsServices.getAllFinishedQuizAttempts(user.getUsername(),quizId);
+           listGrade.put(user, attempts);
+        }
+        model.addAttribute("CLASS_IMG", classList);
+        model.addAttribute("LIST_USER", listGrade);
+        model.addAttribute("LIST_ROLE", roleList);
+        model.addAttribute("CourseSelected", course);
+
+
+        return "teacher/listGradeQuiz";
+    }
 
 }

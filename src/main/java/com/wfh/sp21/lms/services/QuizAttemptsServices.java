@@ -11,4 +11,5 @@ public interface QuizAttemptsServices {
     List<QuizAttempts> getAllFinishedQuizAttempts(String username, Long quizId);
     QuizAttempts addQuizAttempts(String username, Long quizId, List<Long> listQuestionsID);
     boolean makeFinished(Long quizAttemptId);
+    boolean saveGrade(QuizAttempts quizAttempts);
 }

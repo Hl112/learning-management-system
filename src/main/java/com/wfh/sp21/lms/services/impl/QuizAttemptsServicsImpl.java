@@ -72,4 +72,9 @@ public class QuizAttemptsServicsImpl implements QuizAttemptsServices {
         quizAttemptsRepository.save(quizAttempts);
         return true;
     }
+
+    public boolean saveGrade(QuizAttempts quizAttempts){
+        quizAttemptsRepository.save(quizAttempts);
+        return true;
+    }
 }

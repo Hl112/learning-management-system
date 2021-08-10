@@ -362,8 +362,12 @@ public class StudentController {
                 case "QuestionEssay":
                     break;
             }
+
             attemptsAnswersServices.addUpdateAnswer(aans);
         }
+        float totalScore = quizAttempts.getAttemptsAnswers().stream().map(AttemptsAnswers::getGrade).reduce(0f,Float::sum);
+        quizAttempts.setGradeScore(totalScore);
+        quizAttemptsServices.saveGrade(quizAttempts);
         quizAttemptsServices.makeFinished(quizAttemptId);
         return new ResponseEntity<>("Nộp bài thành công",HttpStatus.OK);
     }
