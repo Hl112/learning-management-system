@@ -122,7 +122,7 @@
                                     <!--begin::Col-->
                                     <div class="col-lg-8 fv-row">
                                         <span class="badge badge-light-primary"
-                                              th:text="${assignmentSubmission ==null ? 'Chưa chấm điểm' : (assignmentSubmission.grade ? 'Đã chấm điểm':'Chưa chấm điểm') }"></span>
+                                              th:text="${assignmentSubmission ==null ? 'Chưa chấm điểm' : (assignmentSubmission.grade ? assignmentSubmission.gradeScore + ' điểm' :'Chưa chấm điểm') }"></span>
                                     </div>
                                     <!--end::Col-->
                                 </div>

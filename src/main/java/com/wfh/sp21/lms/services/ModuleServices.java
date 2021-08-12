@@ -6,6 +6,7 @@ import com.wfh.sp21.lms.model.module.Quiz;
 import com.wfh.sp21.lms.model.module.Url;
 
 public interface ModuleServices {
+    Assignment getAssignmentById(Long assignmentId);
     Assignment addAssignment(Assignment assignment);
     Quiz addQuiz(Quiz quiz);
     FileModule addFile(FileModule fileModule);

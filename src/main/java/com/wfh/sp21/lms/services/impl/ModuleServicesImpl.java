@@ -29,6 +29,11 @@ public class ModuleServicesImpl implements ModuleServices {
 
 
     @Override
+    public Assignment getAssignmentById(Long assignmentId) {
+        return assignmentRepository.findByAssignmentId(assignmentId);
+    }
+
+    @Override
     public Assignment addAssignment(Assignment assignment) {
         return assignmentRepository.save(assignment);
     }

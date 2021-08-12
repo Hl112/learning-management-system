@@ -90,6 +90,7 @@ var KTSubmitAss = function () {
                         "fileName": fileName,
                         "fileData": file,
                         "text": text,
+                        "gradeScore" : -1,
                         "assignment": {
                             "assignmentId": assignmentID
                         },

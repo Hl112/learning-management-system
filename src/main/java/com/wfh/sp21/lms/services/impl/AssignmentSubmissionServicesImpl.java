@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class AssignmentSubmissionServicesImpl implements AssignmentSubmissionServices {
@@ -22,6 +23,11 @@ public class AssignmentSubmissionServicesImpl implements AssignmentSubmissionSer
     @Override
     public AssignmentSubmission getByAssignmentIdAndUsername(Long assignmentId, String username) {
         return assignmentSubmissionRepository.findByAssignment_AssignmentIdAndUser_Username(assignmentId,username);
+    }
+
+    @Override
+    public List<AssignmentSubmission> getSubmissionByAssId(Long assignmentId) {
+        return assignmentSubmissionRepository.findAllByAssignment_AssignmentId(assignmentId);
     }
 
     @Override
@@ -41,6 +47,15 @@ public class AssignmentSubmissionServicesImpl implements AssignmentSubmissionSer
             assignmentSubmissionDB.setGrade(false);
         }else assignmentSubmissionDB = assignmentSubmission;
         assignmentSubmissionRepository.save(assignmentSubmissionDB);
+        return true;
+    }
+
+    @Override
+    public boolean gradeAssignmentSubmission(Long assignedSubmissionId, Float gradeScore) {
+        AssignmentSubmission assignmentSubmission = assignmentSubmissionRepository.findByAssignmentSubmissionId(assignedSubmissionId);
+        assignmentSubmission.setGradeScore(gradeScore);
+        assignmentSubmission.setGrade(true);
+        assignmentSubmissionRepository.save(assignmentSubmission);
         return true;
     }
 }

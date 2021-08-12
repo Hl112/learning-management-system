@@ -18,6 +18,7 @@ public class AssignmentSubmission {
     private Date timeCreated = new Date();
     private Date timeModified;
     private boolean grade;
+    private float gradeScore;
     private String fileName;
     @Lob
     private byte[] fileData;

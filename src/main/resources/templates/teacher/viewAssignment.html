@@ -192,8 +192,8 @@
                             <div class="card mb-5 mb-xl-10 align-items-center">
                                 <!--begin::Card header-->
                                 <div class="card-header cursor-pointer">
-                                    <a href="account/settings.html" class="btn btn-light align-self-center me-4">Xem các bài đã nộp</a>
-                                    <a href="account/settings.html" class="btn btn-primary align-self-center">Chấm bài</a>
+                                    <a th:href="@{/teacher/viewSubmission(id=${courseModule.courseModuleId})}" class="btn btn-light align-self-center me-4">Xem các bài đã nộp</a>
+                                    <a th:href="@{/teacher/grade(id=${cGrade})}" class="btn btn-primary align-self-center">Chấm bài</a>
                                 </div>
                                 <!--begin::Card header-->
                             </div>
