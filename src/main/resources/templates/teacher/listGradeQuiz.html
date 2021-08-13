@@ -137,10 +137,9 @@
                                     <!--begin::Table body-->
                                     <tbody class="text-gray-600 fw-bold">
                                     <!--begin::Table row-->
-                                    <tr th:each="user,iState : ${LIST_USER}">
+                                    <tr th:each="map,iState : ${LIST_USER}">
                                         <!--begin::Checkbox-->
                                         <td>
-
                                         </td>
                                         <!--end::Checkbox-->
                                         <!--begin::User=-->
@@ -152,9 +151,9 @@
                                                          th:classappend="${CLASS_IMG[iState.index % 5]}">
 
                                                         <img src="" alt=""
-                                                             th:alt="|${user.key.lastName} ${user.key.firstName}|" class="w-100"
-                                                             th:if="${user.key.image != null}"/>
-                                                        <span th:text="${user.key.firstName.substring(0,1)}"></span>
+                                                             th:alt="|${map.key.lastName} ${map.key.firstName}|" class="w-100"
+                                                             th:if="${map.key.image != null}"/>
+                                                        <span th:text="${map.key.firstName.substring(0,1)}"></span>
                                                     </div>
                                                 </a>
                                             </div>
@@ -163,26 +162,28 @@
                                             <div class="d-flex flex-column">
                                                 <a href="#"
                                                    class="text-gray-800 text-hover-primary mb-1"
-                                                   th:text="${user.key.lastName} + ' '+${user.key.firstName}"></a>
-                                                <span th:text="*{user.key.email}"></span>
+                                                   th:text="${map.key.lastName} + ' '+${map.key.firstName}"></a>
+                                                <span th:text="*{map.key.email}"></span>
                                             </div>
                                             <!--begin::User details-->
                                         </td>
                                         <!--end::User=-->
                                         <!--begin::Role=-->
-                                        <td th:text="|${#numbers.formatDecimal(user.value.get(user.value.size()-1).gradeScore,0,2)} điểm|"></td>
+                                        <td >
+                                            <span class="badge badge-light-danger fw-bolder" th:if="${map.value.isEmpty()}">Chưa làm bài</span>
+                                            <span th:if="${!map.value.isEmpty()}" th:text="|${#numbers.formatDecimal(map.value.get(map.value.size()-1).gradeScore,0,2)} điểm|" ></span></td>
                                         <!--end::Role=-->
                                         <!--begin::Last login=-->
                                         <td></td>
                                         <!--end::Last login=-->
                                         <!--begin::Two step=-->
                                         <td>
-                                            <div class="badge badge-light-success fw-bolder" th:text="*{user.value.size()}">
+                                            <div class="badge badge-light-success fw-bolder" th:text="*{map.value.size()}">
                                             </div>
                                         </td>
                                         <!--end::Two step=-->
                                         <!--begin::Joined-->
-                                        <td th:text="${#dates.format(user.value.get(user.value.size() - 1).timeFinish,'dd-MM-yyyy , hh:mm')}"></td>
+                                        <td th:text="${#dates.format(map.key.joinedDate,'dd-MM-yyyy , hh:mm')}"></td>
                                         <!--begin::Joined-->
                                         <!--begin::Action=-->
                                         <td class="text-end">
