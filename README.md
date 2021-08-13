@@ -45,16 +45,36 @@ Ho Dinh Tung Lam - SE141120
 ## Screenshot
 
 <p align='center'>
-<img width="450" height="180" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/Screenshot1.png"/>
-<img width="450" height="180" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/Screenshot3.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/Screenshot1.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/Screenshot3.png"/>
 <p>
 ####+ Admin
 <p align='center'>
-<img width="450" height="180" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/admin/Screenshot3.png"/>
-<img width="450" height="180" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/admin/Screenshot4.png"/>
-<img width="450" height="180" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/admin/Screenshot5.png"/>
-<img width="450" height="180" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/admin/Screenshot6.png"/>
-<img width="450" height="180" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/admin/Screenshot7.png"/>
-<img width="450" height="180" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/admin/Screenshot8.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/admin/Screenshot3.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/admin/Screenshot4.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/admin/Screenshot5.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/admin/Screenshot6.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/admin/Screenshot7.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/admin/Screenshot8.png"/>
+<p>
+####+ Teacher
+<p align='center'>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/teacher/Screenshot10.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/teacher/Screenshot11.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/teacher/Screenshot12.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/teacher/Screenshot13.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/teacher/Screenshot14.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/teacher/Screenshot16.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/teacher/Screenshot18.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/teacher/Screenshot19.png"/>
+<p>
+####+ Student
+<p align='center'>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/student/Screenshot1.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/student/Screenshot2.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/student/Screenshot3.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/student/Screenshot4.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/student/Screenshot5.png"/>
+<img width="410" height="200" src="https://github.com/Hl112/learning-management-system/raw/master/Screenshot/student/Screenshot6.png"/>
 <p>
 #### © 2021 by HL
